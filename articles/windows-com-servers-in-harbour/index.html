@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Windows COM Servers in Harbour. How to use Harbour from different languages. | Harbour Wiki</title>
+  <meta name="description" content="Windows COM Servers in Harbour. How to use Harbour from different languages.. Original Harbour.wiki article converted to a static article page.">
+  <link rel="icon" type="image/svg+xml" href="/images/harbour.svg">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="/scripts/FontAwesome_5_3_1/css/all.min.css" rel="stylesheet">
+  <link href="/assets/css/site.css" rel="stylesheet">
+  <link href="/assets/css/articles.css" rel="stylesheet">
+  <link href="/assets/css/article-migration.css" rel="stylesheet">
+</head>
+<body class="hw-article-page">
+  <header class="hw-article-tab-header">
+    <a class="hw-article-tab-brand" href="/" aria-label="Harbour Wiki home">
+      <img class="hw-article-tab-logo" src="/images/harbour.svg" alt="" aria-hidden="true">
+      <span class="hw-article-tab-title">
+        <span class="hw-article-tab-site">Harbour Wiki</span>
+        <span class="hw-article-tab-subtitle">Static article</span>
+      </span>
+    </a>
+    <div class="hw-article-tab-actions">
+      <a class="btn btn-light" href="/articles/"><i class="bi bi-arrow-left" aria-hidden="true"></i> Back to Articles</a>
+      <button class="btn btn-outline-light" type="button" data-close-article><i class="bi bi-x-lg" aria-hidden="true"></i> Close</button>
+    </div>
+  </header>
+
+  <main class="hw-article-main">
+    <article class="hw-article-content">
+      <!-- Source: uploaded saved article HTML: 019 Windows COM Servers in Harbour. How to use Harbour from different languages.htm -->
+      <!-- Conversion: visible article content converted from original article HTML; saved-page navigation/scripts excluded. -->
+      <h1>Windows COM Servers in Harbour. How to use Harbour from different languages.</h1>
+
+      
+      <div class="hw-article-author">
+        <img src="images/author.png" alt="Eric Lendvai" class="hw-article-author-photo">
+        <span><strong>Author:</strong> Eric Lendvai</span>
+      </div>
+
+      <h2>Table of Contents</h2>
+      <ul class="hw-article-toc">
+        <li><a href="#revision-history">Revision History</a></li>
+        <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#introduction">Introduction</a></li>
+        <li><a href="#adding-a-buildcom-bat-tool-to-harbourtools">Adding a BuildCOM.bat tool to HarbourTools</a></li>
+        <li><a href="#example-1-simple-class">Example 1. Simple class</a></li>
+        <li><a href="#example-2-shared-object-reference">Example 2. Shared Object Reference</a></li>
+        <li><a href="#using-the-com-objects-from-vfp-32-bit">Using the COM objects from VFP (32 bit)</a></li>
+        <li><a href="#using-the-com-objects-from-powershell-32-bit-and-64-bit">Using the COM objects from PowerShell (32 bit and 64 bit)</a></li>
+        <li><a href="#debugging-com-server">Debugging Com Server</a></li>
+        <li><a href="#conclusion">Conclusion</a></li>
+      </ul>
+
+      <h2 id="revision-history">Revision History</h2>
+
+      <table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td>02/06/2019</td><td></td><td>Added instructions to include the file libgcc_s_dw2-1.dll when creating 32 bit Harbour DLL.</td></tr></tbody></table>
+
+      <h2 id="prerequisites">Prerequisites</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Setup your development environment and use all the tools created in the article <a href="https://harbour.wiki/index.asp?page=PublicArticles&amp;mode=show&amp;id=190129210053&amp;sig=7790451073" rel="noopener noreferrer" target="_blank">How to Install Harbour on Windows.</a></div><div><br/></div><div>You should already know how COM objects work, how to use them from other languages, like VFP, VB or PowerShell.</div></div>
+
+      <h2 id="introduction">Introduction</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>One
+ of the main reasons to use Harbour on Windows, is the ability to use 
+and create COM objects. This allow you to have Object Oriented language 
+interoperability.<br/>For VFP developers, this could be a mean to add 
+Harbour components to your VFP app, or add to Harbour VFP COM objects. 
+But you can also do the same with C++, VB, C#, and even Python (under 
+Windows only).</div><div>But also why in Harbour? Simple, Harbour will 
+create C code, that is extremely fast (when compiled without PCODE), and
+ quite secure against reverse engineering. You will also be able to 
+create 32 and 64 bit DLLs, without any source code change. And you have 
+access to xbase syntax and have full Object Oriented support and 
+multithreading.</div><div>You can find on GitHub all the source code to add Windows native support, including COM. Go <a href="https://github.com/harbour/core/tree/master/contrib/hbwin" rel="noopener noreferrer" target="_blank">here</a> for the repo, and <a href="https://github.com/harbour/core/blob/master/contrib/hbwin/tests/olesrv1.prg" rel="noopener noreferrer" target="_blank">here </a>for the main example for creating a COM server.</div><div>But
+ all that material can be overwhelming, since there are multi ways to 
+create the COM interface, and there are no clear steps and environment 
+to actually create your first COM server.</div><div>In this article I 
+will focus on creating, compiling, testing COM objects where you will 
+have well defined methods and properties. These are going to be UI free 
+objects. In Harbour you could create COM objects that accept any calls 
+and dynamically respond to calls. But that is more of an advanced and 
+rarely used scenario. </div><div>The first example will be your 
+typical COM object, some methods and properties. Each instances you 
+create of that COM will stand by itself, and not share any values with 
+other instances, even when being created from the same process. Example 
+2, will not be as useful, but will show how you code share properties 
+between instance of the same COM, when create from the same 
+host/process.  </div><div>We are going to focus of in-process COM 
+objects, meaning that any memory allocations made by the Harbour COM 
+object is going to happen inside the calling program. In-process calls 
+are the fastest for execution.</div></div>
+
+      <h2 id="adding-a-buildcom-bat-tool-to-harbourtools">Adding a BuildCOM.bat tool to HarbourTools</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Let's add the following batch file to the c:\HarbourTools folder (See Prerequisites).</div><div>As for the BuildEXE program, this script file will need to be called from your 32 or 64 bit Harbour Terminal.</div><div>For example, in the terminal use the following: HarbourMinGW32 C:\HarbourTestCode-32&gt;<strong>buildcom Harbour_Com_Server_Example_1</strong></div><div>This will unregister your previous DLL, if needed, compile, and re-register the new COM.</div><div>You can learn more about how the batch file by reading the <span class="fas fa-comment-alt-dots" style="color:blue;font-size: 120%;"></span> tooltips.</div></div>
+
+      <table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td><span>File: </span><span>BuildCOM.bat</span></td></tr></tbody></table>
+
+      <pre class="ELS1"><span class="ELS2">@echo off</span><span class="ELS2">cls</span><span class="ELS2"></span><span class="ELS2">if %1. == . goto MissingParameter   <span aria-label="Will test if at least the name of the HBP was sent" class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Will test if at least the name of the HBP was sent"></span><nobr></nobr></span><span class="ELS2"></span><span class="ELS2">if %HB_PATH%. == . goto MissingHB_PATH   <span aria-label="Method to ensure the Batch file is called from a Terminal Prompt (HarbourTerminalMinGW32.bat or HarbourTerminalMinGW64.bat)" class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Method to ensure the Batch file is called from a Terminal Prompt (HarbourTerminalMinGW32.bat or HarbourTerminalMinGW64.bat)"></span><nobr></nobr></span><span class="ELS2"></span><span class="ELS2">if exist %1.dll (   <span aria-label="Delete any previous version of the DLL. Used to help detect if a new one will be created." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Delete any previous version of the DLL. Used to help detect if a new one will be created."></span><nobr></nobr></span><span class="ELS2">    regsvr32 %1.dll /u /s   <span aria-label="Silent Unregister, so no confirmation prompt is presented." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Silent Unregister, so no confirmation prompt is presented."></span><nobr></nobr></span><span class="ELS2">    del %1.dll</span><span class="ELS2">)</span><span class="ELS2"></span><span class="ELS2">if exist %1.dll (   <span aria-label="Sadly deleting a DLL does not guarantee no process is still using it. So later the Register could still fail." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Sadly deleting a DLL does not guarantee no process is still using it. So later the Register could still fail."></span><nobr></nobr></span><span class="ELS2">    echo Could not unregister and delete the previous instance of the dll.</span><span class="ELS2">    echo Ensure all references are cleared, meaning clear all created object from any other apps/languages.</span><span class="ELS2">) else (</span><span class="ELS2">    hbmk2 %1.hbp %2 %3 %4 %5 %6   <span aria-label="Will start the actual compilation/linking." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Will start the actual compilation/linking."></span><nobr></nobr></span><span class="ELS2">    if errorlevel 0 (   <span aria-label="Even if no errorlevel was set by HBMK2, it is still possible the compilation failed. So we check if the DLL was actually created." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Even if no errorlevel was set by HBMK2, it is still possible the compilation failed. So we check if the DLL was actually created."></span><nobr></nobr></span><span class="ELS2">        if exist %1.dll (</span><span class="ELS2">            echo.   <span aria-label="Blank line. The dot must be near the word echo" class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Blank line. The dot must be near the word echo"></span><nobr></nobr></span><span class="ELS2">            echo No Compilation Errors</span><span class="ELS2">            regsvr32 %1.dll /s   <span aria-label="This registers the DLL in silent mode, so no confirmation prompt is presented. This will register 32 and 64 bit COM servers (DLL)." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="This registers the DLL in silent mode, so no confirmation prompt is presented. This will register 32 and 64 bit COM servers (DLL)."></span><nobr></nobr></span><span class="ELS2">            if errorlevel 0 (</span><span class="ELS2">                echo.</span><span class="ELS2">                echo No Registration Errors</span><span class="ELS2">            ) else (</span><span class="ELS2">                echo.</span><span class="ELS2">                echo Failed COM Registration   <span aria-label="Will try to report why the registration failed. Since some errorlevel may not be documented, at least a warning will be reported." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Will try to report why the registration failed. Since some errorlevel may not be documented, at least a warning will be reported."></span><nobr></nobr></span><span class="ELS2">                if errorlevel 1 echo Invalid Argument</span><span class="ELS2">                if errorlevel 2 echo OleInitialize Failed</span><span class="ELS2">                if errorlevel 3 echo LoadLibrary Failed</span><span class="ELS2">                if errorlevel 4 echo GetProcAddress failed</span><span class="ELS2">                if errorlevel 5 echo DllRegisterServer or DllUnregisterServer failed.</span><span class="ELS2">            )</span><span class="ELS2">        ) else (</span><span class="ELS2">            echo.</span><span class="ELS2">            echo Compilation Failed   <span aria-label="Since the DLL is not present, still report as failed compilation." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Since the DLL is not present, still report as failed compilation."></span><nobr></nobr></span><span class="ELS2">        )</span><span class="ELS2">    ) else (</span><span class="ELS2">        echo.</span><span class="ELS2">        echo Compilation Error   <span aria-label="Will try to report why the compilation failed. Since some errorlevel may not be documented, at least a warning will be reported." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Will try to report why the compilation failed. Since some errorlevel may not be documented, at least a warning will be reported."></span><nobr></nobr></span><span class="ELS2">        if errorlevel  1 echo Unknown platform</span><span class="ELS2">        if errorlevel  2 echo Unknown compiler</span><span class="ELS2">        if errorlevel  3 echo Failed Harbour detection</span><span class="ELS2">        if errorlevel  5 echo Failed stub creation</span><span class="ELS2">        if errorlevel  6 echo Failed in compilation (Harbour, C compiler, Resource compiler)</span><span class="ELS2">        if errorlevel  7 echo Failed in final assembly (linker or library manager)</span><span class="ELS2">        if errorlevel  8 echo Unsupported</span><span class="ELS2">        if errorlevel  9 echo Failed to create working directory</span><span class="ELS2">        if errorlevel 19 echo Help</span><span class="ELS2">        if errorlevel 10 echo Dependency missing or disabled</span><span class="ELS2">        if errorlevel 20 echo Plugin initialization</span><span class="ELS2">        if errorlevel 30 echo Too deep nesting</span><span class="ELS2">        if errorlevel 50 echo Stop requested</span><span class="ELS2">    )</span><span class="ELS2">)</span><span class="ELS2"></span><span class="ELS2">goto End</span><span class="ELS2"></span><span class="ELS2">:MissingHB_PATH</span><span class="ELS2">echo Run a HarbourTerminal Batch file first.</span><span class="ELS2">goto End</span><span class="ELS2"></span><span class="ELS2">:MissingParameter</span><span class="ELS2">echo Missing Parameter</span><span class="ELS2"></span><span class="ELS2">:End</span><span class="ELS2"></span></pre>
+
+      <h2 id="example-1-simple-class">Example 1. Simple class</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>The
+ following program is used to create a single object DLL. At this time, 
+it is not possible to package more than one object/class definition per 
+DLL files with Harbour.</div><div>This COM will have its own set of properties for every instance created, which is the most typical type of creating COM objects.</div><div>Let's review to code below:</div><div>On
+ line 4 we define the Objects Class Name. Once the DLL is registered 
+via, regsvr32,  this is the name you will use with 
+CreateObject("Example1.harbourwiki.1") or similar commands in the 
+calling program. In Windows you could actually make up almost any names,
+ the dots (.) are not required, but highly recommended.</div><div>On 
+line 5 we must assign a unique UUID. For readability of the code, we are
+ using compiler statements in both lines 4 and 5. </div><div><span class="fas fa-smile-wink" style="color:#003aff;font-size: 120%;"></span>
+ The Harbour.wiki site will automatically create for you a new UUID in 
+this sample code. Simply reloading this page will display a new UUID.</div><div>Most
+ of the magic in creating a COM server in Harbour comes from line 12. In
+ this line we use a "Code Block", which is a Clipper (the origins of 
+Harbour) base concept, to have each instantiated object have its one 
+memory space. The example 2, further down this article will have a 
+different way to call Win_oleServerInit. This is also where we link the 
+outside definition of the COM object to a Harbour Class (define in the 
+same PRG). But since a DLL can only host a single object definition, use
+ a single name in place of "MyHarbourClassExample". So the PROCEDURE 
+DllMAin() is the equivalent of a Main() C program for the DLL. It is the
+ way the Objects gets initialized.</div><div><br/></div><div>What makes your DLL unique will be the definition of the Harbour Class on line 16.</div><div>In
+ Harbour, we have to list all the Properties, via VAR for example, and 
+Methods via METHOD, in the code between CLASS and ENDCLASS. </div><div>Like
+ VFP the language is case insensitive. I use upper case here just for 
+readability. This feature of the language, case insensitivity, makes it 
+so nice not to deal with some bad coding standards where someone use the
+ same text with different casing to mean different things.</div><div>Afterwards,
+ on line 24, we actually define the actual code for the Echo method. 
+Please not hat the word "CLASS" with the name MyHarbourClassExample, is 
+the way to make it clear to the compiler which class this method 
+definition belongs to. In Harbour, you could spread the code for a class
+ in multiple PRGs, as long as the CLASS keyword is used in the METHOD 
+command. So this can help to create some really big classes, but coded 
+in smaller PRGs. There is no concept of "SET PROCEDURE", like in VFP, in
+ Harbour. All functions, procedure and methods are global to an entire 
+EXE of DLL, once linked. To create a routine that should only be know to
+ its PRG file only, the leading word STATIC need to be used. This is the
+ same behavior as in C.</div><div>To help debug your program,  I 
+added the definition of a routine "SendToDebugView" defined on line 45. 
+This use the Microsoft Windows Sysinternals tool <a href="https://docs.microsoft.com/en-us/sysinternals/downloads/debugview" rel="noopener noreferrer" target="_blank">DebugView</a>. In a future article I will demonstrate how to debug your code using a  graphical debugger of a running DLL.</div><div>The
+ SendToDebugView function is not an entry point (method) of the COM 
+object. It is a support function that your Harbour Code can call. In 
+turn that function, calls a C routine,OUTPUTDEBUGSTRING, that is also 
+defined in this PRG. One of the other wonderful things is Harbour is 
+that you can mix C code with your Harbour code. This is done using the 
+compiler command from line 87 to line 96.</div></div>
+
+      <table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td><span>File: </span><span>Harbour_Com_Server_Example_1.prg</span></td></tr></tbody></table>
+
+      <pre class="ELS1"><span class="ELS2"><span>// Copyright 2019 Eric Lendvai, San Diego County, CA, USA</span><span class="ELS2"><span>// Permission is granted to use this source code for any use.</span><span class="ELS2"></span><span class="ELS2"><span>#define CLS_Name  "Example1.harbourwiki.1"  <nobr></nobr></span></span><span class="ELS2"><span>#define CLS_ID    "{bb0686d4-67dd-11f1-8603-a66571ae7484}"  <span aria-label="Using a unique UUID. Use different UUID in each COM you create." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Using a unique UUID. Use different UUID in each COM you create."></span> <nobr></nobr></span></span><span class="ELS2"></span><span class="ELS2"><span>#include "hbclass.ch"</span></span><span class="ELS2"></span><span class="ELS2">PROCEDURE DllMain()</span><span class="ELS2"></span><span class="ELS2"><span>//Individual Object</span><span class="ELS2">win_oleServerInit( CLS_ID, CLS_Name, {|| MyHarbourClassExample():new() } )   <nobr></nobr></span><span class="ELS2"></span><span class="ELS2">RETURN</span><span class="ELS2"><span>//=================================================================================================================</span><span class="ELS2">CLASS MyHarbourClassExample   <nobr></nobr></span><span class="ELS2">VAR Version                    INIT "1.0.1"</span><span class="ELS2">VAR nResultOfLastComputation   INIT NIL</span><span class="ELS2">METHOD Echo()    <span aria-label="The declaration of methods don't need the list of parameter, only the implementation of it." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="The declaration of methods don't need the list of parameter, only the implementation of it."></span><nobr></nobr></span><span class="ELS2">METHOD GetOSName()</span><span class="ELS2">METHOD AddTwoNumbers()    <span aria-label="The declaration of methods don't need the list of parameter, only the implementation of it." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="The declaration of methods don't need the list of parameter, only the implementation of it."></span><nobr></nobr></span><span class="ELS2">ENDCLASS</span><span class="ELS2"><span>//=================================================================================================================</span><span class="ELS2">METHOD Echo(cString) CLASS MyHarbourClassExample   <nobr></nobr></span><span class="ELS2">RETURN cString  <span aria-label="Simply returning the value of the parameter of Echo." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Simply returning the value of the parameter of Echo."></span> <nobr></nobr></span><span class="ELS2"><span>//=================================================================================================================</span><span class="ELS2">METHOD GetOSName() CLASS MyHarbourClassExample</span><span class="ELS2">LOCAL cResult</span><span class="ELS2"></span><span class="ELS2">SendToDebugView("Called GetOSName")  <span aria-label="Example of calling SendToDebugView() only sending a label." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Example of calling SendToDebugView() only sending a label."></span><nobr></nobr></span><span class="ELS2">cResult := OS()</span><span class="ELS2">SendToDebugView("OS()",cResult)  <span aria-label="Example of calling SendToDebugView() sending the label 'OS()', with the actual value returned from Harbour, stored in cResult." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Example of calling SendToDebugView() sending the label 'OS()', with the actual value returned from Harbour, stored in cResult."></span><nobr></nobr></span><span class="ELS2"></span><span class="ELS2">RETURN cResult</span><span class="ELS2"><span>//=================================================================================================================</span><span class="ELS2">METHOD AddTwoNumbers(nValue1,nValue2) CLASS MyHarbourClassExample</span><span class="ELS2">LOCAL nResult</span><span class="ELS2"></span><span class="ELS2">nResult := nValue1 + nValue2</span><span class="ELS2">::nResultOfLastComputation := nResult    <span aria-label="This method will return the some of both parameters and also store it in the property nResultOfLastComputation." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="This method will return the some of both parameters and also store it in the property nResultOfLastComputation."></span><nobr></nobr></span><span class="ELS2">SendToDebugView("Result of AddTwoNumbers()",nResult)</span><span class="ELS2"></span><span class="ELS2">RETURN nResult</span><span class="ELS2"><span>//=================================================================================================================</span><span class="ELS2">FUNCTION SendToDebugView(cStep,xValue)    <span aria-label="Function used to send message to DebugView." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Function used to send message to DebugView."></span>  <nobr></nobr></span><span class="ELS2">LOCAL cTypeOfxValue</span><span class="ELS2">LOCAL cValue := "Unknown Value"</span><span class="ELS2"></span><span class="ELS2">cTypeOfxValue = VALTYPE(xValue)</span><span class="ELS2"></span><span class="ELS2">DO CASE</span><span class="ELS2">CASE PCOUNT() &lt; 2</span><span class="ELS2">    cValue := ""</span><span class="ELS2">CASE cTypeOfxValue == "A" <span>// Array</span><span class="ELS2">    <span>//Not coded yet</span><span class="ELS2">CASE cTypeOfxValue == "B" <span>// Block</span><span class="ELS2">    <span>//Not coded yet</span><span class="ELS2">CASE cTypeOfxValue == "C" <span>// Character (string)</span><span class="ELS2">    cValue := xValue</span><span class="ELS2">    <span>//Not coded yet</span><span class="ELS2">CASE cTypeOfxValue == "D" <span>// Date</span><span class="ELS2">    cValue := DTOC(xValue)</span><span class="ELS2">CASE cTypeOfxValue == "L" <span>// Logical</span><span class="ELS2">    cValue := IIF(xValue,"True","False")</span><span class="ELS2">CASE cTypeOfxValue == "M" <span>// Memo</span><span class="ELS2">    <span>//Not coded yet</span><span class="ELS2">CASE cTypeOfxValue == "N" <span>// Numeric</span><span class="ELS2">    cValue := ALLTRIM(STR(xValue))    <span aria-label="Unlike VFP can not use the TRANS() function. Support to this will be added via a contrib." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Unlike VFP can not use the TRANS() function. Support to this will be added via a contrib."></span><nobr></nobr></span><span class="ELS2">CASE cTypeOfxValue == "O" <span>// Object</span><span class="ELS2">    <span>//Not coded yet</span><span class="ELS2">CASE cTypeOfxValue == "P" <span>// Pointer</span><span class="ELS2">    <span>//Not coded yet</span><span class="ELS2">CASE cTypeOfxValue == "S" <span>// Symbol</span><span class="ELS2">    <span>//Not coded yet</span><span class="ELS2">CASE cTypeOfxValue == "U" <span>// NIL</span><span class="ELS2">    cValue := "Null"</span><span class="ELS2">ENDCASE</span><span class="ELS2"></span><span class="ELS2">IF EMPTY(cValue)</span><span class="ELS2">    OUTPUTDEBUGSTRING("[Harbour] "+cStep)    <span aria-label="Calling the C function added below." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Calling the C function added below."></span><nobr></nobr></span><span class="ELS2">ELSE</span><span class="ELS2">    OUTPUTDEBUGSTRING("[Harbour] "+cStep+" - "+cValue)</span><span class="ELS2">ENDIF</span><span class="ELS2"></span><span class="ELS2">RETURN .T.</span><span class="ELS2"></span><span class="ELS2"><span>#pragma BEGINDUMP    <span aria-label="Telling the Harbour compiler to include the following lines as pure C code. This will be in effect till pragma ENDDUMP" class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Telling the Harbour compiler to include the following lines as pure C code. This will be in effect till pragma ENDDUMP"></span>   <nobr></nobr></span></span><span class="ELS2"><span>#include &lt;windows.h&gt;</span></span><span class="ELS2"><span>#include "hbapi.h"</span></span><span class="ELS2"></span><span class="ELS2">HB_FUNC( OUTPUTDEBUGSTRING )  <nobr></nobr></span><span class="ELS2">{</span><span class="ELS2">    OutputDebugString( hb_parc(1) );</span><span class="ELS2">}</span><span class="ELS2"></span><span class="ELS2"><span>#pragma ENDDUMP <nobr></nobr></span></span><span class="ELS2"><span>//=================================================================================================================</span><span class="ELS2"></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></pre>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Next,
+ create the file Harbour_Com_Server_Example_1.hbp. It should also be 
+placed, along with Harbour_Com_Server_Example_1.prg, in the folder 
+C:\HarbourTestCode-32, to create 32 bit DLLs, or the folder 
+C:\HarbourTestCode-64, to create 64 bit DLLs. Use the appropriate batch 
+from from your C:\HarbourTools folder, like for example 
+HarbourTerminalMinGW32.bat, to open a Harbour Terminal, then issue the 
+command: BuildCOM Harbour_Com_Server_Example_1</div><div>That HBP file is the equivalent for a Makefile of C, or a Project of VFP.</div><div><span class="fas fa-exclamation-square" style="color:#FF0000;font-size: 240%;"></span>
+ When using the mingw-w64 compiler (which includes the 32 bit compiler),
+ like we did during the install of Harbour, and if you are create your 
+own 32 bit DLLs, you must also distribute the file libgcc_s_dw2-1.dll, 
+which is originally in the c:\Program Files 
+(x86)\mingw-w64\i686-8.1.0-win32-dwarf-rt_v6-rev0\mingw32\i686-w64-mingw32\lib\
+ folder. Therefore, also place that file in the C:\HarbourTestCode-32 
+folder.</div><div><br/></div></div>
+
+      <table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td><span>File: </span><span>Harbour_Com_Server_Example_1.hbp</span></td></tr></tbody></table>
+
+      <pre class="ELS1"><span class="ELS2">-hbdynvm    <span aria-label="Will instruct hbmk2 to generate a dll" class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Will instruct hbmk2 to generate a dll"></span><nobr></nobr></span><span class="ELS2">-inc   <span aria-label="Will instruct hbmk2 to not make complete rebuilds, but cache any previous object files with non change source files." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Will instruct hbmk2 to not make complete rebuilds, but cache any previous object files with non change source files."></span><nobr></nobr></span><span class="ELS2"></span><span class="ELS2">-OHarbour_Com_Server_Example_1   <span aria-label="Name of the dll to create" class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Name of the dll to create"></span><nobr></nobr></span><span class="ELS2"></span><span class="ELS2">${HB_PATH}\contrib\hbwin\hbolesrv.hbc   <span aria-label="Require include instruction to create DLLs" class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Require include instruction to create DLLs"></span><nobr></nobr></span><span class="ELS2">${HB_PATH}\contrib\xhb\xhb.hbc  <span aria-label="xHarbour syntax support. Needed to deal with classes." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="xHarbour syntax support. Needed to deal with classes."></span><nobr></nobr></span><span class="ELS2"></span><span class="ELS2">Harbour_Com_Server_Example_1.prg</span></pre>
+
+      <h2 id="example-2-shared-object-reference">Example 2. Shared Object Reference</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>The is the same kind of DLL source code as for Harbour_Com_Server_Example_1. The main difference is how line 12 is created.</div><div>This
+ COM will share the memory space for properties and methods. I would be 
+surprised if you would find a use for this approach, but it is still one
+ of the features of Harbour COM implementations.</div><div>Later on I provided some VFP code to help you visualize what using the two examples will generate.</div><div>For simplicity of code, I did not include the code to help you debug.</div><div><br/></div></div>
+
+      <table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td><span>File: </span><span>Harbour_Com_Server_Example_2.prg</span></td></tr></tbody></table>
+
+      <pre class="ELS1"><span class="ELS2"><span>// Copyright 2019 Eric Lendvai, San Diego County , CA, USA</span><span class="ELS2"><span>// Permission is granted to use this source code for any use.</span><span class="ELS2"></span><span class="ELS2"><span>#define CLS_Name  "Example2.harbourwiki.1"</span></span><span class="ELS2"><span>#define CLS_ID    "{1ac85542-1aa7-11e9-8ee1-005056354306}"</span></span><span class="ELS2"></span><span class="ELS2"><span>#include "hbclass.ch"</span></span><span class="ELS2"></span><span class="ELS2">PROCEDURE DllMain()</span><span class="ELS2"></span><span class="ELS2"><span>//Shared Object Ref THIS IS NOT THE WAY MOST OTHER IMPLEMENTATIONS OF COM SERVERS ARE !!!</span><span class="ELS2">win_oleServerInit( CLS_ID, CLS_Name, MyHarbourClassExample():new() )  <nobr></nobr></span><span class="ELS2"></span><span class="ELS2">RETURN</span><span class="ELS2"></span><span class="ELS2"><span>//=================================================================================================================</span><span class="ELS2"></span><span class="ELS2">CLASS MyHarbourClassExample</span><span class="ELS2"></span><span class="ELS2">VAR Version                    INIT "1.0.1"</span><span class="ELS2"></span><span class="ELS2">VAR nResultOfLastComputation   INIT NIL</span><span class="ELS2"></span><span class="ELS2">METHOD AddTwoNumbers()</span><span class="ELS2"></span><span class="ELS2">METHOD GetResultOfLastComputation()</span><span class="ELS2"></span><span class="ELS2">ENDCLASS</span><span class="ELS2"></span><span class="ELS2"><span>//=================================================================================================================</span><span class="ELS2"></span><span class="ELS2">METHOD AddTwoNumbers(nValue1,nValue2) CLASS MyHarbourClassExample</span><span class="ELS2">LOCAL nResult</span><span class="ELS2"></span><span class="ELS2">nResult := nValue1 + nValue2</span><span class="ELS2">::nResultOfLastComputation := nResult</span><span class="ELS2"></span><span class="ELS2">RETURN nResult</span><span class="ELS2"></span><span class="ELS2"><span>//=================================================================================================================</span><span class="ELS2"></span><span class="ELS2">METHOD GetResultOfLastComputation() CLASS MyHarbourClassExample</span><span class="ELS2">RETURN ::nResultOfLastComputation</span><span class="ELS2"></span><span class="ELS2"><span>//=================================================================================================================</span><span class="ELS2"></span></span></span></span></span></span></span></span></pre>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>As
+ for the first example, create the file 
+Harbour_Com_Server_Example_2.hbp. It should also be placed, along with 
+Harbour_Com_Server_Example_2.prg, in the folder C:\HarbourTestCode-32, 
+to create 32 bit DLLs, or the folder C:\HarbourTestCode-64, to create 64
+ bit DLLs. Use the appropriate batch from from your C:\HarbourTools 
+folder, like for example HarbourTerminalMinGW32.bat, to open a Harbour 
+Terminal, then issue the command: BuildCOM Harbour_Com_Server_Example_2</div></div>
+
+      <table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td><span>File: </span><span>Harbour_Com_Server_Example_2.hbp</span></td></tr></tbody></table>
+
+      <pre class="ELS1"><span class="ELS2">-hbdynvm</span><span class="ELS2"><span>#-inc</span></span><span class="ELS2"></span><span class="ELS2">-OHarbour_Com_Server_Example_2</span><span class="ELS2"></span><span class="ELS2">${HB_PATH}\contrib\hbwin\hbolesrv.hbc</span><span class="ELS2">${HB_PATH}\contrib\xhb\xhb.hbc</span><span class="ELS2"></span><span class="ELS2">Harbour_Com_Server_Example_2.prg</span></pre>
+
+      <h2 id="using-the-com-objects-from-vfp-32-bit">Using the COM objects from VFP (32 bit)</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Using
+ the 32 bit DLLs, the following VFP commands can be called from a VFP 
+PRG, or one by one in the VFP command window. It helps to demonstrate 
+how the Example 1 and 2 Harbour COM objects behaves from VFP.</div><div>You can review the VFP output by viewing the <span class="fas fa-comment-alt-dots" style="color:blue;font-size: 120%;"></span> tooltips.</div></div>
+
+      <pre class="ELS1"><span class="ELS2">clear all</span><span class="ELS2"></span><span class="ELS2">l_o1 = createobject("Example1.harbourwiki.1")</span><span class="ELS2"></span><span class="ELS2">l_o2 = createobject("Example2.harbourwiki.1")</span><span class="ELS2">l_o3 = createobject("Example2.harbourwiki.1")</span><span class="ELS2"></span><span class="ELS2">?l_o1.Echo("Hello World")   //{{Note: Will output "Hello World"}}//</span><span class="ELS2"></span><span class="ELS2">?l_o1.Echo(date())   //{{Note: Will output the current date, but formatted as a datetime (strange behavior of the COM implementation).}}//</span><span class="ELS2"></span><span class="ELS2">?l_o1.GetOSName()   //{{Note: Will output your OS info.}}//</span><span class="ELS2"></span><span class="ELS2">?l_o1.nResultOfLastComputation   //{{Note: Will output .NULL.}}//</span><span class="ELS2">?l_o1.AddTwoNumbers(1,2)   //{{Note: Will output 3}}//</span><span class="ELS2">?l_o1.nResultOfLastComputation   //{{Note: Will output 3}}</span><span class="ELS2"></span><span class="ELS2"></span><span class="ELS2">?l_o2.nResultOfLastComputation   //{{Note: Will output .NULL.}}//</span><span class="ELS2">?l_o3.nResultOfLastComputation   //{{Note: Will output .NULL.}}//</span><span class="ELS2">?l_o2.AddTwoNumbers(10,20)   //{{Note: Will output 30}}//</span><span class="ELS2">?l_o2.nResultOfLastComputation   //{{Note: Will output 30}}//</span><span class="ELS2">?l_o3.nResultOfLastComputation   //{{Note: Will output 30}}//</span><span class="ELS2">l_o2.AddTwoNumbers(11,22)   //{{Note: Will have no output since we are not using the "?" command }}//</span><span class="ELS2">?l_o3.GetResultOfLastComputation()   //{{Note: Will output 33}}//</span><span class="ELS2"></span><span class="ELS2">release all like l_o*</span><span class="ELS2"></span></pre>
+
+      <h2 id="using-the-com-objects-from-powershell-32-bit-and-64-bit">Using the COM objects from PowerShell (32 bit and 64 bit)</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Use
+ the following sample PowerShell commands to create and call the same 
+COM objects from the 32 or 64 bit PowerShell program. </div><div>Line 2 show you how to call the 32 bit PowerShell interpreter, and line 5  show how to call the 64 bit version.</div></div>
+
+      <pre class="ELS1"><span class="ELS2"><span>#Method to test 32bit com:</span></span><span class="ELS2"><span>#&gt;C:\Windows\SysWOW64\WindowsPowerShell\v1.0\powershell.exe   <nobr></nobr></span></span><span class="ELS2"></span><span class="ELS2"><span>#Method to test 64bit com:</span></span><span class="ELS2"><span>#&gt;C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe   <nobr></nobr></span></span><span class="ELS2"></span><span class="ELS2">$hb1 = New-Object -COMObject Example1.harbourwiki.1</span><span class="ELS2">$hb1.echo("test")</span><span class="ELS2">Clear-Variable hb1</span><span class="ELS2"></span></pre>
+
+      <h2 id="debugging-com-server">Debugging Com Server</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>The easiest way to debug your code is to use <a href="https://docs.microsoft.com/en-us/sysinternals/downloads/debugview" rel="noopener noreferrer" target="_blank">DebugView </a>and to make calls to SendToDebugView(cStep,xValue) described in the Harbour_Com_Server_Example_1.prg source file.</div><div><br/></div><div>To also make it easier to not receive debugging messages from other Windows Program, set the Debug Filter as follows:</div><div><img alt="" class="img-fluid" src="images/index_002.png" style="width: 420px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 249px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div>Options to use for example:</div><div><img alt="" class="img-fluid" src="images/index_003.png" style="width: 236px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 231px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div><br/></div><div>The following show you what DebugView would receive when some methods are called.</div><div><img alt="" class="img-fluid" src="images/index.png" style="width: 712px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 473px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div>You can download DebugView from <a href="https://docs.microsoft.com/en-us/sysinternals/downloads/debugview" rel="noopener noreferrer" target="_blank">https://docs.microsoft.com/en-us/sysinternals/downloads/debugview</a></div></div>
+
+      <h2 id="conclusion">Conclusion</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>This
+ was a step by step guide to create, compile and test Harbour COM 
+objects. More articles are going to be available to describe more how 
+Classes work in Harbour and how the make files can be used to control 
+the generation of DLLs. </div><div>Please use the Send message to the Author for any corrections or enhancements.</div></div>
+
+      <div class="hw-close-fallback" data-close-fallback hidden>
+        The browser did not close this tab. It may have been opened directly instead of from the Articles list. Use <a href="/articles/">Back to Articles</a>.
+      </div>
+    </article>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/assets/js/article-page.js"></script>
+  <script src="/assets/js/article-copy-code.js"></script>
+  <script src="/assets/js/article-tooltips.js"></script>
+</body>
+</html>

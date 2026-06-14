@@ -1,0 +1,31 @@
+/* Static migrated article helpers ------------------------------------------ */
+.hw-article-author { display: flex; align-items: center; gap: .65rem; margin: 1rem 0 1.25rem; }
+.hw-article-author-photo { width: 75px; height: 75px; object-fit: cover; }
+.hw-article-toc { margin-bottom: 1.4rem; }
+.hw-article-content [data-bs-toggle="tooltip"] { cursor: help; }
+.hw-article-data-table { width: 100%; margin: 1rem 0 1.5rem; border-collapse: collapse; border: 1px solid #ddd; }
+.hw-article-data-table th, .hw-article-data-table td { padding: .45rem .55rem; border: 1px solid #ddd; vertical-align: top; }
+.hw-article-data-table thead th, .hw-article-data-table th { background: #e6e6e6; font-weight: 700; }
+.hw-article-data-table tbody tr:nth-child(even) { background: #f2f2f2; }
+.hw-article-data-table ul, .hw-article-data-table ol { margin-bottom: 0; }
+.hw-article-file-label-table { margin-top: 1rem; margin-bottom: .25rem; }
+.hw-article-file-label-table td { padding: .25rem .35rem; }
+.hw-code-copy-block { margin: 1rem 0 1.5rem; }
+.hw-code-copy-header { display: flex; align-items: center; gap: 1rem; margin-bottom: .55rem; }
+.hw-code-copy-button { color: #fff; background-color: #0798d8; border-color: #0786c8; font-size: 1rem; padding: .48rem .85rem; white-space: nowrap; }
+.hw-code-copy-button:hover, .hw-code-copy-button:focus { color: #fff; background-color: #0786c8; border-color: #006da3; }
+.hw-code-copy-success { background-color: #198754 !important; border-color: #198754 !important; }
+.hw-code-copy-failed { background-color: #dc3545 !important; border-color: #dc3545 !important; }
+.hw-code-copy-label { font-size: 1.1rem; }
+.hw-code-label-hidden-table { display: none; }
+.ELS1 { background-color: #fff; padding: .6rem; border-radius: .25rem; box-shadow: .1em .1em .5em rgba(0, 0, 0, .18); counter-reset: line; overflow-x: auto; }
+.ELS2 { display: block; line-height: 1.25rem; white-space: pre; }
+.ELS2::before { counter-increment: line; content: counter(line); width: 40px; text-align: right; display: inline-block; border-right: 1px solid #ddd; padding: 0 .5em; margin-right: .5em; color: #888; }
+.mrkdw_code { background-color: #f2f2f2; }
+.mrkdw_table { border-collapse: collapse; }
+.mrkdw_table td, .mrkdw_table th { border: 1px solid #000; padding: 5px; }
+.mrkdw_table tr:nth-child(even) { background-color: #f2f2f2; }
+@media (max-width: 575.98px) { .hw-code-copy-header { align-items: flex-start; flex-direction: column; gap: .45rem; } .hw-article-data-table { display: block; overflow-x: auto; } }
+@media print { .hw-code-copy-button { display: none !important; } .hw-code-copy-header { margin-bottom: .25rem; } }
+
+.hw-article-tab-subtitle { display: none !important; }

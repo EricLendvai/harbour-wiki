@@ -1,0 +1,247 @@
+{
+  "schema_version": "1.0",
+  "kind": "harbour_wiki_articles_index",
+  "open_mode": "script_opened_new_tab",
+  "categories": [
+    {
+      "id": "harbour-compiler",
+      "title": "Harbour Compiler",
+      "articles": [
+        {
+          "title": "How to install Harbour on Ubuntu",
+          "slug": "how-to-install-harbour-on-ubuntu",
+          "summary": "Original Harbour.wiki Ubuntu setup article converted from the saved article HTML.",
+          "status": "migrated"
+        },
+        {
+          "title": "How to Install Harbour on Windows",
+          "slug": "how-to-install-harbour-on-windows",
+          "summary": "Step-by-step Windows setup covering MinGW-w64, Harbour source download, 32-bit and 64-bit builds, terminals, and Hello World testing.",
+          "status": "migrated"
+        }
+      ]
+    },
+    {
+      "id": "harbour-info",
+      "title": "Harbour Info",
+      "articles": [
+        {
+          "title": "Comparing computer languages, Harbour, VFP and others",
+          "slug": "comparing-computer-languages-harbour-vfp-and-others",
+          "summary": "Original Harbour.wiki comparison article converted from the saved article HTML.",
+          "status": "migrated"
+        },
+        {
+          "title": "Harbour an overview",
+          "slug": "harbour-an-overview",
+          "summary": "Original Harbour.wiki overview article converted from the saved article HTML.",
+          "status": "migrated"
+        }
+      ]
+    },
+    {
+      "id": "learning-harbour",
+      "title": "Learning Harbour",
+      "articles": [
+        {
+          "title": "Developing and Debugging Harbour Programs with VSCODE (Visual Studio Code)",
+          "slug": "developing-debugging-harbour-programs-vscode",
+          "summary": "Original Harbour.wiki VSCode setup/debugging article converted from the saved article HTML.",
+          "status": "migrated"
+        },
+        {
+          "title": "Harbour Developer's Guide - Early Access",
+          "slug": "harbour-developers-guide-early-access",
+          "summary": "Original Harbour.wiki Developer's Guide early-access article converted from the saved article HTML.",
+          "status": "migrated"
+        },
+        {
+          "title": "Installing and using WSL, Docker Desktop, VSCode and Harbour Samples",
+          "slug": "installing-wsl-docker-desktop-vscode-harbour-samples",
+          "summary": "Original Harbour.wiki WSL / Docker Desktop / VSCode / Harbour samples article converted from the saved article HTML.",
+          "status": "migrated"
+        }
+      ]
+    },
+    {
+      "id": "harbour-advanced",
+      "title": "Harbour Advanced",
+      "articles": [
+        {
+          "title": "How to build Harbour apps using pCode DLL with hbmk2",
+          "slug": "how-to-build-harbour-apps-using-pcode-dll-with-hbmk2",
+          "summary": "Original Harbour.wiki pCode DLL / hbmk2 article converted from the saved article HTML.",
+          "status": "migrated"
+        },
+        {
+          "title": "SQL Server Access with Habour ORM - Early Access",
+          "slug": "sql-server-access-with-habour-orm-early-access",
+          "summary": "Original Harbour.wiki SQL Server / Harbour ORM early-access article converted from the saved article HTML.",
+          "status": "migrated"
+        },
+        {
+          "title": "Windows COM Servers in Harbour. How to use Harbour from different languages.",
+          "slug": "windows-com-servers-in-harbour",
+          "summary": "Original Harbour.wiki Windows COM Servers article converted from the saved article HTML.",
+          "status": "migrated"
+        }
+      ]
+    },
+    {
+      "id": "web",
+      "title": "Web",
+      "articles": [
+        {
+          "title": "FastCGI Web Development with Harbour",
+          "slug": "fastcgi-web-development-with-harbour",
+          "summary": "Original Harbour.wiki FastCGI article converted from the saved article HTML.",
+          "status": "migrated"
+        }
+      ]
+    },
+    {
+      "id": "postgresql",
+      "title": "PostgreSQL",
+      "articles": [
+        {
+          "title": "Data Architecture and Modeling with DataWharf - Early Access",
+          "slug": "data-architecture-and-modeling-with-datawharf-early-access",
+          "summary": "Original Harbour.wiki DataWharf early-access article converted from the saved article HTML.",
+          "status": "migrated"
+        },
+        {
+          "title": "Python procedural language in PostgreSQL",
+          "slug": "python-procedural-language-in-postgresql",
+          "summary": "Original Harbour.wiki Python procedural language in PostgreSQL article converted from the saved article HTML.",
+          "status": "migrated"
+        },
+        {
+          "title": "Tips and Tricks for developers moving to PostgreSQL",
+          "slug": "tips-and-tricks-for-developers-moving-to-postgresql",
+          "summary": "Original Harbour.wiki PostgreSQL tips and tricks article converted from the saved article HTML.",
+          "status": "migrated"
+        }
+      ]
+    },
+    {
+      "id": "c-language",
+      "title": "C (The Language)",
+      "articles": [
+        {
+          "title": "Exploring the Power of C Integration in Harbour, Introdution to book from Manu Expósito Suárez",
+          "slug": "exploring-the-power-of-c-integration-in-harbour",
+          "summary": "Original Harbour.wiki C integration article converted from the saved article HTML.",
+          "status": "migrated"
+        }
+      ]
+    },
+    {
+      "id": "vfp",
+      "title": "VFP",
+      "articles": [
+        {
+          "title": "Comparing computer languages, Harbour, VFP and others",
+          "slug": "comparing-computer-languages-harbour-vfp-and-others",
+          "summary": "Original Harbour.wiki comparison article converted from the saved article HTML.",
+          "status": "migrated"
+        },
+        {
+          "title": "Introduction to Harbour, an Open Source Alternative to VFP",
+          "slug": "introduction-to-harbour-an-open-source-alternative-to-vfp",
+          "summary": "Original Harbour.wiki VFP alternative introduction converted from the saved article HTML.",
+          "status": "migrated"
+        }
+      ]
+    },
+    {
+      "id": "python",
+      "title": "Python",
+      "articles": [
+        {
+          "title": "Developing and Debugging Python Programs with VSCODE (Visual Studio Code)",
+          "slug": "developing-debugging-python-programs-with-vscode",
+          "summary": "Original Harbour.wiki Python VSCode setup/debugging article converted from the saved article HTML.",
+          "status": "migrated"
+        },
+        {
+          "title": "Python procedural language in PostgreSQL",
+          "slug": "python-procedural-language-in-postgresql",
+          "summary": "Original Harbour.wiki Python procedural language in PostgreSQL article converted from the saved article HTML.",
+          "status": "migrated"
+        }
+      ]
+    },
+    {
+      "id": "authors",
+      "title": "Authors",
+      "articles": [
+        {
+          "title": "How to compose and publish articles on harbour.wiki",
+          "slug": "how-to-compose-and-publish-articles-on-harbour-wiki",
+          "summary": "Original Harbour.wiki article-authoring guide converted from the saved article HTML.",
+          "status": "migrated"
+        }
+      ]
+    },
+    {
+      "id": "forums",
+      "title": "Forums",
+      "articles": [
+        {
+          "title": "Web Scraping Harbour Google Groups",
+          "slug": "web-scraping-harbour-google-groups",
+          "summary": "Original Harbour.wiki web-scraping Google Groups article converted from the saved article HTML.",
+          "status": "migrated"
+        }
+      ]
+    },
+    {
+      "id": "os-windows",
+      "title": "OS / Windows",
+      "articles": [
+        {
+          "title": "How to Install Harbour on Windows",
+          "slug": "how-to-install-harbour-on-windows",
+          "summary": "Step-by-step Windows setup covering MinGW-w64, Harbour source download, 32-bit and 64-bit builds, terminals, and Hello World testing.",
+          "status": "migrated"
+        },
+        {
+          "title": "Developing and Debugging Harbour Programs with VSCODE (Visual Studio Code)",
+          "slug": "developing-debugging-harbour-programs-vscode",
+          "summary": "Original Harbour.wiki VSCode setup/debugging article converted from the saved article HTML.",
+          "status": "migrated"
+        },
+        {
+          "title": "Installing and using WSL, Docker Desktop, VSCode and Harbour Samples",
+          "slug": "installing-wsl-docker-desktop-vscode-harbour-samples",
+          "summary": "Original Harbour.wiki WSL / Docker Desktop / VSCode / Harbour samples article converted from the saved article HTML.",
+          "status": "migrated"
+        },
+        {
+          "title": "Windows COM Servers in Harbour. How to use Harbour from different languages.",
+          "slug": "windows-com-servers-in-harbour",
+          "summary": "Original Harbour.wiki Windows COM Servers article converted from the saved article HTML.",
+          "status": "migrated"
+        }
+      ]
+    },
+    {
+      "id": "os-linux",
+      "title": "OS / Linux",
+      "articles": [
+        {
+          "title": "How to install Harbour on Ubuntu",
+          "slug": "how-to-install-harbour-on-ubuntu",
+          "summary": "Original Harbour.wiki Ubuntu setup article converted from the saved article HTML.",
+          "status": "migrated"
+        },
+        {
+          "title": "Installing and using WSL, Docker Desktop, VSCode and Harbour Samples",
+          "slug": "installing-wsl-docker-desktop-vscode-harbour-samples",
+          "summary": "Original Harbour.wiki WSL / Docker Desktop / VSCode / Harbour samples article converted from the saved article HTML.",
+          "status": "migrated"
+        }
+      ]
+    }
+  ]
+}

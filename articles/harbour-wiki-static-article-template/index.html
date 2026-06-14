@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Harbour Wiki Static Article Template | Harbour Wiki</title>
+  <meta name="description" content="Template page for migrated static Harbour Wiki articles.">
+  <link rel="icon" href="/images/harbour.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="/assets/css/site.css" rel="stylesheet">
+  <link href="/assets/css/articles.css" rel="stylesheet">
+</head>
+<body class="hw-article-page">
+  <header class="hw-article-tab-header">
+    <a class="hw-article-tab-brand" href="/" aria-label="Harbour Wiki home">
+      <img class="hw-article-tab-logo" src="/images/harbour.svg" alt="" aria-hidden="true">
+      <span class="hw-article-tab-title">
+        <span class="hw-article-tab-site">Harbour Wiki</span>
+        <span class="hw-article-tab-subtitle">Static article</span>
+      </span>
+    </a>
+    <div class="hw-article-tab-actions">
+      <a class="btn btn-light" href="/articles/"><i class="bi bi-arrow-left" aria-hidden="true"></i> Back to Articles</a>
+      <button class="btn btn-outline-light" type="button" data-close-article><i class="bi bi-x-lg" aria-hidden="true"></i> Close</button>
+    </div>
+  </header>
+
+  <main class="hw-article-main">
+    <article class="hw-article-content">
+      <h1>Harbour Wiki Static Article Template</h1>
+      <div class="hw-article-meta">Migration template. Replace this page with the first real migrated article after the article layout is approved.</div>
+
+      <p>This page demonstrates the simplified static article model. The article index opens each article in a new tab using JavaScript. Because the tab was script-opened, the Close button can normally close the article tab.</p>
+
+      <p>If the article was opened directly from a bookmark, pasted URL, or browser history, the browser may not allow JavaScript to close it. In that case, use <strong>Back to Articles</strong>.</p>
+
+      <h2>Article file convention</h2>
+      <pre><code>articles/&lt;article-slug&gt;/index.html
+articles/&lt;article-slug&gt;/images/</code></pre>
+
+      <h2>Image convention</h2>
+      <p>Use normal image sources, not lazy-loaded images, so printing and print-to-PDF are reliable.</p>
+
+      <pre><code>&lt;img src="images/example.png" class="img-fluid border rounded" alt="Descriptive image text"&gt;</code></pre>
+
+      <div class="hw-close-fallback" data-close-fallback hidden>
+        The browser did not close this tab. It may have been opened directly instead of from the Articles list. Use <a href="/articles/">Back to Articles</a>.
+      </div>
+    </article>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/assets/js/article-page.js"></script>
+</body>
+</html>

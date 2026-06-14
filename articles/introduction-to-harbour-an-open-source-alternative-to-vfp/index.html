@@ -1,0 +1,480 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Introduction to Harbour, an Open Source Alternative to VFP | Harbour Wiki</title>
+  <meta name="description" content="Introduction to Harbour, an Open Source Alternative to VFP. Original Harbour.wiki article converted to a static article page.">
+  <link rel="icon" type="image/svg+xml" href="/images/harbour.svg">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="/assets/css/site.css" rel="stylesheet">
+  <link href="/assets/css/articles.css" rel="stylesheet">
+  <link href="/assets/css/article-migration.css" rel="stylesheet">
+</head>
+<body class="hw-article-page">
+  <header class="hw-article-tab-header">
+    <a class="hw-article-tab-brand" href="/" aria-label="Harbour Wiki home">
+      <img class="hw-article-tab-logo" src="/images/harbour.svg" alt="" aria-hidden="true">
+      <span class="hw-article-tab-title">
+        <span class="hw-article-tab-site">Harbour Wiki</span>
+        <span class="hw-article-tab-subtitle">Static article</span>
+      </span>
+    </a>
+    <div class="hw-article-tab-actions">
+      <a class="btn btn-light" href="/articles/"><i class="bi bi-arrow-left" aria-hidden="true"></i> Back to Articles</a>
+      <button class="btn btn-outline-light" type="button" data-close-article><i class="bi bi-x-lg" aria-hidden="true"></i> Close</button>
+    </div>
+  </header>
+
+  <main class="hw-article-main">
+    <article class="hw-article-content">
+      <!-- Source: uploaded saved article HTML: 014 Introduction to Harbour, an Open Source Alternative to VFP.htm -->
+      <!-- Conversion: visible article content converted from original article HTML; saved-page navigation/scripts excluded. -->
+      <h1>Introduction to Harbour, an Open Source Alternative to VFP</h1>
+
+      
+      <div class="hw-article-author">
+        <img src="images/author.png" alt="Eric Lendvai" class="hw-article-author-photo">
+        <span><strong>Author:</strong> Eric Lendvai</span>
+      </div>
+
+      <h2>Table of Contents</h2>
+      <ul class="hw-article-toc">
+        <li><a href="#reference">Reference</a></li>
+        <li><a href="#about-me">About Me</a></li>
+        <li><a href="#introduction">Introduction</a></li>
+        <li><a href="#installing-harbour">Installing Harbour</a></li>
+        <li><a href="#using-vscode-to-edit-and-debug-programs">Using VSCODE to edit and debug programs</a></li>
+        <li><a href="#resources-for-learning-about-harbour">Resources for learning about Harbour</a></li>
+        <li><a href="#features-and-syntax-differences-between-vfp-and-harbour">Features and syntax differences between VFP and Harbour</a></li>
+        <li><a href="#gui-development-on-windows-unix-mac">GUI development on Windows, Unix, Mac</a></li>
+        <li><a href="#interop-between-harbour-and-vfp">Interop between Harbour and VFP</a></li>
+        <li><a href="#web-development-with-harbour">Web Development with Harbour</a></li>
+        <li><a href="#a-harbour-playground">A Harbour Playground</a></li>
+        <li><a href="#intro-to-the-harbour-vfp-repo">Intro to the Harbour_VFP repo</a></li>
+        <li><a href="#intro-to-a-harbour-orm-to-the-rescue">Intro to a Harbour ORM to the rescue</a></li>
+        <li><a href="#where-to-go-from-here">Where to go from here</a></li>
+      </ul>
+
+      <h2 id="reference">Reference</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>This article is a republishing of the "White paper" presented at the <a href="https://virtualfoxfest.com/Sessions.aspx#Introduction_to_Harbour" rel="noopener noreferrer" target="_blank">Virtual Fox Fest 2020 Conference</a>.</div><div><br/></div><div>The presentation can be viewed on <a href="https://www.youtube.com/watch?v=N72UmodtOvo" rel="noopener noreferrer" target="_blank">YouTube</a></div><div><br/></div><div>Copyright 2020, Eric Lendvai</div><div><br/></div><div><em>Harbour
+ is a compiler which generates pure C code from xBase-like programs, but
+ unlike other compilers, you can still use macros (evals) and do dynamic
+ linking. If you want to develop with a language that is similar to VFP,
+ is open source, and can still access VFP tables and SQL backends, 
+Harbour is the solution. With Harbour, we have access to its source 
+code, we don't have to be worried about a single vendor controlling its 
+future, and it is 100% free. Harbour was in development since before 
+1999 as a Clipper clone. Now it is incredibly stable, and it allows you 
+to create apps that can run not only on Windows, but also on Unix, Mac, 
+and Android. You can even create 64-bit apps; break the 2Gb file size 
+limit, including DBFs (256 TB); and create multi-threaded apps.</em></div></div>
+
+      <h2 id="about-me">About Me</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>I
+ received a formal education in computer science from the Brussels 
+University a long time ago… it was the first year the university stopped
+ using punch cards and was before Object-oriented Programming existed, 
+and of course, the internet. I was a consultant for most of my 30+ year 
+career, and I recently joined a large company in Seattle as a Senior 
+Software Development Engineer.</div><div><br/></div><div>As a consultant,
+ I mostly used FoxPro, Visual FoxPro and Python, and for more than 17 
+years, I’ve developed web applications. Between the two main 
+applications I developed (a complete desktop application/ERP for one of 
+the largest electrical contractors in the US and a web application with 
+over 2,100 web pages), I also had the role of a Database Architect 
+designing schemas containing over 1,000 tables (fully-normalized).</div><div><br/></div><div>While
+ an employee for three years at a San Diego-based company which provided
+ solutions for law firms, most of my development was using Harbour. As 
+one of their team members, I was responsible for becoming an expert with
+ all the modern engineering systems and tools such as Git, cloud 
+computing, agile methodology.</div><div><br/></div><div>As a VFP 
+enthusiast, I developed using FoxPro 1 to VFP 9 and chaired “The FoxPro 
+Developers Network of San Diego” for 16 years. To preview our past 
+presentation topics: <a href="https://www.foxdevsd.org/index.asp?page=MeetingPast" rel="noopener noreferrer" target="_blank">https://www.foxdevsd.org/index.asp?page=MeetingPast</a></div><div><br/></div><div>As a Harbour community member, I created a web site dedicated to the Harbour computer language: https://harbour.wiki</div><div>I published multiple technical articles on harbour.wiki, which I will refer to during this session.</div><div><br/></div><div>I
+ also create several Harbour specific repos on GitHub such as Harbour 
+FastCGI (Framework to create FastCGI apps in Harbour), Harbour ORM 
+(Currently supporting MySQL, MariaDB and PostgreSQL), and Harbour_VFP 
+(Adding some VFP features to Harbour)</div><div><br/></div><div>For more information about me and to connect, please visit: <a href="https://www.linkedin.com/in/ericlendvai/" rel="noopener noreferrer" target="_blank">https://www.linkedin.com/in/ericlendvai/</a></div></div>
+
+      <h2 id="introduction">Introduction</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div><span>What is Harbour?</span><br/>Harbour
+ is an open-source implementation of a xBase computer language, that is 
+compatible on any platforms supporting C based applications, meaning MS 
+Windows, Mac OS, Linux, Unix, iOS, and can generate 32-bit and 64-bit 
+applications and libraries.<br/>xBase is the generic term for all 
+programming languages that derive from the original dBASE programming 
+language and database formats (https://en.wikipedia.org/wiki/XBase) that
+ was first released in 1979. Harbour is classified as a 4GL language 
+since its compiler generates pure C source code. Harbour-generated 
+applications are self-contained, meaning they do not require external 
+runtime libraries. Harbour programs can be compiled to use an embedded 
+VM (virtual machine including in final EXE), or without any VM (could 
+run faster but bigger executable). Harbour has an embedded “stand-by” 
+compiler that is similar to VFP’s macros.<br/>Harbour can be classified 
+as an object-oriented, functional and data-centric language that also 
+supports procedures and functions. Harbour can also generate 
+multi-threaded applications, such as web and socket servers. Virtually 
+any C libraries can be embedded with Harbour.</div><div><br/></div><div><span>Where does it come from?</span><br/>The
+ original Harbour implementation was started in 1999 as a 100% clone of 
+Clipper, a defunct language that was a compiler version of dBase. During
+ the last 20 years, Harbour went through majors changes, in part due to a
+ forked version called xHarbour. Most features of xHarbour, a commercial
+ fork, are now re-implemented in Harbour, for the exception of a form 
+builder (closer to FoxPro for Windows than VFP). Most of the development
+ of Harbour was done by a handful of extremely skilled C developers. All
+ the source code and contributor information can be found on GitHub at 
+https://github.com/harbour/core</div><div><br/></div><div><span>How come most people have never heard of it?</span><br/>The
+ Harbour community is comprised of developers from around the world; 
+this is an open-source project with no corporate backing. It has 
+suffered due to conflict between developers wanting to remain a 100% 
+Clipper clone, and those wanting to evolve the language (mainly the 
+xHarbour supporters). I hadn’t heard much of Harbour until I began 
+working for a mid-to-large sized company that relied 100% on it for its 
+core product. I only knew of Xbase++ by Alaska Software. I discovered 
+that Harbour had virtually everything Xbase++ had except for easy web 
+development (but it started to as of early 2020). Unlike Xbase++, 
+Harbour is open-source, all operating systems, and 64-bit compatible.</div><div><br/></div><div><span>How does it compare to VFP?</span><br/>VFP
+ is one of the most amazing languages I had the chance to work with, and
+ I did/do use many of them. VFP 9 is closed source code, not free, and 
+can only run on MS Windows. Only Windows 32-bit applications can be 
+generated (using original system). But VFP has an incredible Form and 
+Class builder, that supports visual inheritance. VFP has native a SQL 
+engine embedded in the language (which was the foundation for MS-SQL). 
+VFP comes with its own CLI (command window) and a decent editor.<br/><br/>Harbour
+ does not have a built-in Form or Class designer. There are multiple 
+open-source and commercial packages that can be used with Harbour core. 
+But none have visual inheritance. Harbour is in the same state as 
+Python: a great language but no easy solution for desktop/UI 
+development. But since most new products are now web apps, so long as 
+you generate HTML, CSS, JS, you should be fine. Will review more on this
+ subject later.<br/><br/>With regard to embedded SQL, I recently released 
+an open-source Harbour-ORM which adds easy support to MariaDB, MySQL and
+ PostgreSQL, and has in-memory tables (VFP cursors). I will add 
+in-memory SQLite support soon or push-cursor-to-server functionality to 
+allow subsequent SQL commands.<br/><br/>As far as the Integrated 
+Development Environment (IDE) for developing applications, the best 
+choice for Harbour is Visual Studio Code (VSCODE). There is an 
+open-source VSCODE extension for Harbour, which brings support for 
+debugging and IntelliSense. VSCODE has so many amazing extensions which 
+will transform it from an editor to a rich IDE.<br/><br/>As far as 
+comparing the languages, they are fairly similar, but in many areas, 
+Harbour has a richer set of options. And where some features are 
+missing, they can be added fairly easily. I have a GitHub repo where I 
+am adding VFP features to Harbour. Harbour does not have a report 
+writer, but you could consume VFP object wrapper to your reports. 
+Harbour is more of a solution to write new Web apps or to extend VFP by 
+creating Harbour COM objects. Harbour, like Python 3, has full UTF8 
+support. This is crucial feature for when you are accessing UTF8 encoded
+ SQL backends.<br/><br/>One last important note: Harbour-generated 
+programs are MUCH faster than VFP’s.  Harbour programs are C 
+programs, so speed differences can be of a factor of ten to several 
+hundred times faster. For example, on a single core I7 laptop Linux VM, 
+using Harbour FastCGI under Lighttpd, we get over 2,000 responses per 
+seconds for a generic “hello world” web page, versus 15 responses per 
+seconds under a VFP/ASP/IIS solution.</div><div><br/></div><div><span>How does it compare to other languages?</span><br/>I wrote an article about this subject on the Harbour Wiki, which I created and host:<br/><br/>“Comparing computer languages, Harbour, VFP and others”<br/>https://harbour.wiki/index.asp?page=PublicArticles&amp;mode=show&amp;id=190207000911&amp;sig=1052597288<br/><br/>I
+ recommend visiting the link at the top of the article’s web page 
+labeled “Google user forum discussion about this article”. You’ll find 
+extra information and comments/fixes about the article and notes from 
+some X# users.</div><div><br/></div><div><span>What could Harbour be used for?</span><br/>Since
+ Harbour generates pure C code and has a powerful preprocessor, any 
+other C code and libraries can be merged in. You can even write C code 
+inside your PRG files.<br/><br/>Harbour can be used to create Desktop 
+apps, Web apps, COM objects (32-bit and 64-bit), and device-drivers. I 
+even saw someone compile Harbour with Objective-C and create a native 
+iOS app, and another person created a WebAssembly.<br/><br/>In my opinion, Harbour can be a phenomenal tool to create web apps and microservices.<br/>Currently
+ GO is becoming an increasingly popular programming language for 
+creating microservices, especially with large companies in Seattle. 
+Harbour has all the features of GO and all the object-oriented and 
+data-centric features as well.</div><div><br/></div><div><span>How does Harbour work?</span><br/>Harbour
+ is a language and a series of tools. Its syntax is originally from 
+Clipper but has evolved to include all other modern language features 
+like OOP, Hash Arrays (Python Dictionaries), UTF8 support, 
+multi-threading, multi-OS support. Harbour has its root in C, which 
+means that most of the C tooling is also in Harbour. It has a 
+preprocessor, a compiler, a make tool (optional) and a debugger 
+(replaceable). It does not have a CLI, but Visual Code can be used to 
+facilitate rapid prototyping and debugging.<br/><br/><strong>1. The Harbour preprocessor</strong>
+ takes PRG files and generates PPO files which are still PRG-like files,
+ but are transformed via preprocessor directives. As in C, those 
+directives are commands defined with a leading “#’ character. We have 
+our typical #define, #include, #if, #elif,#else, #endif, #ifdef, 
+#ifndef. But we have some amazing new directives like #xcommand, 
+#xtranslate that can be used to redefine the language itself. I even 
+heard of a developer that transformed COBOL code into Harbour code. This
+ is also a power set of directives that can help auto-translate VFP 
+command and functions to Harbour equivalents or some newly created 
+functions that would behave like VFP. For example, I implemented the 
+SCAN/ENDSCAN VFP structure using these directives that will call a new 
+VFP_ScanStack() function.<br/><br/>To view examples: https://github.com/EricLendvai/Harbour_VFP/blob/master/hb_vfp.ch<br/><br/>Then
+ there is #pragma directive. This will tell the compiler to behave 
+differently. I listed it in this section, since it looks like a 
+preprocessor directive, but it is used by the Harbour compiler itself. 
+This directive allows you to include actual C code in the middle of your
+ PRG file.<br/><br/>The following is an example of a hybrid Harbour and C code PRG file:<br/><br/><span>#define MAXLOOP 5<br/><br/>Function Main()<br/>local l_loop<br/><br/>MyOutputDebugString("[Harbour] Starting Hello World")<br/><br/>FOR l_loop := 1 to MAXLOOP<br/>?"Hello Harbour " + alltrim(str(l_loop))<br/>IF l_loop == 3<br/>AltD() // Same as “SET STEP ON” of VFP<br/>?"Paused Debugger"<br/>ENDIF<br/>END<br/><br/>MyOutputDebugString("[Harbour] Completed Hello World")<br/><br/>RETURN nil<br/>//========================================<br/>#pragma BEGINDUMP<br/><br/>#include &lt;windows.h&gt;<br/>#include "hbapi.h"<br/><br/>HB_FUNC( MYOUTPUTDEBUGSTRING )<br/>{<br/>OutputDebugString( hb_parc(1) );<br/>}<br/><br/>#pragma ENDDUMP</span><br/><br/>The
+ preprocessor will convert command statements, such as “APPEND BLANK” to
+ a native Harbour function: in this case, “dbAppend()”.<br/><br/><strong>2. The Harbour compiler</strong>
+ takes PPO files and generates C files. The same C compiler that was 
+used to build your local copy of Harbour itself will be called to build 
+.obj files, which are actual binary object files.<br/><br/>There are two 
+methodologies for Harbour to create the C source code files. One, the 
+most common, is to create C code that has some PCODE in it, which are 
+basically a series of C arrays with numeric values. This method relies 
+on a Harbour Virtual Machine (HVM), and Harbour Runtime Library (HRL). 
+But all of this gets linked inside a single .EXE or .DLL (or .SO for 
+Linux) you generate with Harbour. The second method is to create C code 
+that does not rely on a HVM and creates all pure C code that can still 
+use the HRL. VFP uses a PCODE-only approach by creating FXP files, which
+ then can get packaged in .APP and .EXE or .DLL. But unlike VFP, Harbour
+ does not rely on VFP runtime files (.dlls). You may wonder why even 
+have a PCODE method in Harbour? The generated C code is smaller, while 
+the source PRGs are larger.</div><div><br/><strong>3. The Make tool.</strong>
+ To do the final building of a program or library, a linker is needed. 
+The standard C linker can be called. All of these steps can be executed 
+via a MAKEFILE.<br/>Luckily one of the main Harbour contributors created a
+ Harbour-specific make tool instead that automates all building steps. 
+It is called the hbmk2 tool and will use a .HBP file (a text file) as 
+the equivalent of a VFP project file.<br/><br/>Alternatively, Harbour can 
+also generate pseudo-PCODE files, similarly to VFP .FXP files, that are 
+called .HRB files. But those files may not include embedded C code – 
+only pure Harbour source code.<br/><br/>To clarify, there are two type of 
+PCODE in Harbour: one inside C-generated files and one with actual PCODE
+ files with the .HRB extension (not C code).<br/><br/>All of this is more 
+complicated than VFP or other modern languages. But this also provides 
+more options and power to Harbour. Since Harbour is a compiler, most 
+source code errors are detected during the compilation process instead 
+of at runtime.<br/><br/>I created a flowchart that shows the Harbour 
+Language Compilation Process. To view this chart at full scale: 
+https://harbour.wiki<br/><br/>From the home page go to “Click here to review the Harbour Language Compilation Process Diagram.”</div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_002.png" style="width: 1259px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 593px; position: relative; max-width: 100%; cursor: pointer;"/></div></div>
+
+      <h2 id="installing-harbour">Installing Harbour</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>I wrote an article about this subject on the Harbour Wiki, “How to Install Harbour on Windows”<br/><a href="https://harbour.wiki/index.asp?page=PublicArticles&amp;mode=show&amp;id=190129210053&amp;sig=7790451073" rel="noopener noreferrer" target="_blank">https://harbour.wiki/index.asp?page=PublicArticles&amp;mode=show&amp;id=190129210053&amp;sig=7790451073</a><br/><br/>You can find an article on the same wiki from another author, “How to install Harbour on Ubuntu”<br/><a href="https://harbour.wiki/index.asp?page=PublicArticles&amp;mode=show&amp;id=191217205049&amp;sig=1012240743" rel="noopener noreferrer" target="_blank">https://harbour.wiki/index.asp?page=PublicArticles&amp;mode=show&amp;id=191217205049&amp;sig=1012240743</a><br/><br/>Alternatively,
+ you can download a pre-compiled version of Harbour builds with the 
+latest Mingw64 C compiler from GitHub CI (Continuous Integration) engine
+ (workflow) at https://github.com/EricLendvai/Harbour_Builds<br/>which came originally from https://github.com/FiveTechSoft/Harbour_builder/<br/><br/>The version on my personal repo has more documentation in the yml definition file.<br/>But you still need to install Mingw locally to be able to compile your own programs.</div></div>
+
+      <h2 id="using-vscode-to-edit-and-debug-programs">Using VSCODE to edit and debug programs</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>I
+ wrote an article about this subject on the Harbour Wiki, “Developing 
+and Debugging Harbour Programs with VSCODE (Visual Studio Code)”<br/><a href="https://harbour.wiki/index.asp?page=PublicArticles&amp;mode=show&amp;id=190401174818&amp;sig=6893630672" rel="noopener noreferrer" target="_blank">https://harbour.wiki/index.asp?page=PublicArticles&amp;mode=show&amp;id=190401174818&amp;sig=6893630672</a><br/><br/>To
+ make your life easier, I recommend installing and using VSCODE. Many 
+veteran Harbour developers use generic text editors and a text-based 
+Harbour debugger. But for VFP developers, not using VSCODE would be like
+ going back to coding in FoxBase (Before VFP and FoxPro).<br/><br/>To further test your Harbour installation, feel free to download and use the repo:<br/><a href="https://github.com/EricLendvai/Harbour_Samples" rel="noopener noreferrer" target="_blank">https://github.com/EricLendvai/Harbour_Samples</a></div></div>
+
+      <h2 id="resources-for-learning-about-harbour">Resources for learning about Harbour</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>As I’ve referenced to earlier, I highly suggest visiting https://harbour.wiki<br/><br/>You
+ find articles, links and documentation about Harbour. Additionally, you
+ can view and post messages to a large community of Harbour developers 
+at the following google forum:<br/>https://groups.google.com/forum/#!forum/harbour-users<br/><br/>To search past posts, I recommend using the “Query Harbour Google Groups”<br/>https://harbour.wiki/index.asp?page=PublicSearchGoogleGroups<br/><br/><strong>Please note the official Harbour website</strong> https://harbour.github.io/ <strong>is defunct.</strong><br/><br/>Example for looking up Harbour functions (API)</div><div><img alt="" class="img-fluid" src="images/index.png" style="width: 933px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 787px; position: relative; max-width: 100%; cursor: pointer;"/></div></div>
+
+      <h2 id="features-and-syntax-differences-between-vfp-and-harbour">Features and syntax differences between VFP and Harbour</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>This section will highlight the major differences between VFP and Harbour. There is no particular order to the list below.<br/><br/>One of the best ways to see what Harbour code looks like is to browse my Harbour-specific repos at <a href="https://github.com/EricLendvai" rel="noopener noreferrer" target="_blank">https://github.com/EricLendvai</a><br/><br/>There
+ is no “SET PROCEDURE” command in Harbour. Any PROCEDURE, FUNCTION or 
+CLASS definition in any of the PRG and C files that get compiled and 
+linked together can be accessed from any place in your program. If you 
+want to make a FUNCTION or PROCEDURE reachable from within the PRG they 
+are defined in, add the STATIC option. The same goes if you want to 
+restrict the creation of objects to a CLASS inside a PRG file, the 
+STATIC option will be required. This behavior of global scope and 
+name-spacing (local PRG) is similar to C.<br/><br/>Programs created with 
+Harbour do not require a set of external runtime files. PRG files 
+compile down to object files (binary), which can be grouped in library 
+files and then finally linked as an executable or other library file. 
+All the Harbour functions are grouped in library files. You have to 
+explicitly tell the Harbour compiler to “bring in” these libraries to 
+assemble your final program. For example, if you create web apps, you 
+would not need the UI engine, or if you create an encryption engine, you
+ would not link all the data-centric features. Most libraries also come 
+with a header include file (.ch) that would have #define, #xcommand, 
+#xtransform, that you would need to call in your PRG files via the 
+#include directive. Luckily the Harbour hbmk2 make program will help you
+ assemble those libraries, and on Harbour.wiki, the “Harbour API 
+Explorer” or “Harbour Source Code Explorer” web pages can help you 
+identify which header and library files to use. By default the HVM 
+(Harbour Virtual Machine) library file will also be linked in your EXE 
+or DLL.<br/><br/>Harbour classes are defined differently. For example, you
+ would define all the methods first, then you can implement them 
+anywhere in your PRG. There are techniques you can use to split class 
+implementation among multiple PRG files. Properties can also be defined 
+at the level of the class, instead of just an object. But there is no 
+constructor method being automatically called, like an “init” method. 
+The solution is to create a constructor function to wrap the creation of
+ objects. For some extensive code samples, go to <a href="https://github.com/EricLendvai/Harbour_ORM" rel="noopener noreferrer" target="_blank">https://github.com/EricLendvai/Harbour_ORM</a><br/>A good place to see the help information: <a href="http://www.kresin.ru/en/hrbfaq_3.html#Doc3" rel="noopener noreferrer" target="_blank">http://www.kresin.ru/en/hrbfaq_3.html#Doc3</a><br/><br/>Harbour
+ Arrays are single dimension. But each cell of an array can contain 
+another array. When using this technique, there are no limits to the 
+dimension of your arrays. To search in a multi-dimension array, you 
+would use the hb_AScan function with a codeblock function. This method 
+of searching is more powerful than VFP’s ASCAN() function, and it 
+already returns the row number, so you would not need to use the 
+AELEMENT() function.<br/><br/>Hash Arrays are basically the equivalent of 
+Python dictionaries. Instead of using integers for the position in your 
+array, you can use any text. This creates the “key” / “Value” concept.<br/>And
+ since array elements can include other arrays, you could for example 
+refer to a cell as follows: 
+MyArray[&lt;cTableName&gt;][&lt;cFieldName&gt;][2]<br/>A good place to see the help information: <a href="http://www.kresin.ru/en/hrbfaq_3.html#Doc8" rel="noopener noreferrer" target="_blank">http://www.kresin.ru/en/hrbfaq_3.html#Doc8</a><br/>Make sure you use square brackets instead of parenthesis.<br/><br/>To refer to a field between the alias and field names, use the symbols “-&gt;” versus “.”<br/>For example: clients-&gt;firstname<br/><br/>To
+ help the compiler resolve tokens, if you try to access a field from the
+ current work area by using the field name, use the keyword FIELD. You 
+also could use a compiler directive to tell which token are fields, but 
+using the FIELD fake alias name works better.<br/>For example: field-&gt;firstname<br/><br/>Assignments are done using “:=” instead of “=” . In some cases, you can still use “=”, but to make it easier, always use “:=”.<br/><br/>You don’t need to use the REPLACE command to assign a value to a field. You can use the regular “:=” syntax.<br/>For example: clients-&gt;firstname := “Eric”<br/><br/>To refer to a property or method use a “:” instead of “.” .<br/>For example: MyObject:MyProperty or MyObject:MyMethod(parameters)<br/><br/>Instead of using “this”, use “::”<br/><br/>Instead of “WITH” use “WITH OBJECT”.<br/><br/>Harbour thinks of Nulls as empty strings. So hb_IsNull() will test for a zero-length variable.<br/>Use hb_IsNil() to test for what in VFP we would use ISNULL().</div><div><br/></div><div>The Empty(xValue)  function works the same in VFP as in Harbour except when testing for NIL /NULL.<br/>In VFP Empty(NULL) returns false; in Harbour Empty(NIL) returns true.</div><div><br/>Harbour
+ does not support NIL values in default, so loading a NIL field value 
+becomes an empty value. Use the Harbour_ORM project I created instead to
+ work around the NIL(NULL) support.<br/><br/>Instead of “and” / “or” use “.and.” “.or.”<br/><br/>Harbour
+ has the concept of codeblocks, which are similar to Lambda functions 
+that are precompiled as PCODE. For VFP developers, we can avoid them 
+most of the time. They are used in many UI libraries for searching and 
+looping. I will create a full article about this powerful feature later.<br/><br/>Calling a command by its first four characters only is not properly supported; use Alltrim() instead of allt().<br/><br/>In
+ addition to PRIVATE, PUBLIC and LOCAL variables, Harbour also has 
+STATIC variables. These are fantastic. Values in these variables will 
+remain between function calls – great for counters and storing state.<br/><br/>The LOCAL command line also allows you to set an initial value.<br/>For example: Local dToday := date()<br/><br/>The
+ default unit of time is 1 day, not 1 second. If you store in two 
+variables the current DATETIME(), the difference would be in days. To 
+work around that, you could use the following preprocessor directive to 
+make a GetTimeDeltaInMs function available anywhere in your code: 
+#xtranslate GetTimeDeltaInMs(&lt;DateTime1&gt;,&lt;DateTime2&gt;) =&gt; 
+(&lt;DateTime2&gt;-&lt;DateTime1&gt;)*(24*3600*1000)<br/><br/>Harbour will support all C style assignments, like: “+=”<br/>For example: cHtml += “&lt;div id=’hello’&gt;”<br/>Instead of “SET STEP ON” use “AltD()”<br/><br/>Binding
+ files and table-bound inside executables can be done easily in VFP 
+through the use of a project (.PJX). To achieve this feature in Harbour,
+ you either have to use a #pragma (limited to 16Mb) or use a C 
+workaround like the one provided by 
+https://github.com/graphitemaster/incbin<br/>At this point, I am not 
+aware of any simple binding for DBF+FPT+CDX. The easiest would be to 
+create an in-memory table, and in your code, execute all the needed 
+APPEND/REPLACE.<br/><br/>The “TEXT TO” / “ENDTEXT” commands can be substituted using the following:<br/>#<span>pragma __text|&lt;v&gt;+=%s+hb_eol();&lt;v&gt;:=""</span><br/>But the text merging feature “&lt;&lt;” + ”&gt;&gt;” needs to be done via string replaces.<br/><br/>Aside
+ from the typical Harbour debuggers, like the one included when using 
+VSCODE, in MS Windows, we can also use the DebugView tool. I recommend 
+using the following filter settings:</div><div><img alt="" class="img-fluid" src="images/index_005.png" style="width: 438px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 260px; position: relative; max-width: 100%; cursor: pointer;"/></div><div>So
+ long as you prefix your messages with the string “[Harbour]”, you will 
+only view your messages, and not the ones generated by Windows and other
+ applications.<br/><br/>Harbour has a Replaceable Database Driver (RDD) 
+engine. This means you are not limited to the DBF/DBT/NDX files, and you
+ can also use VFP tables like DBF/FPT/CDX. We can even create our own 
+RDD library to access other formats. Imagine using 
+APPEND/REPLACE/SKIP/GOTO/LOCATE on non DBF files.<br/><br/>Reverse 
+engineering a Harbour-generated program is almost impossible when 
+compiled without the use of the HVM (Harbour Virtual Machine). But plain
+ text in source code can be detected (via hex editor) unless the 
+following obfuscation technique is used:<br/><span>#pragma TEXTHIDDEN(1)<br/>cPassword := “Some secret I want to obfuscate”<br/>#pragma TEXTHIDDEN(0)</span><br/><br/>With
+ regard to system capacity, when using Harbour in 64-bit mode, any 
+files, including DBF files, can exceed the 2GB file size limit. The 
+number of rows is still restricted to 2^^10 due to file format 
+specifications. Tables and index files are not compatible with VFP in 
+this case. PROCEDURE and FUNCTION definitions are not limited to 64Kb 
+(supposedly neither in VFP, but it creates memory leaks). String length 
+in source code is virtually limitless.</div></div>
+
+      <h2 id="gui-development-on-windows-unix-mac">GUI development on Windows, Unix, Mac</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Nothing
+ in my experience beats the UI development speed of VFP for Windows 
+32-bit desktop applications. VFP has a Visual Form and Class designer 
+with Visual Inheritance, meaning that regular Object-Oriented 
+inheritance can be graphically designed. And as developers, we can 
+create Builders which can be used to easily manipulate Properties, 
+Events and Methods (PEM) in the Form designer.<br/><br/>But the problem is
+ it only works for Windows 32-bit apps. If you need to break the memory 
+restrictions and /or want to create desktop apps also for Linux and Mac 
+OS, you need to leave VFP.  Harbour does not have a native 
+graphical user interface, but it can consume any number of them. Here is
+ a list of the best-known ones:</div><div><img alt="" class="img-fluid" src="images/index_003.png" style="width: 731px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 492px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div>Web-based technologies such as HTML and CSS can be the best solutions to provide the<br/>GUI layer for desktop applications<br/><br/>Many approaches to this have been tried in the past, like JavaFX for the Java Language.<br/><br/>One of the most popular open-source software frameworks used to build cross multi-OS<br/>platform
+ products is Electron. Visual Studio Code, Slack, Skype, Teams, GitHub 
+Desktop, WhatsApp Desktop, Discord, WordPress Desktop and Atom, are a 
+few of the most popular desktop applications created with Electron.<br/><br/>Since
+ Harbour is a Multi-OS Platform compiler, we guess it may be possible to
+ build a multi-platform HTML/CSS GUI with it. If our UI is web based but
+ still runs as a Desktop application, we get all the benefits of local 
+processing and local resources, such high-end displays, printers and 
+scanners. We can also add rich multimedia content, handle form resizing,
+ and adhere to responsive design standards.<br/><br/>I recently met a team of international developers that have a prototype of an electron-like<br/>tool
+ for Harbour. You will be able to develop desktop/web enabled UI apps in
+ Harbour without having to constantly rely on JavaScript.<br/><br/>Remember that Harbour is a 4GL language that generates pure C code, meaning you can<br/>create high-performance applications with some level of source code anti-reverse<br/>engineering protection.</div></div>
+
+      <h2 id="interop-between-harbour-and-vfp">Interop between Harbour and VFP</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>I
+ wrote an article on the Harbour Wiki about how to create COM objects in
+ Harbour to be used in VFP. Since VFP is a Windows 32-bit application, 
+you will be restricted to create Harbour 32-bit dlls as well. Please 
+note that Harbour can create 64-bit COM objects as well.<br/><br/>“Windows COM Servers in Harbour. How to use Harbour from different languages.”<br/><a href="https://harbour.wiki/index.asp?page=PublicArticles&amp;mode=show&amp;id=190112000143&amp;sig=2413934099" rel="noopener noreferrer" target="_blank">https://harbour.wiki/index.asp?page=PublicArticles&amp;mode=show&amp;id=190112000143&amp;sig=2413934099</a><br/><br/>As
+ far as consuming VFP COM objects inside of Harbour applications, you 
+will be forced to create Windows 32-bit Harbour programs. Harbour comes 
+with the function CreateObject( 
+"&lt;COMObjectName&gt;.&lt;ClassName&gt;") that returns a Harbour object
+ reference. This behaves exactly the same way as in VFP. Remember to 
+select "Multi-threaded COM server (dll)" in the "Build Options" screen 
+of your "Project Manager" in VFP.</div></div>
+
+      <h2 id="web-development-with-harbour">Web Development with Harbour</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>I wrote an article about this subject on the Harbour Wiki, “FastCGI Web Development with Harbour”<br/><a href="https://harbour.wiki/index.asp?page=PublicArticles&amp;mode=show&amp;id=190207001538&amp;sig=3331951908" rel="noopener noreferrer" target="_blank">https://harbour.wiki/index.asp?page=PublicArticles&amp;mode=show&amp;id=190207001538&amp;sig=3331951908</a><br/><br/>All the source code is located at: <a href="https://github.com/EricLendvai/Harbour_FastCGI" rel="noopener noreferrer" target="_blank">https://github.com/EricLendvai/Harbour_FastCGI</a><br/>There are also a couple of other projects created by other Harbour developers that could be of interest.<br/><br/>The following project is mainly an Apache module:<br/>https://fivetechsoft.github.io/mod_harbour/<br/>There is quite a bit of following for this project.<br/><br/>The following project is also an Apache module but is quite fast, since can handle multi-concurrency and multi-treaded:<br/>https://www.mod-harbour.com<br/>They are also going to provide secure websocket-based (WS/WSS Protocol) solutions.<br/><br/>The one I created follows the principles of object-oriented design, has a VFP flavor to it, and is also very fast.<br/><br/>The Harbour core repo also has a native HTTP server written in Harbour, but it is not maintained.<br/><br/>Please see the article I listed above about why I choose the FastCGI approach instead.<br/><br/>Additionally, there is a websocket server repo that may be of interest:<br/>https://github.com/FiveTechSoft/wsserver (Under development)</div></div>
+
+      <h2 id="a-harbour-playground">A Harbour Playground</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>One
+ sample of Harbour FastCGI repo is a “Local Sandbox”. This will make it 
+easy to play around with Harbour sample code, allowing you to test and 
+learn more about coding in Harbour.<br/><br/>Per the instructions in the “Web Development With Harbour” article, once you start your instance of Apache, open a browser to:<br/>http://localhost:8164/fcgi_localsandbox/<br/><br/>The following figure shows an example of editing and running some Harbour Code, all in a web page.</div><div><img alt="" class="img-fluid" src="images/index_004.png" style="width: 1092px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 480px; position: relative; max-width: 100%; cursor: pointer;"/></div></div>
+
+      <h2 id="intro-to-the-harbour-vfp-repo">Intro to the Harbour_VFP repo</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Even
+ though these last 3 years I developed in Harbour without attempting to 
+convert VFP applications, I found myself missing a few VFP features, 
+like SCAN/ENDSCAN and case insensitive strtran(). The Harbour core repo 
+has a contrib that provides a few FoxPro extra features but is not VFP 
+aware. I recently created a repo to add VFP features. This is a work in 
+progress, and of course, I welcome any help!<br/><br/><a href="https://github.com/EricLendvai/Harbour_VFP" rel="noopener noreferrer" target="_blank">https://github.com/EricLendvai/Harbour_VFP</a><br/><br/>Please open the file Examples\hb_vfp_Test.code-workspace with VSCODE and review the Test.prg file.<br/><br/>There
+ are two methods to incorporate this library into your application: 
+either #include the file hb_vfp.ch or vfp.ch . Use hb_vfp.ch if you want
+ to add VFP features to the native Harbour language, or use the file 
+vfp.ch if you also have VFP feature supersede any Harbour features. I 
+would strongly advise you to use hb_vfp.ch and learn any Harbour 
+counterpart features to VFP.</div></div>
+
+      <h2 id="intro-to-a-harbour-orm-to-the-rescue">Intro to a Harbour ORM to the rescue</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Harbour
+ does not have natively the equivalent of VFP cursors or an easy way to 
+fetch SQL backend data. Luckily, we can find some Harbour core contribs 
+to assist us. Also, Harbour does not have a local SQL engine, and cannot
+ run SQL against DBFs or cursors. I created the Harbour ORM with the 
+purpose of making it easier to get SQL server data, add support for 
+cursors, and handle local SQL. Currently the ORM takes care of the first
+ two issues, and there is a path to handle local SQL requirements 
+hopefully soon.<br/><br/>The repo is located at: https://github.com/EricLendvai/Harbour_ORM<br/><br/>Please review the readme on the repo for latest design and use information.<br/><br/>There are three VSCODE workspace files:<br/><br/>1. To manage the hb_orm library open with VSCODE<br/>./hb_orm.code-workspace<br/>2. To build a test program to manipulate in-memory cursors ./Examples/Cursors/hb_orm_Examples_Cursors.code-workspace<br/>3. To Build a test program to demonstrate accessing a MariaDB and PostgreSQL server<br/>./Examples/SQL_CRUD/hb_orm_Examples_SQL_CRUD.code-workspace</div></div>
+
+      <h2 id="where-to-go-from-here">Where to go from here</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Please
+ join me in discovering and using Harbour. Harbour has much to offer: it
+ is quite similar yet quite different from VFP; it is old but also 
+incredibly powerful and flexible; it has a lot of potential for growth; 
+and lastly, it is slower to develop in than VFP, but it is SO MUCH 
+faster to run.<br/><br/>I am in contact with top Harbour developers 
+working on close integration with Python, Electron like Desktop apps and
+ more Web development tools, so please stay tuned for further 
+developments.<br/><br/>And feel free to contact me (information listed on 
+the cover page) if you would like to further discuss how you can get 
+involved in the Harbour community, and/or if you interested in 
+contributing to the Harbour_VFP repo project.</div></div>
+
+      <div class="hw-close-fallback" data-close-fallback hidden>
+        The browser did not close this tab. It may have been opened directly instead of from the Articles list. Use <a href="/articles/">Back to Articles</a>.
+      </div>
+    </article>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/assets/js/article-page.js"></script>
+  <script src="/assets/js/article-copy-code.js"></script>
+</body>
+</html>

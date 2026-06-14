@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>How to Install Harbour on Windows | Harbour Wiki</title>
+  <meta name="description" content="How to Install Harbour on Windows. Original Harbour.wiki article converted to a static article page.">
+  <link rel="icon" type="image/svg+xml" href="/images/harbour.svg">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/scripts/FontAwesome_5_3_1/css/all.min.css" rel="stylesheet">
+  <link href="/assets/css/site.css" rel="stylesheet">
+  <link href="/assets/css/articles.css" rel="stylesheet">
+  <link href="/assets/css/article-migration.css" rel="stylesheet">
+</head>
+<body class="hw-article-page">
+  <header class="hw-article-tab-header">
+    <a class="hw-article-tab-brand" href="/" aria-label="Harbour Wiki home">
+      <img class="hw-article-tab-logo" src="/images/harbour.svg" alt="" aria-hidden="true">
+      <span class="hw-article-tab-title">
+        <span class="hw-article-tab-site">Harbour Wiki</span>
+        <span class="hw-article-tab-subtitle">Static article</span>
+      </span>
+    </a>
+    <div class="hw-article-tab-actions">
+      <a class="btn btn-light" href="/articles/"><i class="fas fa-arrow-left" aria-hidden="true"></i> Back to Articles</a>
+      <button class="btn btn-outline-light" type="button" data-close-article><i class="fas fa-times" aria-hidden="true"></i> Close</button>
+    </div>
+  </header>
+
+  <main class="hw-article-main">
+    <article class="hw-article-content">
+      <!-- Source: OriginalArticles/Harbour Language Wiki Articles.htm -->
+      <!-- Conversion: visible article content converted from original article HTML; saved-page navigation/scripts excluded. -->
+      <h1>How to Install Harbour on Windows</h1>
+
+      <div class="hw-article-author">
+        <img src="images/author-eric-lendvai.png" alt="Eric Lendvai" class="hw-article-author-photo">
+        <span><strong>Author:</strong> Eric Lendvai</span>
+      </div>
+
+      <h2>Table of Contents</h2>
+      <ul class="hw-article-toc">
+        <li><a href="#introduction">Introduction</a></li>
+        <li><a href="#installing-c-compiler-mingw-w64-for-32-and-64-bit-windows">Installing C compiler MinGW-w64 for 32 and 64 bit Windows</a></li>
+        <li><a href="#download-harbour-core">Download Harbour Core</a></li>
+        <li><a href="#compiling-harbour-in-32-bit-mode-with-mingw">Compiling Harbour in 32 bit mode with MinGW</a></li>
+        <li><a href="#compiling-harbour-in-64-bit-mode-with-mingw">Compiling Harbour in 64 bit mode with MinGW</a></li>
+        <li><a href="#setting-up-a-32-bit-terminal">Setting up a 32 bit Terminal</a></li>
+        <li><a href="#setting-up-a-64-bit-terminal">Setting up a 64 bit Terminal</a></li>
+        <li><a href="#testing-the-installation-for-harbour-hello-world">Testing the installation for Harbour, Hello World</a></li>
+        <li><a href="#conclusion">Conclusion</a></li>
+      </ul>
+
+      <h2 id="introduction">Introduction</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>You can find a generic description of how to build Harbour from source at the master github repo: <a href="https://github.com/harbour/core#how-to-build" rel="noopener noreferrer" target="_blank">https://github.com/harbour/core#how-to-build</a><br/><br/>But this article will focus on real, step by step, instructions for those developing in Microsoft Windows.<br/>This article is also a practical guide for VFP developers intending to use Harbour.<br/><br/>One
+ of the main reasons to use Harbour on Windows, is the ability to use 
+and create COM objects. This allows you to have Object Oriented language
+ interoperability.<br/>For VFP developers, this could be a means to add Harbour components to your VFP app, or add to Harbour VFP COM objects.<br/><br/>This article will also be regularly updated as new versions of Windows and C compilers are made available.<br/><br/>The
+ Harbour compiler takes PRG files, creates some C source code equivalent
+ files, than relies on a C compiler and linker to create the actual 
+binaries.<br/><br/>There are two methodologies for Harbour to create the C
+ source code files. One, the most common, is to create C code that has 
+some PCODE in it, which are basically a series of arrays with numeric 
+values. This method relies on a Harbour Virtual Machine (HVM), and 
+Harbour Runtime Library (HRL). But all of this gets linked inside a 
+single EXE you generate with Harbour. The second method is to create C 
+code that does not rely on a HVM, and creates all pure C code, that can 
+still use the HRL. VFP use a PCODE only approach, by creating FXP files,
+ which then can get packaged in APP and EXE. But unlike VFP, Harbour 
+does not rely on VFP runtime files (.dlls). So you may wonder, why even 
+have a PCODE method in Harbour. The generated C code is smaller, while 
+the source PRGs are larger.<br/><br/>Also one of the huge advantages of 
+the way Harbour works, by generating C code, is that final EXEs are 
+protected from decompilation. Any decompilation would result in hard to 
+read C code, never your original PRG source files.<br/><span class="fas fa-exclamation-square" style="color:#FF0000;font-size: 240%;"></span>
+ .Net, Java programs can be easily decompiled. NodeJS, Python (generic 
+version), PHP and others requires distribution of source code. Even VFP 
+could be decompiled (but difficult if branded via 3rd party commercial 
+products). C, C++, assembler, Delphi, and Go are probably the most 
+reverse engineering proof languages to use. Harbour, xHarbour and 
+Xbase++ (by Alaska Software), all generate intermediate C code. xHarbour
+ was a commercial fork of Harbour, but all of its features are now in 
+Harbour. Xbase++ is a closed code commercial license product, that only 
+generates 32 bit Windows programs, and to my knowledge, will not allow 
+you to create COM servers. Harbour is the only compiler that is open 
+source, 100% free, 32 and 64 bit, and virtually runs on all platforms C 
+can run on, like Windows, DOS, Mac, Unix, and Linux. VFP still has some 
+huge advantages compared to all those languages, more to come on this.</div><div><br/></div><div>There
+ are many C compilers available under Windows. The main Harbour 
+documentation claims many can be used to compiler programs. But if you 
+want to also build COM objects, in my experience use MinGW or Microsoft 
+C. MinGW has the advantage of being open source and much smaller to 
+install. Also when creating a 32 bit COM object, you will only need to 
+distribute a small support dll file (libgcc_s_dw2-1.dll), and none when 
+creating 64 bit COM objects. Alternatively with Microsoft C, if you 
+don't already have it, you will need to install Visual Studio 2017, on 
+Windows 8.1 or above, and distribute a C/C++ runtime installer for non 
+Windows 10 or above users.</div><div><br/></div><div>I will focus on 
+installing MinGW, the Harbour source code, and how to compile it under 
+Windows 32 and 64 bit. Then will show how to test your install with the 
+standard "Hello World" program. I will not describe how to build Harbour
+ with Microsoft C, since Installing Visual Studio can take one hour, 
+require a huge amount to download, and uninstalling it can be a real 
+nightmare, and leave lots of unwanted programs on your computer.</div><div><br/></div><div>For
+ VFP developer wanting to use Harbour COM objects, or consume VFP COM 
+objects in Harbour, you must always compile in 32 bit mode.</div><div><br/></div><div>You may wonder why create 64 bit DLL? You could consume them from a C++ FastCGI app for example, under Windows.<span class="fas fa-smile-wink" style="color:#003aff;font-size: 120%;"></span></div><div><br/></div><div>You can also call Harbour COM object from PowerShell 32 and 64 bit !</div><div><br/></div><div>64
+ bit apps will also help you break the 2Gb file size limit of DBF / FPT 
+files, and read and write any files of almost any size!<br/><br/></div></div>
+
+      <h2 id="installing-c-compiler-mingw-w64-for-32-and-64-bit-windows">Installing C compiler MinGW-w64 for 32 and 64 bit Windows</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>On
+ Windows 64 bit OS, you will be able to install the 32 and 64 compilers.
+ But to do so you will need to run the installer twice.</div><div><br/></div><div>First download the free compiler using the following <a href="https://sourceforge.net/projects/mingw-w64/files/mingw-w64/" rel="noopener noreferrer" target="_blank"><u>link</u></a> and get the file MinGW-W64-install.exe  (the online installer).</div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_012.png" style="width: 389px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 177px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_006.png" style="width: 474px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 348px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><table class="hw-article-file-label-table"><tbody><tr><td>Use the following setting to install the 32 bit C compiler / linker.<br/></td><td>Use the following setting to install the 64 bit C compiler / linker.<br/></td></tr><tr><td><img alt="" class="img-fluid" src="images/index_009.png" style="width: 469px; display: block; vertical-align: top; margin: 5px auto; text-align: center; height: 344px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></td><td><img alt="" class="img-fluid" src="images/index_011.png" style="width: 467px; display: block; vertical-align: top; margin: 5px auto; text-align: center; height: 342px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></td></tr><tr><td><div>Note
+ about the "Threads" setting. You can select posix or win32. I could not
+ find a reason to stay with posix under Windows except for the following
+ warning "win32 thread model, which prevents full C++11 compliance". But
+ since Harbour uses the C compiler by default, not C++, I think 
+specifying "win32" could ensure more compatibility with other Windows 
+internals. Send me (the author) a message if you have more info on this.
+ The Harbour web site has a feature to send messages directly to 
+Authors.</div><div><br/></div></td></tr><tr><td>The following is the default location for 32 bit installs:<br/>C:\Program Files (x86)\mingw-w64\i686-8.1.0-win32-dwarf-rt_v6-rev0<br/>Please
+ note as newer versions are available the path will change, but its root
+ will remain C:\Program Files (x86)\mingw-w64\. Even though the path say
+ "mingw-w64", it is the 32 bit version!<br/></td><td>The following is the default location for 64 bit installs:<br/>C:\Program Files\mingw-w64\x86_64-8.1.0-win32-seh-rt_v6-rev0<br/>Please note as newer versions are available the path will change, but its root will remain C:\Program Files\mingw-w64\.<br/></td></tr><tr><td><img alt="" class="img-fluid" src="images/index_008.png" style="width: 453px; display: block; vertical-align: top; margin: 5px auto; text-align: center; height: 332px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></td><td><img alt="" class="img-fluid" src="images/index.png" style="width: 454px; display: block; vertical-align: top; margin: 5px auto; text-align: center; height: 333px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></td></tr></tbody></table><div><br/></div><div><br/></div><div>Then
+ continue by selecting "Next" and once the installer completes, you may 
+want to restart it to also install the other 32 or 64 bit 
+compiler/linker.</div><div><br/></div><div><br/></div></div>
+
+      <h2 id="download-harbour-core">Download Harbour Core</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Download the latest version of Harbour from <u><a href="https://github.com/harbour/core" rel="noopener noreferrer" target="_blank">here</a></u>.</div><div>For the purposes of this documentation, we will assume you will unzip the master repo in c:\Harbour</div><div>By
+ selecting the ZIP option, you will not have to deal with Git. Also, the
+ single zip will also include many contribs and documentation.</div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_002.png" style="width: 829px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 594px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_007.png" style="width: 655px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 526px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div></div>
+
+      <h2 id="compiling-harbour-in-32-bit-mode-with-mingw">Compiling Harbour in 32 bit mode with MinGW</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Before
+ you can actually compile your own Harbour programs, PRG and supporting 
+files into EXEs and DLLs, you will need to compile the Harbour program 
+itself using the same C compiler you previously installed, in this case 
+MinGW. </div><div>To make it easier and reproducible, you can use 
+the batch file below. To make it easier to follow this and future 
+articles, place the batch file in a folder C:\HarbourTools</div><div>Ensure
+ you start if from a Command Prompt with "Administrator" access rights, 
+or you can create a shortcut to it with "Run as administrator" selected.</div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_003.png" style="width: 704px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 481px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div>This
+ also assumes you did install the Harbour source code in C:\Harbour. The
+ same location can be used for the 32 and 64 bit versions.</div><div><br/></div><div>When
+ this batch file runs, specifically when win-make runs, on line 9, a lot
+ of output messages will be create. Some errors/warning will be visible.
+ Not certain yet how critical those are.</div><div>This step will take many minutes!</div><div>The resulting files will be located in the folder C:\Harbour\bin\win\mingw\.</div><div><br/></div><div>Also,
+ on line 9, we are using a trick of starting a new Command Prompt, 
+instructing it to run win-make, and not exit that Command Prompt when 
+done (/K).</div><div>That new Command Prompt, will inherit all the 
+environment variable settings, including the PATH. You could close the 
+Command Prompt, by entering the "exit" command, or the usual way for 
+closing a Windows program.</div><div><br/></div><div>Please note that you
+ can also rerun this batch file any time. Only changed source code files
+ will be recompiled, then all will be linked as needed.</div></div>
+
+      <table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td><span>File: </span><span>CompileHarbourMinGW32.bat</span></td></tr></tbody></table>
+
+      <pre class="ELS1"><span class="ELS2">@echo off</span><span class="ELS2"></span><span class="ELS2">set PATH=C:\Program Files (x86)\mingw-w64\i686-8.1.0-win32-dwarf-rt_v6-rev0\mingw32\bin;%PATH%   <span aria-label="This will add the 32 bit C compiler in the PATH. This will only persist while this Batch file runs." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="This will add the 32 bit C compiler in the PATH. This will only persist while this Batch file runs."></span><nobr></nobr></span><span class="ELS2"></span><span class="ELS2">set HB_COMPILER=mingw   <span aria-label="This will instruct the win-make program below place the 32 bit result files in a sub folder under C:\Harbour\bin\win\mingw\. DO NOT specify mingw32, for some reason win-make would fail then." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="This will instruct the win-make program below place the 32 bit result files in a sub folder under C:\Harbour\bin\win\mingw\. DO NOT specify mingw32, for some reason win-make would fail then."></span><nobr></nobr></span><span class="ELS2"></span><span class="ELS2">c:</span><span class="ELS2">cd c:\Harbour</span><span class="ELS2">"C:\WINDOWS\system32\cmd.exe" /k win-make   <span aria-label="This will do the actual building of the Harbour compiler and other contrib files, and leave you in a Command Prompt so you can read all the results." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="This will do the actual building of the Harbour compiler and other contrib files, and leave you in a Command Prompt so you can read all the results."></span> <nobr></nobr></span><span class="ELS2"></span></pre>
+
+      <h2 id="compiling-harbour-in-64-bit-mode-with-mingw">Compiling Harbour in 64 bit mode with MinGW</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>As
+ stated in the 32 bit section above, before you can actually compile 
+your own Harbour programs, PRG and supporting files into EXEs and DLLs, 
+you will need to compile the Harbour program itself using the same C 
+compiler you previously installed, in this case MinGW. </div><div>To
+ make it easier and reproducible, you can use the batch file below. To 
+make easier to follow this and future articles, place the batch file in a
+ folder C:\HarbourTools</div><div>Please follow the instructions in the 
+section above (Compiling Harbour in 32 bit mode with MinGW), and 
+substitute any reference to "32" to "64".</div><div>The resulting files will be located in the folder C:\Harbour\bin\win\mingw64\</div></div>
+
+      <table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td><span>File: </span><span>CompileHarbourMinGW64.bat</span></td></tr></tbody></table>
+
+      <pre class="ELS1"><span class="ELS2">@echo off</span><span class="ELS2"></span><span class="ELS2">set PATH=C:\Program Files\mingw-w64\x86_64-8.1.0-win32-seh-rt_v6-rev0\mingw64\bin;%PATH%   <span aria-label="This will add the 64 bit C compiler in the PATH. This will only persist while this Batch file runs." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="This will add the 64 bit C compiler in the PATH. This will only persist while this Batch file runs."></span><nobr></nobr></span><span class="ELS2"></span><span class="ELS2">set HB_COMPILER=mingw64   <span aria-label="This will instruct the win-make program below place the 64 bit result files in a sub folder under C:\Harbour\bin\win\mingw64\." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="This will instruct the win-make program below place the 64 bit result files in a sub folder under C:\Harbour\bin\win\mingw64\."></span><nobr></nobr></span><span class="ELS2"></span><span class="ELS2">c:</span><span class="ELS2">cd c:\Harbour</span><span class="ELS2">"C:\WINDOWS\system32\cmd.exe" /k win-make   <span aria-label="This will do the actual building of the Harbour compiler and other contrib files, and leave you in a Command Prompt so you can read all the results." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="This will do the actual building of the Harbour compiler and other contrib files, and leave you in a Command Prompt so you can read all the results."></span> <nobr></nobr></span><span class="ELS2"></span></pre>
+
+      <h2 id="setting-up-a-32-bit-terminal">Setting up a 32 bit Terminal</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>The
+ default Harbour repo does not have a nice IDE currently. So all the 
+work will be done via batch files. For that reason you will need to 
+create your own "Terminal", meaning a Command Prompt that has the PATH 
+set correctly, and any other environment variables needed  by the 
+"make" program called HBMK2 (more on that later).</div><div>Create a 
+file similar to HarbourTerminalMinGW32.bat, place it in a folder 
+C:\HarbourTools and create a Windows Shortcut for yourself to start it. 
+Flag that shortcut to "Run as Administrator" (See above).</div><table class="hw-article-file-label-table"></table></div>
+
+      <table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td><span>File: </span><span>HarbourTerminalMinGW32.bat</span></td></tr></tbody></table>
+
+      <pre class="ELS1"><span class="ELS2">@echo off</span><span class="ELS2"></span><span class="ELS2">set PATH=C:\Program Files (x86)\mingw-w64\i686-8.1.0-win32-dwarf-rt_v6-rev0\mingw32\bin;C:\Harbour\bin\win\mingw;C:\HarbourTools;%PATH%   <span aria-label="This will add the 32 bit C compiler and Harbour Compiler and tools, and our new C:\HarbourTools in the PATH. This will only persist while this Command Prompt runs." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="This will add the 32 bit C compiler and Harbour Compiler and tools, and our new C:\HarbourTools in the PATH. This will only persist while this Command Prompt runs."></span><nobr></nobr></span><span class="ELS2">set HB_COMPILER=mingw   <span aria-label="This matches the settings used when we compiled Harbour with the 32 bit C Compiler." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="This matches the settings used when we compiled Harbour with the 32 bit C Compiler."></span><nobr></nobr></span><span class="ELS2">set HB_PATH=C:\Harbour   <span aria-label="Needed by the Harbour HBMK2 make program." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Needed by the Harbour HBMK2 make program."></span><nobr></nobr></span><span class="ELS2"></span><span class="ELS2">echo HB_PATH     = %HB_PATH%   <span aria-label="We are simply displaying all the settings needed by the Harbour Make/Compiler" class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="We are simply displaying all the settings needed by the Harbour Make/Compiler"></span><nobr></nobr></span><span class="ELS2">echo HB_COMPILER = %HB_COMPILER%</span><span class="ELS2">echo PATH        = %PATH%</span><span class="ELS2"></span><span class="ELS2">Prompt HarbourMinGW32 $p$g   <span aria-label="This will make it easier to remember the use of this Command Prompt" class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="This will make it easier to remember the use of this Command Prompt"></span><nobr></nobr></span><span class="ELS2"></span><span class="ELS2">C:</span><span class="ELS2">cd "C:\HarbourTestCode-32\"   <span aria-label="Create such folder as a playground to create Harbour test programs, like the HelloWorld.PRG we are going to create later on." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Create such folder as a playground to create Harbour test programs, like the HelloWorld.PRG we are going to create later on."></span><nobr></nobr></span><span class="ELS2"></span><span class="ELS2">"C:\WINDOWS\system32\cmd.exe"   <span aria-label="This will start a new Command Prompt, that will inherit all the environment variable settings" class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="This will start a new Command Prompt, that will inherit all the environment variable settings"></span>  <nobr></nobr></span><span class="ELS2"></span></pre>
+
+      <h2 id="setting-up-a-64-bit-terminal">Setting up a 64 bit Terminal</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Please
+ see the notes and instructions above, "Setting up a 32 bit Terminal", 
+and use the batch file below instead. Ensure your Windows shortcuts 
+points to this other file.</div></div>
+
+      <table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td><span>File: </span><span>HarbourTerminalMinGW64.bat</span></td></tr></tbody></table>
+
+      <pre class="ELS1"><span class="ELS2">@echo off</span><span class="ELS2"></span><span class="ELS2">set PATH=C:\Program Files\mingw-w64\x86_64-8.1.0-win32-seh-rt_v6-rev0\mingw64\bin;C:\Harbour\bin\win\mingw64;C:\HarbourTools;%PATH%   <span aria-label="This will add the 64 bit C compiler and Harbour Compiler and tools, and our new C:\HarbourTools in the PATH. This will only persist while this Command Prompt runs." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="This will add the 64 bit C compiler and Harbour Compiler and tools, and our new C:\HarbourTools in the PATH. This will only persist while this Command Prompt runs."></span><nobr></nobr></span><span class="ELS2">set HB_COMPILER=mingw64   <span aria-label="This matches the settings used when we compiled Harbour with the 64 bit C Compiler." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="This matches the settings used when we compiled Harbour with the 64 bit C Compiler."></span><nobr></nobr></span><span class="ELS2">set HB_PATH=C:\Harbour   <span aria-label="Needed by the Harbour HBMK2 make program." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Needed by the Harbour HBMK2 make program."></span><nobr></nobr></span><span class="ELS2"></span><span class="ELS2">echo HB_PATH     = %HB_PATH%   <span aria-label="We are simply displaying all the settings needed by the Harbour Make/Compiler" class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="We are simply displaying all the settings needed by the Harbour Make/Compiler"></span><nobr></nobr></span><span class="ELS2">echo HB_COMPILER = %HB_COMPILER%</span><span class="ELS2">echo PATH        = %PATH%</span><span class="ELS2"></span><span class="ELS2">Prompt HarbourMinGW64 $p$g   <span aria-label="This will make it easier to remember the use of this Command Prompt" class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="This will make it easier to remember the use of this Command Prompt"></span><nobr></nobr></span><span class="ELS2"></span><span class="ELS2">C:</span><span class="ELS2">cd "C:\HarbourTestCode-64\"   <span aria-label="Create such folder as a playground to create Harbour test programs, like the HelloWorld.PRG we are going to create later on." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Create such folder as a playground to create Harbour test programs, like the HelloWorld.PRG we are going to create later on."></span><nobr></nobr></span><span class="ELS2"></span><span class="ELS2">"C:\WINDOWS\system32\cmd.exe"   <span aria-label="This will start a new Command Prompt, that will inherit all the environment variable settings" class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="This will start a new Command Prompt, that will inherit all the environment variable settings"></span>  <nobr></nobr></span></pre>
+
+      <h2 id="testing-the-installation-for-harbour-hello-world">Testing the installation for Harbour, Hello World</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>An
+ easy way to verify your installation was successfully done, is to try 
+to compile and run a very simple "Hello World" program. We will compile 
+and run this in 32 and 64 bit mode.</div><div>For the purpose of this 
+Article, create two folders, for example: C:\HarbourTestCode-32 and 
+C:\HarbourTestCode-64. If you decide to use different folders, you will 
+need to alter the respective HarbourTerminalMinGW32.bat  and 
+HarbourTerminalMinGW64.bat files created earlier.</div><div>We are also 
+going to rely on the HBMK2 program, created by Viktor Szakats, to assist
+ in doing all the compilation. For detailed information about HBMK2, 
+click <a href="https://github.com/harbour/core/blob/master/utils/hbmk2/doc/hbmk2.en.md" rel="noopener noreferrer" target="_blank">here</a>.</div><div>To make it even easier, I create a batch file to automate the process as much as possible, BuildEXE.bat.</div><div>So here are all the files you will need. </div><div><br/></div><div>Place the following file in C:\HarbourTools:</div><div>    BuildEXE.bat      (A generic command to compile PRG files and run the compiled EXE files.</div><div><br/></div><div>Place the following files it in C:\HarbourTestCode-32 and C:\HarbourTestCode-64</div><div>   HelloWorld.prg    (Test Harbour program)</div><div>   HelloWorld.hbp   (an instruction file used by the HBMK2 "make" tool.)</div></div>
+
+      <table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td><span>File: </span><span>HelloWorld.prg</span></td></tr></tbody></table>
+
+      <pre class="ELS1"><span class="ELS2">Function Main()</span><span class="ELS2"></span><span class="ELS2">? "Hello World"</span><span class="ELS2"></span><span class="ELS2">RETURN nil</span><span class="ELS2"></span></pre>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>For
+ now we are relying on all the default settings used by HBMK2, which is 
+the reason the HellowWorld.hbp is so simple (1 line). In another article
+ we will review the most important settings we could use. The HBMK2 
+program completely replaces the need to use C style makefiles.</div><div>Since
+ we want to test both 32 and 64 bit compilations, for now, copy 
+HelloWorld.prg and HelloWorld.hbp in C:\HarbourTestCode-32 and 
+C:\HarbourTestCode-64.</div></div>
+
+      <table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td><span>File: </span><span>HelloWorld.hbp</span></td></tr></tbody></table>
+
+      <pre class="ELS1"><span class="ELS2">HelloWorld.prg   <span aria-label="We only need to list the name of the files required to create HelloWorld.exe" class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="We only need to list the name of the files required to create HelloWorld.exe"></span><nobr></nobr></span></pre>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Place
+ the BuildEXE.bat file in the C:\HarbourTools. Since both 32 and 64 bit 
+terminals, have that folder in their PATH, it can be used to compile 32 
+and 64 bit programs.</div><div>That batch file will only require one 
+parameter. It could handle extra options, but for now we only need to 
+name of the HBP file to use as make (hbmk2) input file.</div><div>So from the Terminal Command Prompt you would only need to run the following:</div><div><br/></div><div>HarbourMinGW64 C:\HarbourTestCode-64&gt;buildexe helloworld</div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_004.png" style="width: 787px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 226px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div>To make easier to track which terminal you are working on, you can change the terminal's color.</div><div><img alt="" class="img-fluid" src="images/index_005.png" style="width: 507px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 455px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div><br/></div></div>
+
+      <table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td><span>File: </span><span>BuildEXE.bat</span></td></tr></tbody></table>
+
+      <pre class="ELS1"><span class="ELS2">@echo off</span><span class="ELS2">cls</span><span class="ELS2"></span><span class="ELS2">if %1. == . goto MissingParameter   <span aria-label="Will test if at least the name of the HBP was sent" class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Will test if at least the name of the HBP was sent"></span><nobr></nobr></span><span class="ELS2"></span><span class="ELS2">if %HB_PATH%. == . goto MissingHB_PATH   <span aria-label="Method to ensure the Batch file is called from a Terminal Prompt (HarbourTerminalMinGW32.bat or HarbourTerminalMinGW64.bat)" class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Method to ensure the Batch file is called from a Terminal Prompt (HarbourTerminalMinGW32.bat or HarbourTerminalMinGW64.bat)"></span><nobr></nobr></span><span class="ELS2"></span><span class="ELS2">if exist %1.exe (   <span aria-label="Delete any previous version of the EXE. Used to help detect if a new one will be created." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Delete any previous version of the EXE. Used to help detect if a new one will be created."></span><nobr></nobr></span><span class="ELS2">    del %1.exe &gt;nul</span><span class="ELS2">)</span><span class="ELS2"></span><span class="ELS2">if exist %1.exe (   <span aria-label="A previous copy of the EXE must be still running." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="A previous copy of the EXE must be still running."></span><nobr></nobr></span><span class="ELS2">    echo EXE is still running, could not recompile.</span><span class="ELS2">) else (</span><span class="ELS2">    hbmk2 %1.hbp %2 %3 %4 %5 %6   <span aria-label="Will start the actual compilation/linking." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Will start the actual compilation/linking."></span><nobr></nobr></span><span class="ELS2">    if errorlevel 0 (   <span aria-label="Even if no errorlevel was set by HBMK2, it is still possible the compilation failed. So we check if the EXE was actually created." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Even if no errorlevel was set by HBMK2, it is still possible the compilation failed. So we check if the EXE was actually created."></span><nobr></nobr></span><span class="ELS2">        if exist %1.exe (</span><span class="ELS2">            echo.   <span aria-label="Blank line. The dot must be near the word echo" class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Blank line. The dot must be near the word echo"></span><nobr></nobr></span><span class="ELS2">            echo No Errors</span><span class="ELS2">            %1.exe   <span aria-label="Automatically run the new EXE." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Automatically run the new EXE."></span><nobr></nobr></span><span class="ELS2">        ) else (</span><span class="ELS2">            echo.</span><span class="ELS2">            echo Compilation Failed</span><span class="ELS2">        )</span><span class="ELS2">    ) else (</span><span class="ELS2">        echo Compilation Error   <span aria-label="Will try to report why the compilation failed. Since some errorlevel may not be documented, at least a warning will be reported." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Will try to report why the compilation failed. Since some errorlevel may not be documented, at least a warning will be reported."></span><nobr></nobr></span><span class="ELS2">        if errorlevel  1 echo Unknown platform</span><span class="ELS2">        if errorlevel  2 echo Unknown compiler</span><span class="ELS2">        if errorlevel  3 echo Failed Harbour detection</span><span class="ELS2">        if errorlevel  5 echo Failed stub creation</span><span class="ELS2">        if errorlevel  6 echo Failed in compilation (Harbour, C compiler, Resource compiler)</span><span class="ELS2">        if errorlevel  7 echo Failed in final assembly (linker or library manager)</span><span class="ELS2">        if errorlevel  8 echo Unsupported</span><span class="ELS2">        if errorlevel  9 echo Failed to create working directory</span><span class="ELS2">        if errorlevel 19 echo Help</span><span class="ELS2">        if errorlevel 10 echo Dependency missing or disabled</span><span class="ELS2">        if errorlevel 20 echo Plugin initialization</span><span class="ELS2">        if errorlevel 30 echo Too deep nesting</span><span class="ELS2">        if errorlevel 50 echo Stop requested</span><span class="ELS2">    )</span><span class="ELS2">)</span><span class="ELS2"></span><span class="ELS2">goto End</span><span class="ELS2"></span><span class="ELS2">:MissingHB_PATH</span><span class="ELS2">echo Run a HarbourTerminal Batch file first.</span><span class="ELS2">goto End</span><span class="ELS2"></span><span class="ELS2">:MissingParameter</span><span class="ELS2">echo Missing Parameter</span><span class="ELS2"></span><span class="ELS2">:End</span><span class="ELS2"></span></pre>
+
+      <h2 id="conclusion">Conclusion</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>This article focused on setting up your computer environment to start your journey into the Harbour language. </div><div>For
+ VFP developers, at first this will look really unfriendly, since the 
+default install does not have an IDE. More articles will cover how the 
+compiler works, how to create DLLs, how to debug and the Pro and Cons 
+between Harbour and VFP.</div></div>
+
+      <div class="hw-close-fallback" data-close-fallback hidden>
+        The browser did not close this tab. It may have been opened directly instead of from the Articles list. Use <a href="/articles/">Back to Articles</a>.
+      </div>
+    </article>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/assets/js/article-page.js"></script>
+  <script src="/assets/js/article-copy-code.js"></script>
+  <script src="/assets/js/article-tooltips.js"></script>
+</body>
+</html>

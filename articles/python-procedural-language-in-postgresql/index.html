@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Python procedural language in PostgreSQL | Harbour Wiki</title>
+  <meta name="description" content="Python procedural language in PostgreSQL. Original Harbour.wiki article converted to a static article page.">
+  <link rel="icon" type="image/svg+xml" href="/images/harbour.svg">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="/assets/css/site.css" rel="stylesheet">
+  <link href="/assets/css/articles.css" rel="stylesheet">
+  <link href="/assets/css/article-migration.css" rel="stylesheet">
+</head>
+<body class="hw-article-page">
+  <header class="hw-article-tab-header">
+    <a class="hw-article-tab-brand" href="/" aria-label="Harbour Wiki home">
+      <img class="hw-article-tab-logo" src="/images/harbour.svg" alt="" aria-hidden="true">
+      <span class="hw-article-tab-title">
+        <span class="hw-article-tab-site">Harbour Wiki</span>
+        <span class="hw-article-tab-subtitle">Static article</span>
+      </span>
+    </a>
+    <div class="hw-article-tab-actions">
+      <a class="btn btn-light" href="/articles/"><i class="bi bi-arrow-left" aria-hidden="true"></i> Back to Articles</a>
+      <button class="btn btn-outline-light" type="button" data-close-article><i class="bi bi-x-lg" aria-hidden="true"></i> Close</button>
+    </div>
+  </header>
+
+  <main class="hw-article-main">
+    <article class="hw-article-content">
+      <!-- Source: uploaded saved article HTML: 015 Python procedural language in PostgreSQL.htm -->
+      <!-- Conversion: visible article content converted from original article HTML; saved-page navigation/scripts excluded. -->
+      <h1>Python procedural language in PostgreSQL</h1>
+
+      
+      <div class="hw-article-author">
+        <img src="images/author.png" alt="Eric Lendvai" class="hw-article-author-photo">
+        <span><strong>Author:</strong> Eric Lendvai</span>
+      </div>
+
+      <h2>Table of Contents</h2>
+      <ul class="hw-article-toc">
+        <li><a href="#target-audience">Target Audience</a></li>
+        <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#introduction">Introduction</a></li>
+        <li><a href="#installation">Installation</a></li>
+        <li><a href="#examples-of-stored-functions">Examples of Stored Functions</a></li>
+        <li><a href="#examples-of-stored-procedure">Examples of Stored Procedure</a></li>
+        <li><a href="#examples-of-anonymous-code-block">Examples of Anonymous Code Block</a></li>
+        <li><a href="#the-plpy-object">The plpy object</a></li>
+        <li><a href="#the-sd-and-gd-global-dictionary">The SD and GD global dictionary</a></li>
+        <li><a href="#reference-material">Reference Material</a></li>
+        <li><a href="#conclusion">Conclusion</a></li>
+      </ul>
+
+      <h2 id="target-audience">Target Audience</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Developers interested in developing and debugging PostgreSQL stored procedures, functions and triggers.</div></div>
+
+      <h2 id="prerequisites">Prerequisites</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><ul><li>Basic understanding of SQL concepts and PostgreSQL servers.</li><li>Setting up and configuring PostgreSQL servers.</li><li>Basic knowledge of Python.</li><li>Root access to a PostgreSQL server.</li></ul></div>
+
+      <h2 id="introduction">Introduction</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>As per: <a href="https://www.postgresql.org/docs/13/xplang.html" rel="noopener noreferrer" target="_blank">https://www.postgresql.org/docs/13/xplang.html</a><br/><br/>Please note that except for some minor installation differences this entire article is still valid as of PostgreSQL 18.<br/>Any use of Python 2 are no longer supported.</div><div><br/></div><div>PostgreSQL
+ allows user-defined functions to be written in other languages besides 
+SQL and C. These other languages are generically called procedural 
+languages (PLs). For a function written in a procedural language, the 
+database server has no built-in knowledge about how to interpret the 
+function's source text. Instead, the task is passed to a special handler
+ that knows the details of the language.<br/><br/>PostgreSQL ships with <strong>four “official” procedural languages</strong> in the core distribution. These are maintained by the PostgreSQL project itself (not third-party add-ons):</div><ol><li><p><strong><span>PL/pgSQL</span></strong><br/><span>-The default procedural language.</span><br/><span>-Syntax similar to Oracle’s PL/SQL.<br/></span>-<span>Trusted language (users can create PL/pgSQL functions without superuser).<br/></span></p></li><li><p><span><strong>PL/Tcl</strong></span><br/><span>-Uses the Tcl scripting language.</span><br/>-<span>Comes in both trusted (pltcl) and untrusted (pltclu) variants.</span></p></li><li><p><span><strong>PL/Perl</strong></span><br/><span>-Uses the Perl language.</span><br/><span>_Comes in both trusted (plperl) and untrusted (plperlu) variants.</span></p></li><li><p><span><strong>PL/Python</strong></span><br/><span>-Uses Python 3 (only).</span><br/>-<span>Available only as untrusted (plpython3u), so superuser rights are required.</span></p></li></ol><div>It is also possible to create stored procedures, triggers and anonymous code blocks in Python.</div><div><br/></div><div>One
+ of the main reasons to create stored functions and procedures is 
+performance. Data can remain on the server, and only results have to be 
+transferred to a local connection. But this could also create a 
+bottleneck, since all processing would occur on the server itself. 
+Debugging and version control can also be challenging. </div><div><br/></div><div>In
+ this article, we are going to cover how to install support for Python 
+on the PostgreSQL server running on MS Windows and review some examples 
+of stored functions, procedures and anonymous code blocks. In the 
+reference section, you can also find a link for how to install on Linux.</div></div>
+
+      <h2 id="installation">Installation</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>The
+ following instructions are valid for a MS Windows PostgreSQL install 
+(tested on Windows 10 Pro) and will also require the use of pgAdmin.</div><ol><li>Create a new database, for example "test001"</li><li>For that database, open a "Query Tool" tab and run the following:<br/>"select * from pg_language;"<br/><img alt="" class="img-fluid" src="images/index_005.png" style="width: 870px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 278px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/>unless you already see Python listed, do the following steps:</li><li>Locate and open (with a web browser) the file installation-notes.html in the "doc" folder wherever python is installed.<br/>On Windows 10, the PostgreSQL install defaults to the "C:\Program Files\PostgreSQL\13" folder.</li><li><span>In the in installation-notes.html, locate the version of Python that is compatible with your version of PostgreSQL.</span><span> </span>For PostgreSQL 13, we will need to install Python 3.7.<br/><img alt="" class="img-fluid" src="images/index_002.png" style="width: 700px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 583px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></li><li>For MS Windows, download the 64 bit version of Python 3.7:<br/><a href="https://www.python.org/downloads/windows/" rel="noopener noreferrer" target="_blank">https://www.python.org/downloads/windows/</a><br/>As of March 25, 2021: <a href="https://www.python.org/ftp/python/3.7.8/python-3.7.8-amd64.exe" rel="noopener noreferrer" target="_blank">https://www.python.org/ftp/python/3.7.8/python-3.7.8-amd64.exe</a></li><li>Install
+ Python but use the "Add Python 3.7 to PATH" ! Otherwise, you will have 
+to start PostgreSQL not as a service and wrap the path in a batch file 
+that will launch PostgreSQL.  <br/><img alt="" class="img-fluid" src="images/index_003.png" style="width: 546px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 336px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/>To avoid access issues, use the "Install for all users" option, since PostgreSQL will run as a service.<br/><img alt="" class="img-fluid" src="images/index_006.png" style="width: 546px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 336px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></li><li>Restart the postgresql-x64-13 Windows Service, or simply reboot first.<br/><img alt="" class="img-fluid" src="images/index.png" style="width: 545px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 443px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></li><li>To back to pgAdmin, open the database you would like to add Python support to and run: "create extension plpython3u;"</li><li>Re-run for the "test001" database "select * from pg_language;" to confirm Python is available.<br/><img alt="" class="img-fluid" src="images/index_004.png" style="width: 420px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 296px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/>Only
+ plpgsql is a "trusted" language, meaning no code can be created to get 
+root access to the PostgreSQL machine itself. The "u" in plpython3u, 
+stands for "untrusted."</li><li>Run "create extension plpython3u;" for any database you would like to create procedures in Python.</li></ol><div>When
+ you create Python code, the PL/Python language module automatically 
+imports a Python module called plpy. The functions and constants in this
+ module are available to you in the Python code as plpy.foo.</div></div>
+
+      <h2 id="examples-of-stored-functions">Examples of Stored Functions</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Using pgAdmin, open a "Query Tool" tab and run all the following examples: </div></div>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div><strong>To Add/Update</strong> a stored function GetPythonVersion:</div></div>
+
+      <pre class="ELS1"><span class="ELS2">CREATE OR REPLACE FUNCTION GetPythonVersion() RETURNS text</span><span class="ELS2">AS $$</span><span class="ELS2">import sys</span><span class="ELS2">return sys.version</span><span class="ELS2">$$ LANGUAGE plpython3u;</span><span class="ELS2"></span></pre>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div><strong>To test</strong> run the following:</div></div>
+
+      <pre class="ELS1"><span class="ELS2">DO $$</span><span class="ELS2">DECLARE</span><span class="ELS2">    v_cVersion Text;</span><span class="ELS2">BEGIN</span><span class="ELS2">    SELECT GetPythonVersion() INTO v_cVersion;</span><span class="ELS2">    RAISE NOTICE 'Python Version = %',v_cVersion;</span><span class="ELS2">END; $$</span><span class="ELS2"></span></pre>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div><strong>To Add/Update</strong> a stored function pythonmax:</div></div>
+
+      <pre class="ELS1"><span class="ELS2">CREATE OR REPLACE FUNCTION pythonmax (a integer, b integer) RETURNS integer</span><span class="ELS2">AS $$</span><span class="ELS2">    if (a is None) or (b is None):</span><span class="ELS2">        return None</span><span class="ELS2">    if a &gt; b:</span><span class="ELS2">        return a</span><span class="ELS2">    return b</span><span class="ELS2">$$ LANGUAGE plpython3u;</span><span class="ELS2"></span></pre>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div><strong>To test</strong> run the following:</div></div>
+
+      <pre class="ELS1"><span class="ELS2">DO $$</span><span class="ELS2">DECLARE</span><span class="ELS2">    v_iMaxValue integer;</span><span class="ELS2">BEGIN</span><span class="ELS2">    SELECT pythonmax(2,5) INTO v_iMaxValue;</span><span class="ELS2">    RAISE NOTICE 'Python Max of 2 and 5 is %',v_iMaxValue;</span><span class="ELS2">END; $$</span><span class="ELS2"></span></pre>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Let's create a <strong>function to UDP send a message</strong>.<br/>Run the following to Add/Update the stored function SendMessage(...):</div></div>
+
+      <pre class="ELS1"><span class="ELS2">CREATE OR REPLACE FUNCTION SendMessage (par_message text)</span><span class="ELS2">    RETURNS text</span><span class="ELS2">AS $$</span><span class="ELS2">    import socket</span><span class="ELS2">    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)</span><span class="ELS2">    address = ('127.0.0.1', 49152)</span><span class="ELS2">    sock.sendto(bytes(par_message, 'utf-8'), address)</span><span class="ELS2">    sock.close()</span><span class="ELS2">    return par_message</span><span class="ELS2">$$ LANGUAGE plpython3u;</span><span class="ELS2"></span></pre>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>To call it:</div></div>
+
+      <pre class="ELS1"><span class="ELS2">SELECT SendMessage('hello');</span><span class="ELS2"></span></pre>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Or use the following anonymous code block:</div></div>
+
+      <pre class="ELS1"><span class="ELS2">DO $$</span><span class="ELS2">BEGIN</span><span class="ELS2">    PERFORM SendMessage('hello');</span><span class="ELS2">END; $$</span><span class="ELS2"></span></pre>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>The following is a plain program to view the message transmitted from the PostgreSQL server: </div></div>
+
+      <table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td><span>File: </span><span>ListenToUDPMessages.py:</span></td></tr></tbody></table>
+
+      <pre class="ELS1"><span class="ELS2">import socket</span><span class="ELS2">from datetime import datetime</span><span class="ELS2"></span><span class="ELS2">def main():</span><span class="ELS2">    UDP_IP = "127.0.0.1"</span><span class="ELS2">    UDP_PORT = 49152</span><span class="ELS2"></span><span class="ELS2">    nCounter = 0</span><span class="ELS2"></span><span class="ELS2">    sock = socket.socket(socket.AF_INET, # Internet</span><span class="ELS2">                        socket.SOCK_DGRAM) # UDP</span><span class="ELS2">    sock.bind((UDP_IP, UDP_PORT))</span><span class="ELS2"></span><span class="ELS2">    while True:</span><span class="ELS2">        try:</span><span class="ELS2">            nCounter += 1</span><span class="ELS2">            data, addr = sock.recvfrom(1024*1024) # buffer size is 1Mb</span><span class="ELS2">            dt = datetime.now()</span><span class="ELS2">            print("{0:05d}|{1}|{2}".format(nCounter,dt,data.decode("utf-8")) )</span><span class="ELS2">        except:</span><span class="ELS2">            print("Overflow")</span><span class="ELS2"></span><span class="ELS2">if __name__ == "__main__":</span><span class="ELS2">    main()</span><span class="ELS2"></span></pre>
+
+      <h2 id="examples-of-stored-procedure">Examples of Stored Procedure</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>The following is an example of a stored function in Python, also using the plpy object.<br/><br/>Let's first create a table in the test001 database. In pgAdmin, run the following: </div></div>
+
+      <pre class="ELS1"><span class="ELS2">CREATE TABLE product</span><span class="ELS2">(</span><span class="ELS2">    pk integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1),</span><span class="ELS2">    name text,</span><span class="ELS2">    CONSTRAINT product_pkey PRIMARY KEY (pk)</span><span class="ELS2">)</span><span class="ELS2"></span></pre>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>To <strong>add and test</strong> the stored procedure AddManyProducts:</div></div>
+
+      <pre class="ELS1"><span class="ELS2">CREATE OR REPLACE PROCEDURE AddManyProducts()</span><span class="ELS2">LANGUAGE plpython3u</span><span class="ELS2">AS $$</span><span class="ELS2">for i in range(1, 11):</span><span class="ELS2">    plpy.execute("INSERT INTO product (name) VALUES ('Thing {}')".format(i))</span><span class="ELS2">$$;</span><span class="ELS2"></span><span class="ELS2">CALL AddManyProducts();</span><span class="ELS2"></span></pre>
+
+      <h2 id="examples-of-anonymous-code-block">Examples of Anonymous Code Block</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Ensure you have the ListenToUDPMessages.py running first.</div></div>
+
+      <pre class="ELS1"><span class="ELS2">DO $$</span><span class="ELS2"><span>    # PL/Python code</span></span><span class="ELS2">    from datetime import datetime</span><span class="ELS2">    cCurrentTime = datetime.now().strftime("%H:%M:%S")</span><span class="ELS2">    plpy.execute("INSERT INTO product (name) VALUES ('Thing {}')".format(cCurrentTime))</span><span class="ELS2">    plpy.execute("SELECT SendMessage('Added a record in product table at {}')".format(cCurrentTime))</span><span class="ELS2">$$ LANGUAGE plpython3u;</span><span class="ELS2"></span></pre>
+
+      <h2 id="the-plpy-object">The plpy object</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Any
+ Python that runs on the PostgreSQL server will have access to a plpy 
+object. The following is a list of possible methods and properties: </div><div><br/></div><div>As per <a href="https://www.postgresql.org/docs/13/plpython-database.html" rel="noopener noreferrer" target="_blank">https://www.postgresql.org/docs/13/plpython-database.html</a></div><div>plpy.execute(query [, max-rows])<br/>plpy.prepare(query [, argtypes])<br/>plpy.execute(plan [, arguments [, max-rows]])<br/>plpy.cursor(query)<br/>plpy.cursor(plan [, arguments])<br/>plpy.commit()<br/>plpy.rollback()<br/>plpy.SPIError   # Trapping Errors</div><div><br/></div><div>As per <a href="https://www.postgresql.org/docs/13/plpython-util.html" rel="noopener noreferrer" target="_blank">https://www.postgresql.org/docs/13/plpython-util.html</a></div><div>plpy.log(msg, **kwargs)<br/>plpy.info(msg, **kwargs)<br/>plpy.notice(msg, **kwargs)<br/>plpy.warning(msg, **kwargs)<br/>plpy.error(msg, **kwargs)<br/>plpy.fatal(msg, **kwargs)<br/><br/>plpy.error and plpy.fatal<br/><br/></div></div>
+
+      <h2 id="the-sd-and-gd-global-dictionary">The SD and GD global dictionary</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>As per <a href="https://www.postgresql.org/docs/13/plpython-sharing.html" rel="noopener noreferrer" target="_blank">https://www.postgresql.org/docs/13/plpython-sharing.html</a></div><div><br/></div><div>The
+ global dictionary SD is available to store private data between 
+repeated calls to the same function. The global dictionary GD is public 
+data that is available to all Python functions within a session; use it 
+with care. </div></div>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Example for using the SD dictionary in a Python stored function:</div></div>
+
+      <pre class="ELS1"><span class="ELS2">CREATE OR REPLACE FUNCTION my_counting_function() RETURNS integer AS $$</span><span class="ELS2">      if 'counter' not in SD:</span><span class="ELS2">         SD['counter'] = 0</span><span class="ELS2">      SD['counter'] += 1</span><span class="ELS2">      return SD['counter']</span><span class="ELS2">$$ LANGUAGE plpython3u;</span><span class="ELS2"></span></pre>
+
+      <h2 id="reference-material">Reference Material</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>The best source of information is the official PostgreSQL documentation:</div><div><a href="https://www.postgresql.org/docs/13/plpython.html" rel="noopener noreferrer" target="_blank">https://www.postgresql.org/docs/13/plpython.html</a></div><div><br/></div><div>For Linux install: <a href="https://dev.nextthought.com/blog/2018/09/getting-started-with-pgsql-plpythonu.html" rel="noopener noreferrer" target="_blank">https://dev.nextthought.com/blog/2018/09/getting-started-with-pgsql-plpythonu.html</a></div><div>(Not a verified set of instructions) </div></div>
+
+      <h2 id="conclusion">Conclusion</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Even
+ though the native PostgreSQL procedural language is very powerful and 
+quite fast, having the option to use Python code will open the list of 
+features you can implement on your server. Being able to import 
+virtually any Python packages will give you lots of features, but 
+remember to be careful with security-related issues. </div></div>
+
+      <div class="hw-close-fallback" data-close-fallback hidden>
+        The browser did not close this tab. It may have been opened directly instead of from the Articles list. Use <a href="/articles/">Back to Articles</a>.
+      </div>
+    </article>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/assets/js/article-page.js"></script>
+  <script src="/assets/js/article-copy-code.js"></script>
+</body>
+</html>

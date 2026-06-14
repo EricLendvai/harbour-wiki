@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SQL Server Access with Habour ORM - Early Access | Harbour Wiki</title>
+  <meta name="description" content="SQL Server Access with Habour ORM - Early Access. Original Harbour.wiki article converted to a static article page.">
+  <link rel="icon" type="image/svg+xml" href="/images/harbour.svg">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="/scripts/FontAwesome_5_3_1/css/all.min.css" rel="stylesheet">
+  <link href="/assets/css/site.css" rel="stylesheet">
+  <link href="/assets/css/articles.css" rel="stylesheet">
+  <link href="/assets/css/article-migration.css" rel="stylesheet">
+</head>
+<body class="hw-article-page">
+  <header class="hw-article-tab-header">
+    <a class="hw-article-tab-brand" href="/" aria-label="Harbour Wiki home">
+      <img class="hw-article-tab-logo" src="/images/harbour.svg" alt="" aria-hidden="true">
+      <span class="hw-article-tab-title">
+        <span class="hw-article-tab-site">Harbour Wiki</span>
+        <span class="hw-article-tab-subtitle">Static article</span>
+      </span>
+    </a>
+    <div class="hw-article-tab-actions">
+      <a class="btn btn-light" href="/articles/"><i class="bi bi-arrow-left" aria-hidden="true"></i> Back to Articles</a>
+      <button class="btn btn-outline-light" type="button" data-close-article><i class="bi bi-x-lg" aria-hidden="true"></i> Close</button>
+    </div>
+  </header>
+
+  <main class="hw-article-main">
+    <article class="hw-article-content">
+      <!-- Source: uploaded saved article HTML: 016 SQL Server Access with Habour ORM - Early Access.htm -->
+      <!-- Conversion: visible article content converted from original article HTML; saved-page navigation/scripts excluded. -->
+      <h1>SQL Server Access with Habour ORM - Early Access</h1>
+
+      
+      <div class="hw-article-author">
+        <img src="images/author.png" alt="Eric Lendvai" class="hw-article-author-photo">
+        <span><strong>Author:</strong> Eric Lendvai</span>
+      </div>
+
+      <h2>Table of Contents</h2>
+      <ul class="hw-article-toc">
+        <li><a href="#early-access">Early Access</a></li>
+        <li><a href="#target-audience">Target Audience</a></li>
+        <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#terminology">Terminology</a></li>
+        <li><a href="#github-and-source-code">GitHub and Source Code</a></li>
+        <li><a href="#installation">Installation</a></li>
+        <li><a href="#using-vscode-to-compile-the-library-and-compile-run-the-examples-applications">Using VSCODE to Compile the Library and Compile/Run the Examples Applications</a></li>
+        <li><a href="#debugging-with-vscode-and-debugview">Debugging with VSCODE and DebugView</a></li>
+        <li><a href="#connecting-to-sql-backend">Connecting to SQL Backend</a></li>
+        <li><a href="#field-types-still-composing">Field Types - Still Composing</a></li>
+        <li><a href="#nil-and-null">NIL and NULL</a></li>
+        <li><a href="#schema-managment-still-composing">Schema Managment - Still Composing</a></li>
+        <li><a href="#installing-postgresql-on-ms-windows">Installing PostgreSQL on MS Windows</a></li>
+      </ul>
+
+      <h2 id="early-access">Early Access</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Most of the articles here are released once they are complete.</div><div>Since
+ this is a fairly big initiative, I am making this article visible while
+ it is being composed, with the hope to receive reviews and contribution
+ from any seasoned Harbour developer.</div><div><br/></div><div>The 
+Harbour_ORM repo also has support for devcontainers in VSCODE, meaning 
+developing using Docker Desktop and Ubuntu. The current article does not
+ cover that major enhancement yet.</div></div>
+
+      <h2 id="target-audience">Target Audience</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><ul><li>Harbour developers interested in developing applications accessing SQL backends like PostgreSQL, MariaDB and MySQL.</li><li>VFP developers converting to Harbour.</li></ul></div>
+
+      <h2 id="prerequisites">Prerequisites</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><ul><li>Set up your development environment, and use all the tools created in the article, <a href="https://harbour.wiki/index.asp?page=PublicArticles&amp;mode=show&amp;id=190129210053&amp;sig=7790451073" rel="noopener noreferrer" target="_blank">How to Install Harbour on Windows.</a><br/>Library can be used on any platform but this article and test code was created on MS Windows platform.</li><li>Basic knowledge of VSCODE (Microsoft Visual Studio Code) is recommended. See article <a href="https://harbour.wiki/index.asp?page=PublicArticles&amp;mode=show&amp;id=190401174818&amp;sig=6893630672" rel="noopener noreferrer" target="_blank">Developing and Debugging Harbour Programs with VSCODE</a> .</li><li>Basic understanding of SQL concepts and SQL servers.</li><li>Setting up and configuring PostgreSQL, MariaDB or MySQL.</li></ul></div>
+
+      <h2 id="terminology">Terminology</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>One of the biggest source of confusion when moving from xBase storage system to server side relational databases is terminology.</div><div>xBase
+ developers mainly only used the terms "Tables", "Fields" and "Records".
+ VFP developers also have "Database Containers" aka "DBC", a method for 
+grouping multiple tables ("Free Tables", classic DBFs) together. The 
+main advantages of DBCs is to extend the definition of tables by 
+allowing long field names and add table triggers. </div><div>Currently
+ the most popular Relational Database solutions are: MySQL (including 
+MariaDB), PostgreSQL and MS SQL. I will not include SQLite in this list,
+ since it is mainly used for local storage or limited multi-user access 
+(any data writes will lock an entire database). I also did not include 
+Oracle, since it is loosing market share consistently since 2013 and is 
+one of the most expensive solutions.</div><div><br/></div><div><span>Database:</span><br/>Many
+ xBase developers use this term for a single DBF table. This used to be 
+the case before relational databases became popular and solutions like 
+MS SQL, MySQL and PostgreSQL came to market.<br/><br/>A "database" is an 
+organized collection of data (Wikipedia). In its most simplistic 
+definition it would be a collection of tables.<br/>But for most vendors 
+is a container that holds all the tables and indexes, the data 
+dictionary describing all the tables, indexes, stored procedure / 
+functions, triggers and views (more on that later).<br/>The SQL Standard call this a "<strong>Catalog</strong>".<br/><br/><span>Schema:</span><br/>This term became used for many concepts.<br/>A
+ "schema" can be used to refer to a description of all the tables, 
+fields, indexes and so on. In this case this would be more like a data 
+dictionary (definition of all tables).<br/>Another use for the term "schema" is to create the concept of namespaces, a kind of single level of folders in a "database".<br/>PostgreSQL
+ and MS SQL have this feature of "schema". More than one table may have 
+the same name, as long as their are stored in a different "schema".<br/>In this article and the actual Harbour ORM, we will usually use the term "schema name" instead of simply "schema".<br/>The default "schema" in PostgreSQL is named "public" and in MS SQL it is "dbo".<br/>MySQL/MariaDB, SQLite do not have the concept of Schema Namespaces.<br/>"Schema
+ Names" can make it easier to deal with access rights, or by 
+functionality. For example you could create "schema names" like: 
+"archives", "logs", "exports" ...<br/><br/><span>Public:</span></div><div>This term could be used to describe access rights. </div><div>In PostgreSQL it is the name of the default "schema (name)". Any newly created database will have a "public" "schema".</div><div><br/></div><div><span>Columns / Rows and Fields / Records:</span></div><div>"Columns" and "fields" can be used interchangeably, as does "rows" and "records".</div><div>In
+ all the main documentation and  admin tools for the most popular 
+relational databases, the terms "columns" and "rows" are used the most 
+often.</div><div><br/></div><div><span>Terms used by different products:</span></div><div>MySQL uses "Schema" as a synonym for "Database".<br/>PostgreSQL uses "Schemas" but uses "Databases" to refer to what standard SQL calls a "catalogs."</div><div><br/></div><div>The following is a hierarchy of terminology for popular relational database, DBF RDD Harbour/xBase,  VFP :</div><div><br/></div><table class="hw-article-data-table"><tbody><tr><td><br/></td><td><strong>MySQL</strong></td><td><strong>PostgreSQL</strong></td><td><strong>MS SQL</strong></td><td><strong>Harbour DBF RDD</strong></td><td><strong>VFP</strong></td></tr><tr><td>1</td><td>Database</td><td>Database</td><td>Database</td><td><br/></td><td>DBC</td></tr><tr><td>2</td><td><br/></td><td>Schema</td><td>Schema</td><td><br/></td><td><br/></td></tr><tr><td>3</td><td>Table</td><td>Table</td><td>Table</td><td>Table</td><td>Table</td></tr><tr><td>4</td><td>Column</td><td>Column</td><td>Column</td><td>Field</td><td>Field</td></tr><tr><td>5</td><td>Row</td><td>Row</td><td>Row</td><td>Record</td><td>Record</td></tr></tbody></table><div><br/></div><div><span>Cursors:</span><br/>In
+ MySQL/MariaDB, PostgreSQL and MS SQL, a "cursor" is a variable that 
+holds the definition of a SQL query or other commands returning a set of
+ rows. Cursors are used to read the query result a few rows at a time, 
+instead of downloading the entire result set, avoiding memory overruns.<br/><br/>In VFP a "cursor" is a temporary table, mostly in-memory (overruns are placed in local storage).<br/>They behave like DBF tables with the exception of already supporting long field names.<br/>They can be created via the following 3 methods:<br/>1. Explicitly using the CREATE CURSOR command<br/>2. When calling the local SQL engine SELECT .... INTO CURSOR<br/>3. When calling a remote SQL command using an ODBC connection with the SQLExec function.<br/><br/>In the Harbour ORM, it is an object of the class hb_orm_Cursor and an associated in-memory table (no local storage overruns.)<br/>Since
+ an entire result set will be in-memory, it is advised to use Harbour 
+64-bit. A future enhancement would be to use backend "cursors" to buffer
+ result sets.<br/>Unlike classic DBFs, long field names are supports, 
+null values can be assigned to fields, and support of auto-increment 
+field is also provided.<br/>An entire section in the article will focus on cursors.</div><div><br/></div></div>
+
+      <h2 id="github-and-source-code">GitHub and Source Code</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>This entire article is the official documentation for the <a href="https://github.com/EricLendvai/Harbour_ORM" rel="noopener noreferrer" target="_blank">https://github.com/EricLendvai/Harbour_ORM</a> repo.</div><div>Download, clone or fork this repo since referrence to its source code will be made throughout this article. </div><div>If
+ you decide to fork the repo, you may still want to monitor this 
+upstream repo since continuous enhancements and fixes will be provided.</div><div>This Harbour_ORM library also needs the <a href="https://github.com/EricLendvai/Harbour_VFP" rel="noopener noreferrer" target="_blank">https://github.com/EricLendvai/Harbour_VFP</a> repo, or at minimum the compiled Harbour_VFP library.</div><div>Using the Harbour_VFP library WILL NOT alter Harbour itself, only add a few vfp_* and el_* functions.</div><div>The el_* functions are actually equivalent new hb_* functions being submitted for merge in the core Harbour repo.</div><div><br/></div><div><span>Repo folder structure:</span></div><ul><li>The root folder includes all the files needed to compile the library files.</li><li>The ".vscode" folder include some configuration files used by VSCODE.</li><li>The "Examples" folder is the parent folder for some example programs. It includes a build batch file and debugger global files.</li><li>The
+ "Examples\Cursors" folder contains a workspace for building and testing
+ a program to demonstrate the creation and use of cursors (object + 
+in-memory table). This does not rely on a server backend.</li><li>The 
+"Examples\SQL_CRUD" folder contains a workspace for building and testing
+ a program to demonstrate Schema management, Create, Read (and Query), 
+Update and Delete operations against MariaDB and PostgreSQL servers.</li><li>The "mingw64" and "msvc64" folders are compiled library already compiled for mingw and msvc 64-bit.</li></ul></div>
+
+      <h2 id="installation">Installation</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>The
+ following are instructions for 3rd party applications used for/by this 
+library. The instructions are documented for use under MS Windows.<br/>Please skip any sections if you already have those installed and configured.</div><div><br/></div><div><span>Git</span></div><div>Download git from https://git-scm.com/<br/>Install using all default options.</div><div><br/></div><div><span>Enhanced Git Prompt in MS Windows (optional)<br/></span></div><div>Instructions to create a better git aware powershell with a colored git prompt that display the branch information and status.</div><div><br/></div><div>Start Command Prompt "Run as Admin", then &gt;powershell   or "Run As Admin" Powershell<br/>From Powershell execute the following:<br/>&gt;Set-ExecutionPolicy -Scope LocalMachine -ExecutionPolicy RemoteSigned -Force<br/>&gt;Install-Module posh-git -Scope CurrentUser -Force<br/>&gt;Import-Module posh-git<br/>&gt;Add-PoshGitToProfile -AllHosts<br/>See: https://github.com/dahlbyk/posh-git</div><div><br/></div><div>Example of an Enhanced Git Prompt</div><div><img alt="" class="img-fluid" src="images/index_028.png" style="width: 672px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 116px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><span><br/></span></div><div><span>VSCODE and Extensions</span></div><div>Please refer to the article "<a href="https://harbour.wiki/index.asp?page=PublicArticles&amp;mode=show&amp;id=190401174818&amp;sig=6893630672" rel="noopener noreferrer" target="_blank">Developing and Debugging Harbour Programs with VSCODE (Visual Studio Code)</a>"</div><div>Amongst all the installation methods, I would recommend using and downloading <a href="https://code.visualstudio.com/download" rel="noopener noreferrer" target="_blank">https://code.visualstudio.com/download</a></div><div>In this case, if you are concerned about monitoring by Microsoft, or automatic updates, simply use the following VSCODE setting:</div><div><span>"telemetry.enableTelemetry": false,<br/> "telemetry.enableCrashReporter": false,<br/>"extensions.autoUpdate":false,</span></div><div><br/></div><div><strong>Install at the minimum the following VSCODE extensions:</strong></div><ul><li>"Harbour and xHarbour" By Antonino Perricone</li><li>"Tasks" by actboy168</li></ul><div><span>Harbour and C Compiler</span><br/>Install Harbour and the C compiler of your choice as per the article "How to Install Harbour on Windows"<br/>I recommend installing Harbour in c:\Harbour and using Mingw64.<br/><br/>The following are the steps I used for installing Harbour in c:\Harbour:</div><div><br/>From an Admin Command Prompt:<br/>Created a folder C:\github\Harbour and from there executed<br/>git clone &gt;https://github.com/harbour/core.git<br/>That create a core subfolder (C:\github\Harbour\core) which I copied to c:\harbour</div><div><br/><span>Local PostgreSQL server (optional but recommended)</span></div><div>To install PostgreSQL go to <a href="https://www.postgresql.org/download/" rel="noopener noreferrer" target="_blank">https://www.postgresql.org/download/</a></div><div>At the last step of the install you may want to select to also run "Stack Builder" to install the psqlODBC (64-bit) driver.<br/><br/>Also you can configure pgAdmin to run in Desktop mode.<br/>Check out https://www.pgadmin.org/faq/ the section "What are Server Mode and Desktop Mode?"<br/>See: <a href="https://community.wegalvanize.com/s/article/How-to-run-pgAdmin-4-as-native-desktop-app?language=en_US" rel="noopener noreferrer" target="_blank">https://community.wegalvanize.com/s/article/How-to-run-pgAdmin-4-as-native-desktop-app?language=en_US</a></div><div><br/></div><div><span>Any PostgreSQL database using UUID fields</span></div><div>Install the pgcrypto extension to provide support for UUID fields. Use the following command while connected as a superuser.</div><div><code><span>CREATE EXTENSION IF NOT EXISTS pgcrypto;</span></code></div><div><br/></div><div><span>Local MariaDB server (optional but recommended)</span><br/>MariaDB
+ is almost equivalent to MySQL and was created as a fork from MySQL but 
+not owned by Oracle. See: 
+https://mariadb.com/kb/en/mariadb-vs-mysql-compatibility/<br/>To install MariaDB Server go to <a href="https://mariadb.org/download/" rel="noopener noreferrer" target="_blank">https://mariadb.org/download/</a></div><div><br/></div><div>The
+ MariaDB server install also give you the option to install HeidiSQL. It
+ is an excellent management tool for MariaDB and MySQL. It can also be 
+used for PostgreSQL, although lack many features of pgAdmin. But one of 
+the nicest features is the ability to export data out of one database 
+into an other empty database across  connections.</div><div><br/></div><div><span>Client Connection Library (ODBC)<br/></span></div><div>Currently
+ this library use ODBC as a method to connect to SQL servers (Not MS 
+SQL, but any SQL servers). You only need to install the ODBC Drivers, 
+but <strong>do not need</strong>
+ to setup a DSN (Data Source Name) entry. ODBC drivers are provided for 
+most OS, including MS Windows, Mac OS and the most popular Linux 
+distros.</div><div>Ensure you match your Harbour bit mode, 32-bit or 
+64-bit. At this point all my development is done using 64-bit. Even 
+PostgreSQL only ships 64-bit mode since version 11.</div><div><br/></div><div>You will need to specify which ODBC driver name should be used to connect to the SQL server of your choice.</div><div>If
+ not specified, "MySQL ODBC 8.0 Unicode Driver" will be used when 
+connecting to MySQL or MariaDB, and "PostgreSQL Unicode" for PostgreSQL.</div><div>At this point this library will only support UTF8 (Unicode) encoding, since this covers all spoken languages.</div><div><br/></div><div>You can find the driver at the following links:</div><table class="hw-article-data-table"><tbody><tr><td>MariaDB and MySQL</td><td>For all platforms:<br/><a href="https://mariadb.com/downloads/?showall=1&amp;tab=connectors&amp;group=mariadbconnectors&amp;product=ODBC%20connector#connectors" rel="noopener noreferrer" target="_blank">https://mariadb.com/downloads/?showall=1&amp;tab=connectors&amp;group=mariadbconnectors&amp;product=ODBC%20connector#connectors</a></td></tr><tr><td>PostgreSQL</td><td>For MS Windows:<br/><a href="https://www.postgresql.org/ftp/odbc/versions/msi/" rel="noopener noreferrer" target="_blank">https://www.postgresql.org/ftp/odbc/versions/msi/</a><br/>For Linux: search you package manager or build from source, <a href="https://odbc.postgresql.org/docs/unix-compilation.html" rel="noopener noreferrer" target="_blank">https://odbc.postgresql.org/docs/unix-compilation.html</a></td></tr></tbody></table><div><a href="https://downloads.mariadb.com/Connectors/odbc/%3Cbr%3Ehttps://www.postgresql.org/ftp/odbc/versions/msi/" rel="noopener noreferrer" target="_blank"><br/></a></div><div><span>Harbour_ORM Library and dependency</span></div><div>Use Git to download the following two repos:</div><ul><li><a href="https://github.com/EricLendvai/Harbour_VFP.git" rel="noopener noreferrer" target="_blank">https://github.com/EricLendvai/Harbour_VFP.git</a></li><li><a href="https://github.com/EricLendvai/Harbour_ORM.git" rel="noopener noreferrer" target="_blank">https://github.com/EricLendvai/Harbour_ORM.git</a></li></ul><div>I
+ usually download those in a \github\&lt;AuthorName&gt; folder than copy
+ them to c:\Harbour_VFP and c:\Harbour_ORM respectively, but do not 
+include the ".git" hidden sub-folder.</div><div>By doing this technique I can alway re-pull the repos and see what changed before incorporating changes in my other projects.</div><div><br/></div><div>You could run the following from an Admin Command prompt to automate the process:</div></div>
+
+      <pre class="ELS1"><span class="ELS2">C:</span><span class="ELS2">MD \GitHub</span><span class="ELS2">MD \GitHub\EricLendvai</span><span class="ELS2">CD \GitHub\EricLendvai</span><span class="ELS2">git clone https://github.com/EricLendvai/Harbour_VFP.git</span><span class="ELS2">git clone https://github.com/EricLendvai/Harbour_ORM.git</span><span class="ELS2">MD \Harbour_VFP</span><span class="ELS2">MD \Harbour_ORM</span><span class="ELS2">XCOPY c:\GitHub\EricLendvai\Harbour_VFP c:\Harbour_VFP /s</span><span class="ELS2">XCOPY c:\GitHub\EricLendvai\Harbour_ORM c:\Harbour_ORM /s</span><span class="ELS2"></span></pre>
+
+      <h2 id="using-vscode-to-compile-the-library-and-compile-run-the-examples-applications">Using VSCODE to Compile the Library and Compile/Run the Examples Applications</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>The
+ compilation of this library is best performed from within VSCODE. For 
+that reason, all VSCODE configuration files are also including in the 
+repo.</div><div><br/></div><div>In regards to the Harbour_ORM library 
+itself, all the source code files needed to compile the library are in 
+the root folder of the repo. The ".vscode" folder includes some of the 
+configuration files for VSCODE.</div><div>The "<a href="https://github.com/EricLendvai/Harbour_ORM/blob/master/hb_orm.code-workspace" rel="noopener noreferrer" target="_blank">hb_orm.code-workspace</a>" file located in the root folder is the VSCODE workspace file you should use to start VSCODE.</div><div>First
+ update any path in the "hb_orm.code-workspace" file and the json files 
+located in "\.vscode" folder to point to the location where you 
+installed the source code of Harbour_VFP and Harbour_ORM.</div><div>The compilation process use the hbmk2 Harbour tool. The "<a href="https://github.com/EricLendvai/Harbour_ORM/blob/master/BuildLIB.bat" rel="noopener noreferrer" target="_blank">BuildLIB.bat</a>" will be called by VSCODE tasks.</div><div><br/></div><div>In
+ regards to example programs, which demonstrates how to use the 
+Harbour_ORM, they are located in sub-folders of the "Examples" 
+folder. </div><div>Building these example programs are done in the same manner as the library itself, using VSCODE.</div><div>Open any "Examples\*\*.code-workspace" file with VSCODE, to open the examples' workspaces. </div><div>Remember
+ to first update any path in the *.code-workspace file and the json 
+files located in "\Examples\*\.vscode" to point to the location where 
+you installed the source code of Harbour_VFP and Harbour_ORM.</div><div>Currently in the repos, everything is defaulting to "C:\Harbour_VFP" and "C:\Harbour_ORM"</div><div>The compilation process use the hbmk2 Harbour tool. The "\Examples\BuildEXE.bat" will be called by VSCODE tasks.</div><div><br/></div><div>As
+ per the installation instructions the "Tasks" VSCODE extension will 
+display some buttons to help you compile the library and/or 
+compile/debug/run example programs. </div><div>If your open the "<a href="https://github.com/EricLendvai/Harbour_ORM/blob/master/hb_orm.code-workspace" rel="noopener noreferrer" target="_blank">hb_orm.code-workspace</a>"
+ workspace you will be able to compile the library, but not run it. The 
+actual execution of the library must be done via the examples.</div><div><br/></div><div>If you intend to debug an example program, you may want to also build in debug mode the library itself.</div><div><br/></div><div>The
+ environment is configured in such manner that debug and release build 
+will be stored in their own folders. Currently all debugging is done 
+when when using the Mingw64 C compiler.</div><div>Release build can be done in MSVC64.</div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_020.png" style="width: 619px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 359px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div>If you are opening one of the example workspace files, you will also be able to run the examples.</div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_017.png" style="width: 1082px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 599px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div></div>
+
+      <h2 id="debugging-with-vscode-and-debugview">Debugging with VSCODE and DebugView</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Debugging
+ your code is so simple with VSCODE. Beside using the VSCODE method to 
+setup breakpoints, you can also create code-based explicit breakpoints 
+with the use of "AltD()" function.</div><div>Under MS Windows, you can also send messages to DebugView using the function hb_orm_SendToDebugView(cMessage,[xValue]).</div><div><br/></div><div>Example of a debugging session:</div><div><img alt="" class="img-fluid" src="images/index_004.png" style="width: 1222px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 794px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div>I would recommend starting DebugView with the following settings and using the leading text "[Harbour]" in your messages:</div><div><img alt="" class="img-fluid" src="images/index_027.png" style="width: 342px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 203px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div></div>
+
+      <h2 id="connecting-to-sql-backend">Connecting to SQL Backend</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Before using any SQLData objects, a SQLConnect object need to be created and a connection must be initiated.</div><div><br/></div><div>There
+ are two ways to tell a SQLConnect object where to connect. Either by 
+sending all the configuration setting as parameters to the 
+hb_SQLConnect() constructor or by calling a series of methods before 
+initiating the actual connections.</div><div><br/></div><div>The following are examples of both ways to set the configuration and connect:</div></div>
+
+      <pre class="ELS1"><span class="ELS2">l_oSQLConnection1 := hb_SQLConnect()</span><span class="ELS2">with object l_oSQLConnection1</span><span class="ELS2">    :MySQLEngineConvertIdentifierToLowerCase := .f.</span><span class="ELS2">    :SetDriver("MariaDB ODBC 3.1 Driver")</span><span class="ELS2">    :SetBackendType("MariaDB")</span><span class="ELS2">    :SetUser("root")</span><span class="ELS2">    :SetPassword("password")</span><span class="ELS2">    :SetDatabase("test001")</span><span class="ELS2">    <span>// :SetServer("127.0.0.1")</span><span class="ELS2">    :SetPrimaryKeyFieldName("key")</span><span class="ELS2">    l_iSQLHandle := :Connect()</span><span class="ELS2">    do case</span><span class="ELS2">    case l_iSQLHandle == 0</span><span class="ELS2">        ?"Already Connected"</span><span class="ELS2">    case l_iSQLHandle &lt; 0</span><span class="ELS2">        ? :GetErrorMessage()</span><span class="ELS2">    otherwise</span><span class="ELS2">        ?"connection is",l_iSQLHandle</span><span class="ELS2">    endcase</span><span class="ELS2"></span><span class="ELS2">    ?"MariaDB Get last Handle",:GetHandle()   <span aria-label="This function is only needed if l_iSQLHandle was set to 0." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="This function is only needed if l_iSQLHandle was set to 0."></span><nobr></nobr></span><span class="ELS2">end</span><span class="ELS2"></span><span class="ELS2"></span><span class="ELS2">l_oSQLConnection2 := hb_SQLConnect("PostgreSQL",,,,"postgres","password","test001","set001")</span><span class="ELS2">with object l_oSQLConnection2</span><span class="ELS2">    :PostgreSQLIdentifierCasing := HB_ORM_POSTGRESQL_CASE_SENSITIVE</span><span class="ELS2">    :PostgreSQLHBORMSchemaName := "MyDataDic"</span><span class="ELS2">    l_iSQLHandle := :Connect()</span><span class="ELS2">    do case</span><span class="ELS2">    case l_iSQLHandle == 0</span><span class="ELS2">        ?"Already Connected"</span><span class="ELS2">    case l_iSQLHandle &lt; 0</span><span class="ELS2">        ? :GetErrorMessage()</span><span class="ELS2">    otherwise</span><span class="ELS2">        ?"connection is",l_iSQLHandle</span><span class="ELS2">    endcase</span><span class="ELS2"></span><span class="ELS2">    ?"PostgreSQL Get last Handle",:GetHandle()   <span aria-label="This function is only needed if l_iSQLHandle was set to 0." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="This function is only needed if l_iSQLHandle was set to 0."></span><nobr></nobr></span><span class="ELS2">end</span><span class="ELS2"></span></span></pre>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>For
+ the list of parameters and list of methods, please review the file 
+"hb_orm_sqlconnect_class_definition.prg" or the reference section in 
+this article.</div><div><br/></div><div>The connections are done using 
+ODBC drivers, but do not rely on DSN definitions. All ODBC settings are 
+handle using method calls.<br/><br/>When the :Connect() method of a 
+SQLConnect object is called the property :p_Schema will be initialized 
+with the definition of every tables, fields (columns) and index 
+definition.<br/>This :p_Schema property will help facilitate the 
+auto-casing for tables and fields. This is very useful if you configured
+ the backend server to be case-sensitive.<br/>In your Harbour code you 
+could refer to tables and field in any case since the ORM will adjust 
+the queries and commands to match casing. Due to this feature, <span class="fas fa-exclamation-square" style="color:#FF0000;font-size: 120%;"></span> you may not define more than one table or field in a table, with the same name in a case-insensitive manner.<br/>For
+ example, if in a table named "Client" you had a column named 
+"DateOfFirstContact", you could refer to that field as 
+"CLIENT.DATEOFFIRSTCONTACT" or "client.dateoffirstcontact" or any other 
+casing.<br/>The :p_Schema property is also used to apply schema migrations (across multiple schema names).</div><div><br/></div><div><span>PostgreSQL notes:</span><br/>The
+ process of loading schema definitions in :p_Schema can take a few 
+seconds for databases with thousands of tables. In PostgreSQL, querying 
+its meta data can be quite slow. For this reason the ORM will cache the 
+definition of all tables and indexes, for all schemas (PostgreSQL 
+Schemas) in the database. A trigger will help monitor structure changes 
+and invalidate the cache. Cache data will be stored in tables named 
+"SchemaCache*".</div><div>All ORM support tables, including the 
+structure cache files will be stored in a Schema (PostgreSQL namespace) 
+named "hb_orm". You may set the property :PostgreSQLHBORMSchemaName to 
+any other name. This must be done before calling all :Connect() methods.<br/><img alt="" class="img-fluid" src="images/index_023.png" style="width: 365px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 590px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div></div>
+
+      <h2 id="field-types-still-composing">Field Types - Still Composing</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>As mentioned in the introductions, a few extra fields types exists in this ORM. </div><div>When
+ results are returned into a cursor (in-memory table) some field types 
+are converted to locally supporting types (hbusrrdd.ch)</div><div>For some explanation about datetime and timestamp see xhb-diff.txt in the harbour source code repo.</div><div><br/></div><table class="hw-article-data-table"><tbody><tr><td><strong>ORM Code</strong></td><td><strong>ORM Content Type<br/></strong></td><td><strong>Length</strong></td><td><strong>Decimals</strong></td><td><strong>Supported Attributes</strong></td><td><strong>Cursor Field Type</strong></td><td><strong>Harbour variable types</strong></td><td><strong>PostgreSQL<br/>Field Type</strong></td><td><strong>MariaDB and MySQL<br/>Field Type</strong></td><td><span><strong>Warnings/Notes</strong></span></td></tr><tr><td><span>I</span></td><td>Integer</td><td><br/></td><td><br/></td><td>N, +</td><td>I - Integer</td><td>N - Numeric</td><td>integer</td><td>INT</td><td><br/></td></tr><tr><td><span>IB</span></td><td>Big Integer</td><td><br/></td><td><br/></td><td>N, +</td><td>I - Integer</td><td>N - Numeric</td><td>bigint</td><td>BIGINT</td><td><br/></td></tr><tr><td>F<br/></td><td>Float<br/></td><td><br/></td><td><br/></td><td>N<br/></td><td>F - Float<br/></td><td>N - Numeric<br/></td><td>real<br/></td><td>FLOAT([&lt;len&gt;,&lt;dec&gt;])<br/></td><td>In PostgreSQL No decimal precision.<br/></td></tr><tr><td>Y</td><td>Money (4 decimal)</td><td><br/></td><td><br/></td><td>N</td><td>Y - Currency</td><td>N - Numeric</td><td>money</td><td>DECIMAL(13,4)<br/>Comment field: 'Type=Y'<br/></td><td><br/></td></tr><tr><td>N</td><td>Numeric</td><td>X</td><td>X</td><td>N</td><td>N - Numeric</td><td>N - Numeric</td><td>numeric(&lt;len&gt;,&lt;dec&gt;)</td><td>DECIMAL(&lt;len&gt;,&lt;dec&gt;)</td><td><br/></td></tr><tr><td>C</td><td>Char</td><td>X</td><td><br/></td><td>N, B, T, U, C/Z</td><td>C - String</td><td>C - Character string</td><td>character(&lt;len&gt;)</td><td>CHAR(&lt;len&gt;)</td><td>ORM uses UTF8 encoding</td></tr><tr><td>CV</td><td>Variable length char (with max length value)</td><td>X</td><td><br/></td><td>N, B, T, U, C/Z</td><td>C - String</td><td>C - Character string</td><td>character varying(&lt;len&gt;)</td><td>VARCHAR(&lt;len&gt;)</td><td>ORM uses UTF8 encoding</td></tr><tr><td>B</td><td>Binary (Same as "R")</td><td>X</td><td><br/></td><td>N</td><td>C - String</td><td>C - Character string</td><td>bytea<br/>Comment field: 'Type=B|Length=&lt;len&gt;'</td><td>BINARY(&lt;len&gt;)</td><td>No code page/encoding.</td></tr><tr><td>BV</td><td>Variable length Binary (Same as "R" with max length value)</td><td>X</td><td><br/></td><td>N</td><td>C - String</td><td>C - Character string</td><td>bytea<br/>Comment field: 'Type=BV|Length=&lt;len&gt;'<br/></td><td>VARBINARY(&lt;len&gt;)</td><td>No code page/encoding.</td></tr><tr><td>M</td><td>Longtext (memo)</td><td><br/></td><td><br/></td><td>N, C/Z</td><td>M - Memo</td><td>C - Character string</td><td>text</td><td>LONGTEXT</td><td>ORM uses UTF8 encoding</td></tr><tr><td>R</td><td>Long blob (binary) (Same as "B")</td><td><br/></td><td><br/></td><td>N</td><td>M - Memo</td><td>C - Character string</td><td>bytea</td><td>LONGBLOB</td><td><br/></td></tr><tr><td>L</td><td>Logical</td><td><br/></td><td><br/></td><td>N</td><td>L - Logical</td><td>L - Boolean</td><td>boolean</td><td>TINYINT(1)</td><td><br/></td></tr><tr><td>D</td><td>Date</td><td><br/></td><td><br/></td><td>N</td><td>D - Date</td><td>D - Date</td><td>date</td><td>DATE</td><td><br/></td></tr><tr><td>TOZ</td><td>Time with time zone</td><td><br/></td><td><br/></td><td>N</td><td>T - Time</td><td>T - TimeStamp</td><td>time with time zone<br/>or<br/>time(&lt;dec&gt;) with time zone</td><td>TIME<br/>or<br/>TIME(&lt;dec&gt;)<br/>Comment field: 'Type=TOZ'<br/></td><td><br/></td></tr><tr><td>TO</td><td>Time without time zone</td><td><br/></td><td><br/></td><td>N</td><td>T - Time</td><td>T - TimeStamp</td><td>time without time zone<br/>or<br/>time(&lt;dec&gt;) without time zone</td><td>TIME<br/>or<br/>TIME(&lt;dec&gt;)</td><td><br/></td></tr><tr><td>DTZ</td><td>Date Time with time zone</td><td><br/></td><td><br/></td><td>N</td><td>T - Time</td><td>T - TimeStamp</td><td>timestamp with time zone<br/>or<br/>timestamp(&lt;dec&gt;) with time zone<br/></td><td>TIMESTAMP<br/>or<br/>TIMESTAMP(&lt;dec&gt;)</td><td><br/></td></tr><tr><td>DT<br/>or<br/>T</td><td>Date Time without time zone</td><td><br/></td><td><br/></td><td>N</td><td>T - Time</td><td>T - TimeStamp</td><td>timestamp without time zone<br/>or<br/>timestamp(&lt;dec&gt;) without time zone<br/></td><td>DATETIME<br/>or<br/>DATETIME(&lt;dec&gt;)</td><td><br/></td></tr><tr><td>UUI</td><td>UUID (Universally Unique Identifier)</td><td><br/></td><td><br/></td><td>+</td><td>C - String</td><td>C - Character string</td><td>uuid</td><td>VARCHAR(36)<br/>Comment field: 'Type=UI'</td><td>MySQL/MariaDB36 Character Length (32 digits and 4 dashes).<br/>PostgreSQL requires pgcrypto extension to be installed.<br/></td></tr><tr><td><div>JS</div></td><td>JSON</td><td><br/></td><td><br/></td><td><br/></td><td>C - String</td><td>C - Character string</td><td>json</td><td>LONGTEXT<br/>Comment field: 'Type=JS'</td><td><br/></td></tr></tbody></table><div><br/></div><div><span>Field Attributes:</span></div><div>You can also a combination of the following codes to add attributes/behaviors to field content:</div><table class="hw-article-data-table"><tbody><tr><td><strong>Code</strong></td><td><strong>Behavior</strong></td><td><strong>Used for Tables</strong></td><td><strong>Used for Cursors</strong></td></tr><tr><td>N</td><td>Allow Null</td><td>X</td><td>X</td></tr><tr><td>+</td><td>Auto Increment</td><td>X</td><td>X</td></tr><tr><td>B</td><td>Binary</td><td>No Yet</td><td>X</td></tr><tr><td>T</td><td>Trimmed</td><td>Always</td><td>X</td></tr><tr><td>U</td><td>Unicode</td><td>No Yet</td><td>No Yet</td></tr><tr><td>Z</td><td>Compressed</td><td>No Yet</td><td>No Yet</td></tr><tr><td>C</td><td>Compressed</td><td>No Yet</td><td>No Yet</td></tr><tr><td>A<br/></td><td>Array<br/></td><td>X PostgreSQL<br/></td><td>Not Yet<br/></td></tr></tbody></table><div><br/></div><div><span>Notes:</span></div><ul><li>Even
+ though PostgreSQL makes it optional to specify a max length value for 
+"Variable length Chars" and Variable length Binary", since MySQL 
+requires it, so does this ORM.</li><li>To take advantage of "Big Integer" type you must use Harbour 64-bits.</li><li>To make a "C" or "CV"  field allow binary content, use the "B" attribute (See below).</li><li>The U, C/Z are not yet implemented. By default all C/CV fields are UTF8 already.</li><li>In
+ PostgreSQL a "bit" type also exists, which is a string series for "0" 
+and "1", not the Binary type. For now the ORM does not support the field
+ type.</li><li>UUID Fields set to not allow null values will have their default value set to get a new UUID value</li><li>On PostgreSQL to allow the generation of UUID values, install the extension "pgcrypto".</li></ul></div>
+
+      <h2 id="nil-and-null">NIL and NULL</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>In
+ Harbour  there is a function hb_IsNull(xValue). It is only valid 
+when xValue is a "string", "array" or "hash array", and return true if 
+the length is zero. It has nothing to do with the concept of NULL values
+ in relational databases.</div><div>In Harbour a NIL variable means no 
+value was assigned to it, similar to what a NULL column (field) value 
+would be if no value was assigned to it.</div><div>The DBF tables in 
+Clipper and Harbour do not support NULL values in fields. In VFP DBF 
+tables (since version 3), a NULL value can be assigned to a field, as 
+long as the field was marked to allow nulls.</div><div>In the C language, at least in Object-C, there is a difference between NIL and NULL. </div><div>Since
+ Harbour is mainly used to work on database, and since in this ORM we 
+are dealing with relational database, we are going to avoid using the 
+terms NIL, and always talk about NULL.</div><div>One of the main 
+advantages for supporting NULL becomes apparent when issuing SQL SELECT 
+queries with outer joins, like "left join". The way you can detect if a 
+"left join" did not find related records (rows) is if all the fields in 
+the related tables return a NULL value. The easiest is to test if the 
+primary key in the related (joined) table IS NULL, since primary keys 
+may never be null.</div><div><br/></div><div>The Harbour ORM use the Harbour VFP library, in Harbour compatibility mode. </div><div>Using xtranslate statements the following declarations are available to your code:</div><ul><li>Any NULL, .NULL. will be processed as a Harbour NIL.</li><li>ISNULL(xValue) will be translated to hb_IsNIL(xValue).</li><li>Avoid
+ using hb_IsNULL. use Empty(xValue) instead, since if behaves the same 
+as hb_IsNULL and works on numeric and any other fields/variable types.</li><li>Empty(NULL) returns true.  (In VFP this return false)</li></ul></div>
+
+      <h2 id="schema-managment-still-composing">Schema Managment - Still Composing</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Managing deployment of an app that relies on PostgreSQL or MySQL/MariaDB can be tricky. </div><div>You need to ensure your schema version (table structures and indexes) match the application you deploy.</div><div><br/></div><div>There
+ are several tools that already exists for creating tables and indexes, 
+and updating their structure. Products like Flyway, Liquibase and 
+dbdeploy run using Java or .Net. Most require a fixed sequence of script
+ to migrate schema. Meaning you must change your schema without skipping
+ a particular version.</div><div><br/></div><div>A long time ago I 
+decided on a few business rules about how to handle data structures. 
+These rules allow me to simplify the process and make my deployments 
+more robust and are the main reason I created a Harbour based migration 
+set of features.</div><div><br/></div><div><span>Schema Rules:</span></div><ul><li>All tables must have a primary key that is an auto-increment integer or big integer.</li><li>An incremental schema version number is recorded with the data, and the application specify the version it needs.</li><li>Fields don't change types.</li><li>Indexes don't change definition. A new index name can be created with a new  index expression.</li><li>Tables and Fields are never deleted via automated migration process (will define that process later).</li><li>Tables
+ and Field are never renamed. For example if a field name has to change,
+ a new field is created with the new name, and data is copied from the 
+old field to the new field. Deleting the old field will block 
+downgrading schema.</li></ul><div>The following is the list of steps a migration should have.</div><div><br/></div><div><span>Migration Process Steps:</span></div><ol><li>Read the current version of the schema.</li><li>If same as the one the application expect, exit the migration process.</li><li>Issue an Application Lock to the schema to other users.</li><li>Compare the current schema definition with what the application needs and generate SQL commands to alter the structure.</li><li>Apply the generated migration code.</li><li>Starting
+ from the on-file database version number, start applying data content 
+transformations, like initializing field content or moving data into new
+ fields. Optionally delete old tables and fields, but this will need to 
+prevent rollbacks.</li><li>As we apply data version specific changes, 
+record the version we completed. Reviewing some actual code will make 
+this step clearer.</li><li>Remove any Application Locks.</li></ol><div>Based
+ on the Schema Rules and Migration Process steps I usually embed the 
+migration process inside my applications. Updating an application will 
+almost always trigger a schema migration. When an application starts, it
+ will always check the schema version of the database is at least the 
+version it expects.</div><div><br/></div><div>All schema migration 
+functions are implement as methods of a SQLConnect object. For the 
+purpose of this documentation, let's call it l_oSQLConnection1.</div><div>The
+ following is a list of methods that can be used to implement all the 
+steps of the previously defined "Migration Process Steps".</div><div><br/></div><div>1.
+ l_oSQLConnection1:GetSchemaDefinitionVersion(par_cSchemaDefinitionName)
+ . The par_cSchemaDefinitionName can be any text, for example "main". In
+ theory you could split into multiple modules your application, and do 
+the same for schema management. The ORM will maintain a table named "<strong>SchemaVersion</strong>" to record the current version numbers.</div><div><br/></div><div>3.
+ l_oSQLConnection1:Lock("SchemaVersion",1). The first parameter is a 
+table name, "SchemaVersion" is a ORM support table, and 1 is a key 
+value. The record does not have to exist, just all the instances of your
+ application should standardize on a key number, and that is the reason I
+ choose 1. It is up to you about how to handle notification to users in 
+case the lock was not granted, and how to tell them that a maintenance 
+is in progress.</div><div><br/></div><div>4. and 5. Create a variable, 
+for example l_SchemaDefinition1 (as demonstrated in 
+"\Examples\SQL_CRUD\SQL_CRUD.prg") and call 
+l_oSQLConnection1:MigrateSchema(l_SchemaDefinition1). </div><div>This method returns an array {nResult,cSQLScript,cLastError} where:</div><ul><li>nResult could be 0 = Nothing Migrated, 1 = Migrated, -1 = Error Migrating</li><li>cSQLScript is the SQL script that was generated on the fly and actually executed</li><li>cLastError if the script failed, this will have an error text explaining the failure.</li></ul><div>6.
+ and 7. Use 
+l_oSQLConnection1:SetSchemaDefinitionVersion(par_cSchemaDefinitionName,par_iVersion)
+ after every version specific transformations. See 1. about 
+par_cSchemaDefinitionName, and par_iVersion will be your new database 
+schema version.<br/><br/></div><div>8. l_oSQLConnection1:Unlock("SchemaVersion",1), see 3.</div><div><br/></div><div>In
+ regards to the :p_Schema property (the one that stores the schema 
+structure of the entire database you connect to), and the parameter you 
+provide to the :MigrateSchema() method, they are very similar. </div><div>The
+ first differences between those two is that :p_Schema covers all tables
+ in the database, and SchemaDefinition parameter may only represent some
+ tables, since more than one :MigrateSchema() can be applied to a 
+database (like program module specific tables).</div><div>The second 
+difference is that the :p_Schema property is already specific to the 
+backend you connect to, while the SchemaDefinition parameter may contain
+ definitions specific to a particular backend. For example you may want a
+ certain field or index to only exists in PostgreSQL and not in MySQL, 
+or vice versa.</div><div><br/></div><div><span>Structure of a SchemaDefinition variable used by the MigrateSchema method:</span></div><div>In
+ the following explanation I will use a hypothetical variable 
+ l_Schema to describe the structure of SchemaDefinition variables.</div><div>First
+ of all l_Schema is a hash array where the keys are the table names. 
+Then each value is a two element array. The first will contain a hash 
+array of field definitions, the second another hash array of index 
+definition or null (NIL) if the table has no indexes. Indexes on the 
+primary key for every tables is not listed as one of the index 
+definitions.</div><div>The field definition hash array has the field 
+names as keys and the value can be an array defining the field 
+attributes, or an array of arrays where the first dimension tell the 
+kind of backend this relates too. </div><div>The index definition 
+hash array, if exists, has the index names as keys (name must be unique 
+for current table) and the value is similar in concept to the field 
+definition hash arrays.</div><div><br/></div><div>I know this can be a 
+little tricky to visualize, so let's review an actual implementation of 
+this l_Schema variable (from the method UpdateORMSupportSchema() class 
+hb_orm_SQLConnect).</div><div><br/></div><div>At line {{TableSchemaVersion}}  we are defining the ORM support table "SchemaVersion"</div><div>Line
+ {{FieldDefinitionArray}} is an example of a field definition that 
+should exist for any backend. Field definition arrays have the following
+ elements:</div><ol><li>Backend Type. You may use the pre-processor 
+defintions HB_ORM_SCHEMA_MYSQL_OBJECT and 
+HB_ORM_SCHEMA_POSTGRESQL_OBJECT (defined in hb_orm.ch)</li><li>Field Type. See "Field Type" section in this article for the valid list.</li><li>Field Length.</li><li>Field decimal precision.</li><li>Field
+ Attributes. Optional. String can include more than one attribute. See 
+"Field Type" section in this article for the valid list.</li></ol><div>All element of the field definition array must be defined, except that the first one may be null (NIL).</div><div><br/></div><div>Line {{IndexDefinitionsArray}} is the start of index definitions for the table "SchemaTableNumber".</div><div>Index definition arrays have the following elements:</div><ol><li>Backend Type. (Same as Field Definitions)</li><li>Index Name (leading table and schema name (PostgreSQL only) and trailing "idx") will be added in the actual database.</li><li>Is Unique (to enforce unique entries.) (I never had to use this setting before, since I wanted to detect non unique entries.)</li><li>Algorithm (depend of backends, refer to PostgreSQL/MySQL/MariaDB documentation)</li></ol><div>All element of the index definition array must be defined, except that the first one may be null (NIL).</div><div><br/></div><div>Here is an example of how pgAdmin (PostgreSQL) presents the structure of the table "SchemaTableNumber".</div><div><img alt="" class="img-fluid" src="images/index_022.png" style="width: 421px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 159px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/><br/></div></div>
+
+      <pre class="ELS1"><span class="ELS2">local l_Schema := ;</span><span class="ELS2">    {"SchemaVersion"=&gt;{"Fields"=&gt;;</span><span class="ELS2">      {"pk"     =&gt;{, "I",  0,  0,""};</span><span class="ELS2">      ,"name"   =&gt;{{HB_ORM_SCHEMA_MYSQL_OBJECT     ,"CV",254,  0,},;</span><span class="ELS2">                   {HB_ORM_SCHEMA_POSTGRESQL_OBJECT, "M",  0,  0,}};</span><span class="ELS2">      ,"version"=&gt;{, "I",  0,  0,}};</span><span class="ELS2">      ,"Indexes"=&gt;;</span><span class="ELS2">      NIL};</span><span class="ELS2">     ,"SchemaAutoTrimLog" =&gt; {"Fields"=&gt;;</span><span class="ELS2">      {"pk"           =&gt;{                                , "IB",  0,  0,"+"};</span><span class="ELS2">      ,"eventid"      =&gt;{                                ,  "C",HB_ORM_MAX_EVENTID_SIZE,0,"N"};</span><span class="ELS2">      ,"datetime"     =&gt;{                                ,"DTZ",  0,  0,};</span><span class="ELS2">      ,"ip"           =&gt;{                                ,  "C", 43,  0,};</span><span class="ELS2">      ,"schemaname"   =&gt;{HB_ORM_SCHEMA_POSTGRESQL_OBJECT ,  "M",  0,  0,};   <span aria-label="This field will only exists for PostgreSQL databases." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="This field will only exists for PostgreSQL databases."></span><nobr></nobr></span><span class="ELS2">      ,"tablename"    =&gt;{{HB_ORM_SCHEMA_MYSQL_OBJECT     , "CV",254,  0,},;  <span aria-label="Same field defined differently depending of backend server." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Same field defined differently depending of backend server."></span><nobr></nobr></span><span class="ELS2">                         {HB_ORM_SCHEMA_POSTGRESQL_OBJECT,  "M",  0,  0,}};</span><span class="ELS2">      ,"recordpk"     =&gt;{                                , "IB",  0,  0,};</span><span class="ELS2">      ,"fieldname"    =&gt;{{HB_ORM_SCHEMA_MYSQL_OBJECT     , "CV",254,  0,},;</span><span class="ELS2">                         {HB_ORM_SCHEMA_POSTGRESQL_OBJECT,  "M",  0,  0,}};</span><span class="ELS2">      ,"fieldtype"    =&gt;{                                ,  "C",  3,  0,};</span><span class="ELS2">      ,"fieldlen"     =&gt;{                                ,  "I",  0,  0,};</span><span class="ELS2">      ,"fieldvaluer"  =&gt;{                                ,  "R",  0,  0,"N"};</span><span class="ELS2">      ,"fieldvaluem"  =&gt;{                                ,  "M",  0,  0,"N"}};</span><span class="ELS2">      ,"Indexes"=&gt;;</span><span class="ELS2">      NIL};</span><span class="ELS2">     ,"SchemaAndDataErrorLog" =&gt; {"Fields"=&gt;;</span><span class="ELS2">      {"pk"           =&gt;{                                , "IB",  0,  0,"+"};</span><span class="ELS2">      ,"eventid"      =&gt;{                                ,  "C",HB_ORM_MAX_EVENTID_SIZE,0,"N"};</span><span class="ELS2">      ,"datetime"     =&gt;{                                ,"DTZ",  0,  0,};</span><span class="ELS2">      ,"ip"           =&gt;{                                ,  "C", 43,  0,};</span><span class="ELS2">      ,"schemaname"   =&gt;{HB_ORM_SCHEMA_POSTGRESQL_OBJECT ,  "M",  0,  0,"N"};</span><span class="ELS2">      ,"tablename"    =&gt;{{HB_ORM_SCHEMA_MYSQL_OBJECT     , "CV",254,  0,"N"},;</span><span class="ELS2">                         {HB_ORM_SCHEMA_POSTGRESQL_OBJECT,  "M",  0,  0,"N"}};</span><span class="ELS2">      ,"recordpk"     =&gt;{                                , "IB",  0,  0,"N"};</span><span class="ELS2">      ,"errormessage" =&gt;{                                ,  "M",  0,  0,"N"};</span><span class="ELS2">      ,"appstack"     =&gt;{                                ,  "M",  0,  0,"N"}};</span><span class="ELS2">      ,"Indexes"=&gt;;</span><span class="ELS2">      NIL};</span><span class="ELS2">     ,"SchemaTableNumber" =&gt; {"Fields"=&gt;;   <span>// Used to get a single number for a table name, to be used with pg_advisory_lock()</span><span class="ELS2">      {"pk"           =&gt;{                                ,  "I",  0,  0,"+"};   <span>// Will never have more than 2**32 tables.</span><span class="ELS2">      ,"schemaname"   =&gt;{HB_ORM_SCHEMA_POSTGRESQL_OBJECT ,  "M",  0,  0,};</span><span class="ELS2">      ,"tablename"    =&gt;{{HB_ORM_SCHEMA_MYSQL_OBJECT     , "CV",254,  0,},;</span><span class="ELS2">                         {HB_ORM_SCHEMA_POSTGRESQL_OBJECT,  "M",  0,  0,}}};</span><span class="ELS2">      ,"Indexes"=&gt;;</span><span class="ELS2">      {"schemaname" =&gt;{HB_ORM_SCHEMA_POSTGRESQL_OBJECT,"schemaname",.f.,"BTREE"};   <span aria-label="This index will only exists for PostgreSQL databases." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="This index will only exists for PostgreSQL databases."></span><nobr></nobr></span><span class="ELS2">      ,"tablename"  =&gt;{                               ,"tablename" ,.f.,"BTREE"}}};</span><span class="ELS2">    }</span></span></span></pre>
+
+      <h2 id="installing-postgresql-on-ms-windows">Installing PostgreSQL on MS Windows</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>This section is only to assist you if you want to install a local PostgreSQL server on your development machine.</div><div>The instructions were created on a Windows 10 Pro machine 64-bit.</div><div><br/></div><div>Download PostgreSQL 13 64-bit (no 32-bit is available) or newer:</div><div><a href="https://www.enterprisedb.com/downloads/postgres-postgresql-downloads" rel="noopener noreferrer" target="_blank">https://www.enterprisedb.com/downloads/postgres-postgresql-downloads</a> and use the Windows x86-64 Download button for PostgreSQL 13 or higher.</div><div><br/></div><div>One
+ of the only suggestions for using different than default settings 
+during install, is to install the actual PostgreSQL data files not in a 
+sub-folder of C:\Program Files\.</div><div>Instead of "C:\Program 
+Files\PostgreSQL\13\data" I usually create a folder 
+"C:\PostgreSQL_Data\13" and specify it for the "Data Directory" setting.</div><div><br/></div><div>The following are screen shots of the PostgreSQL server install and the ODBC driver.</div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_025.png" style="width: 300px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 235px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_005.png" style="width: 300px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 235px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_007.png" style="width: 300px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 235px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_008.png" style="width: 300px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 235px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_010.png" style="width: 300px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 235px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_009.png" style="width: 300px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 235px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_006.png" style="width: 300px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 235px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_015.png" style="width: 300px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 235px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_018.png" style="width: 300px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 235px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_019.png" style="width: 300px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 235px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_013.png" style="width: 300px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 235px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_002.png" style="width: 300px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 206px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_011.png" style="width: 300px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 206px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_026.png" style="width: 300px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 206px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_012.png" style="width: 300px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 206px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_016.png" style="width: 300px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 235px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_024.png" style="width: 300px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 235px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_021.png" style="width: 300px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 235px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_003.png" style="width: 300px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 235px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_014.png" style="width: 300px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 235px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div><img alt="" class="img-fluid" src="images/index.png" style="width: 300px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 206px; position: relative; max-width: 100%; cursor: pointer;"/></div></div>
+
+      <div class="hw-close-fallback" data-close-fallback hidden>
+        The browser did not close this tab. It may have been opened directly instead of from the Articles list. Use <a href="/articles/">Back to Articles</a>.
+      </div>
+    </article>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/assets/js/article-page.js"></script>
+  <script src="/assets/js/article-copy-code.js"></script>
+  <script src="/assets/js/article-tooltips.js"></script>
+</body>
+</html>

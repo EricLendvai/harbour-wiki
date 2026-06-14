@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Comparing computer languages, Harbour, VFP and others | Harbour Wiki</title>
+  <meta name="description" content="Comparing computer languages, Harbour, VFP and others. Original Harbour.wiki article converted to a static article page.">
+  <link rel="icon" type="image/svg+xml" href="/images/harbour.svg">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="/scripts/FontAwesome_5_3_1/css/all.min.css" rel="stylesheet">
+  <link href="/assets/css/site.css" rel="stylesheet">
+  <link href="/assets/css/articles.css" rel="stylesheet">
+  <link href="/assets/css/article-migration.css" rel="stylesheet">
+</head>
+<body class="hw-article-page">
+  <header class="hw-article-tab-header">
+    <a class="hw-article-tab-brand" href="/" aria-label="Harbour Wiki home">
+      <img class="hw-article-tab-logo" src="/images/harbour.svg" alt="" aria-hidden="true">
+      <span class="hw-article-tab-title">
+        <span class="hw-article-tab-site">Harbour Wiki</span>
+        <span class="hw-article-tab-subtitle">Static article</span>
+      </span>
+    </a>
+    <div class="hw-article-tab-actions">
+      <a class="btn btn-light" href="/articles/"><i class="bi bi-arrow-left" aria-hidden="true"></i> Back to Articles</a>
+      <button class="btn btn-outline-light" type="button" data-close-article><i class="bi bi-x-lg" aria-hidden="true"></i> Close</button>
+    </div>
+  </header>
+
+  <main class="hw-article-main">
+    <article class="hw-article-content">
+      <!-- Source: uploaded saved article HTML: Comparing computer languages, Harbour, VFP and others.htm -->
+      <!-- Conversion: visible article content converted from original article HTML; saved-page navigation/scripts excluded. -->
+      <h1>Comparing computer languages, Harbour, VFP and others</h1>
+
+      
+      <div class="hw-article-author">
+        <img src="images/author-eric-lendvai.png" alt="Eric Lendvai" class="hw-article-author-photo">
+        <span><strong>Author:</strong> Eric Lendvai</span>
+      </div>
+
+      <h2>Table of Contents</h2>
+      <ul class="hw-article-toc">
+        <li><a href="#revision-history">Revision History</a></li>
+        <li><a href="#target-audience">Target Audience</a></li>
+        <li><a href="#the-big-picture">The big picture</a></li>
+        <li><a href="#desktop-gui-and-development-environments">Desktop GUI and Development Environments</a></li>
+        <li><a href="#web-protocols">Web Protocols</a></li>
+        <li><a href="#in-memory-tables-and-local-sql-syntax">In-Memory Tables and Local SQL Syntax</a></li>
+        <li><a href="#vfp-cursors-and-local-sql-engine">VFP cursors and Local SQL engine</a></li>
+        <li><a href="#functions-and-commands">Functions and commands</a></li>
+        <li><a href="#documentation-and-training">Documentation and Training</a></li>
+        <li><a href="#core-developers">Core developers</a></li>
+        <li><a href="#conclusion">Conclusion</a></li>
+      </ul>
+
+      <h2 id="revision-history">Revision History</h2>
+
+      <table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td>03/12/2019</td><td></td><td>New section "VFP cursors and Local SQL engine"</td></tr></tbody></table>
+
+      <h2 id="target-audience">Target Audience</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><ul><li>VFP developers contemplating a switch to Harbour.</li><li>Harbour developers wondering what else is out there, and why VFP developers might join us.</li><li>xHarbour, Xbase++ developers looking for Open Source and free solution.</li></ul></div>
+
+      <h2 id="the-big-picture">The big picture</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>In
+ this article, I am going to highlight the main differences between 
+Harbour and VFP, and make a case for Harbour against all other popular 
+languages.<br/><br/>I personally developed in VFP (Microsoft Visual 
+FoxPro) since FoxPro 1.0 until its last implementation, version 9. I am 
+also well versed in Python, C, JavaScript and a few other languages. 
+This current web site, harbour.wiki, was developed using VFP for 
+backend, with some minor Python, and lots of JavaScript, Bootstrap and 
+jQuery mainly. My hope is to convert the backend to Harbour at some 
+point. But, sadly, quite a bit of work will be needed to add some 
+missing features to Harbour, and some work to get rid of VFP specific 
+code. Also, more than 55 tables are needed to store all the settings and
+ data published here, all fully normalized.<br/><br/>So you may wonder: why convert to Harbour and not another language? Harbour is still very similar to VFP, more on that later.<br/><br/>Let’s
+ first mention some of the most popular languages, some of their pros 
+and cons, from the perspective of a VFP and Harbour developer.</div><div>I
+ will also include xHarbour, Xbase++ (by Alaska-Software), X#, and of 
+course Harbour and VFP, in the following comparison matrix.</div><div> 
+                     
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                   </div><table class="hw-article-data-table"><thead><tr><th>Language</th><th><div>Pros</div></th><th>Cons</th></tr></thead><tbody><tr><td><div>Python</div>        </td><td><ul><li>Extremely popular</li><li>Lots of community packages</li><li>Lots of training material</li><li>Virtually all platforms and 32/64-bit</li><li>100% open source</li><li>Actively developed and evolving language</li><li>Most taught language in colleges and universities (recently)</li></ul></td><td><ul><li>No unified UI development environment</li><li>No native table/database layer</li><li>Dependency nightmare</li><li>No compilation error detection</li><li>No easy single packaging</li><li>Your code can easily be reverse-engineered</li><li>Indentation-based logic</li><li>One of the slowest in runtime</li><li>Really different approach to linking (importing) external modules</li><li>Case-sensitive language</li></ul></td></tr><tr><td>Java        </td><td><ul><li>Virtually all platforms and 32/64-bit</li><li>Lots of training material</li><li>Still popular</li></ul></td><td><ul><li>No native table/database layer</li><li>Your code can easily be reverse-engineered (decompilation)</li><li>Case-sensitive language</li><li>For newer versions, commercial runtime license fees are required and could become expensive</li><li>OpenJDK  is open source, but not the official implementation by Oracle</li></ul></td></tr><tr><td><div>JavaScript (Node)        </div></td><td><ul><li>Extremely popular</li><li>Lots of community packages</li><li>Lots of training material</li><li>Actively developed and evolving language</li><li>Very fast execution</li></ul></td><td><ul><li>No native table/database layer</li><li>Dependency nightmare</li><li>No compilation error detection</li><li>Source code deployment</li><li>Web backend mainly, desktop solutions requires solution like electronjs</li><li>Case-sensitive language</li></ul></td></tr><tr><td><div>C# and VB.NET       </div></td><td><ul><li>Popular</li><li>Rich development environment</li><li>Lots of training material</li><li>Desktop and web solutions</li><li>Virtually all platforms and 32/64-bit with reduced functionality</li></ul></td><td><ul><li>Controlled by single vendor, Microsoft (which terminated VB, Visual FoxPro)</li><li>No native table/database layer</li><li>Your code can easily be reverse-engineered (decompilation)</li><li>Overly complicated class structure and API</li><li>Case-sensitive language</li><li>Not 100% open source</li></ul></td></tr><tr><td><div>PHP</div></td><td><ul><li>Easy syntax</li><li>Lots of training material</li><li>100% open source</li><li>Still in the top 10 most popular languages</li></ul></td><td><ul><li>No compilation error detection</li><li>Source code deployment</li><li>Web backend only, not for desktop solutions</li><li>On the decline in popularity</li><li>Case-sensitive language</li></ul></td></tr><tr><td><div>C++        </div></td><td><ul><li>Fast Runtime</li><li>Virtually all platforms and 32/64-bit</li></ul></td><td><ul><li>No native table/database layer</li><li>Extremely verbose language</li><li>Really difficult to debug</li><li>Case-sensitive language</li></ul></td></tr><tr><td>Ruby        </td><td><ul><li>Nice syntax</li></ul></td><td><ul><li>On the decline in popularity</li><li>Web backend only, not for desktop solutions</li><li>Slow runtime</li><li>Case-sensitive language</li></ul></td></tr><tr><td>xHabour</td><td><ul><li>Virtually the same syntax as Harbour, XBase++ and VFP</li><li>Virtually all platforms and 32/64-bit</li><li>Hard to reverse engineer (no practical decompilation)</li><li>Virtually the same syntax as Harbour, and VFP</li><li>Fast runtime</li><li>Multiple database engine native support, like DBF, Advantage Database (commercial)</li><li>Case insensitive language</li></ul></td><td><ul><li>No visible active development</li><li>Single vendor</li><li>Harbour already integrated all of its features</li></ul></td></tr><tr><td><div>XBase++</div></td><td><ul><li>Direct support from vendor (Alaska-Software)</li><li>Hard to reverse engineer (no practical decompilation)</li><li>Virtually the same syntax as Harbour, and VFP</li><li>Very good web protocol support</li><li>Fast runtime</li><li>Multiple database engine native support, like DBF, PostgreSQL, Advantage Database (commercial)</li><li>Case insensitive language</li></ul></td><td><ul><li>Proprietary, not open source</li><li>Windows 32-bit only</li><li>Limited interoperability</li><li>Yearly license fee</li><li>Vaporware regarding their VFP support</li><li>Weak UI design tools</li></ul></td></tr><tr><td><div>X#        </div></td><td><ul><li>Possible solution for .NET developers to add xBase language syntax</li></ul></td><td><ul><li>.NET runtime</li><li>Your code can easily be reverse-engineered (decompilation)</li><li>Case-sensitive language</li><li>Still under development</li><li>Commercial license may be required</li></ul></td></tr><tr><td>VFP</td><td><ul><li>Built-in fantastic IDE, including forms designed with visual inheritance and report writer</li><li>Excellent for creating desktop Windows 32-bit apps</li><li>Very rich language, everything but the kitchen sink approach</li><li>Extremely stable</li><li>SQL syntax support on DBF</li><li>Extremely fast for table queries and inserts (was the foundation of the MS SQL 7+ engine)</li><li>In-memory tables (cursors)</li><li>Case insensitive language</li></ul></td><td><ul><li>End of Life by Microsoft</li><li>Your code can easily be reverse-engineered (decompilation) (unless commercial branding)</li><li>Windows 32-bit only, limited to 2GB table size</li><li>Closed code, and non-free development environment</li></ul></td></tr><tr><td>Harbour</td><td><ul><li>100% Open Source and free</li><li>Virtually all platforms and 32/64-bit</li><li>Hard to reverse engineer (no practical decompilation)</li><li>Virtually the same syntax as xHarbour, Xbase++, X#, and VFP</li><li>Fast runtime</li><li>Multiple database engine native support, like DBF, SQLite, Advantage Database (commercial)</li><li>Case insensitive language</li><li>In 64-bit, will break the 2GB table limit</li><li>Support for in-memory tables</li><li>FastCGI framework for web development</li></ul><br/></td><td><ul><li>No vibrant core developer community</li><li>No unified UI development environment</li><li>Lack of clear language documentation (getting better)</li><li>Fragmented core code (branching)</li><li>No local table SQL syntax support</li><li>No easy build process</li></ul></td></tr></tbody></table><div> 
+                     
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+               </div></div>
+
+      <h2 id="desktop-gui-and-development-environments">Desktop GUI and Development Environments</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>As
+ mentioned in the language matrix above, Harbour does not support GUI 
+natively. GUI means Graphical User Interface. Clipper, rather than 
+Harbour, has a text-based entry screen system. </div><div><br/></div><div>On
+ the other hand,  VFP has a 100% GUI design and runtime engine. It 
+is true that VFP was a commercial product, but it came with everything 
+to design forms, visual classes, menus, reports, labels in a graphical 
+way. Even the forms and visual classes support inheritance! You could 
+create a control, and subclass it. Or even create a container that had 
+controls or subclassed controls in it. And all can be done with 
+form/class/report designers. You can manipulate all the controls via 
+property sheets, add code, events and methods to your form and classes. 
+You can even create your own property editing screens to integrate with 
+the form designer. The only major downside was that the designers would 
+store all the settings in tables, and it would take some tricks to deal 
+with source code version control systems. Also, sadly, VFP is Windows 
+32-bit only.</div><div><br/></div><div>VFP has a complete integrated IDE 
+(Integrated Development Environment), but it missed the concept of 
+solutions, meaning a collections of projects and has no native 
+integration with git or any other source version control system. </div><div>A
+ project was used to build a single EXE, DLL, or APP (VFP-specific 
+executable). In Microsoft .NET for example, you can create a Solution, 
+which is kind of like a "product", that can have a collection of 
+projects, a series of EXEs and DLLs.</div><div><br/></div><div>The following are some screens showing the VFP project, form, class and report designers/builders:</div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_004.png" style="width: 409px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 829px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_007.png" style="width: 766px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 475px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_008.png" style="width: 1030px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 615px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_003.png" style="width: 1074px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 659px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_009.png" style="width: 1193px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 561px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_002.png" style="width: 1006px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 181px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_006.png" style="width: 1029px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 600px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div>But,
+ sadly, Harbour does not natively have an IDE and/or GUI support. Like 
+Python, we have a collection of options to add GUI to our desktop apps.</div><div><br/></div><div><strong>Here is a list of free solutions to add GUI to your desktop app:</strong></div><div><br/></div><div>1. Harbour Mini Graphics<br/>See <a href="http://www.hmgforum.com/" rel="noopener noreferrer" target="_blank">www.hmgforum.com</a> for more detail. Last version is HMG 3.4.4 dated. 2017/03/29</div><div><br/></div><div>2. Harbour MiniGUI Extended Edition</div><div>See <a href="http://www.hmgextended.com/" rel="noopener noreferrer" target="_blank">www.hmgextended.com</a> for more detail. Derived from HMG, but is Windows platform-specific.</div><div><br/></div><div>3. HwGUI</div><div>See <a href="http://www.kresin.ru/en/hwgui.html" rel="noopener noreferrer" target="_blank">www.kresin.ru/en/hwgui.html</a> for more detail. Still actively supported and seems to have a large support group in Brazil.<br/>Works on Windows and Linux. On Windows, uses the native Windows API, and for Linux uses <a href="https://www.gtk.org/" rel="noopener noreferrer" target="_blank">www.gtk.org</a>, a free GUI kit</div><div><br/></div><div>4.
+ There was a project call "Harbour IDE" also called HBIDE, created by 
+Pritpal Bedi, but it does not seem to be actively maintained anymore.</div><div><br/></div><div><strong>And here are some commercial solutions to add GUI to your desktop app:</strong></div><div><br/></div><div>1. Five Tech Software<br/>See <a href="https://www.fivetechsoft.com/english/index.php" rel="noopener noreferrer" target="_blank">https://www.fivetechsoft.com/english/index.php</a> for more details.</div><div><br/></div><div>2.
+ Some Harbour developers are trying to use QT, which is a major player 
+in the GUI world. But I am not certain how it would be possible to avoid
+ having to pay for a very expensive monthly license fee ($350 / month).</div><div><br/></div><div><strong>And so ...</strong></div><div><br/></div><div>One of the other solutions, is to focus on using Harbour to create Web Apps! All the GUI is done rendering web pages.</div><div><br/></div><div><span class="fas fa-smile-wink" style="color:#003aff;font-size: 120%;"></span>
+ If you are interested in demonstrating any of these solutions, or have 
+additional ones, please contact me, or even better, become a 
+harbour.wiki author!  </div></div>
+
+      <h2 id="web-protocols">Web Protocols</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>In this section, I will review how Harbour and VFP can be used in web solutions.</div><div><br/></div><div>In
+ VFP, developers can create multi-threaded DLLs that can be called from 
+ASP pages running under IIS. Or purchase some other commercial solutions
+ that run their own web servers.</div><div><br/></div><div>In Harbour, most developers create CGI executables. </div><div><br/></div><div>Both
+ techniques work well enough, but are actually a little slow. Every page
+ request requires an entire new process to be started.</div><div>This web site runs using VFP and a former commercial product I created, called DotFox.</div><div><br/></div><div>There
+ is also currently an open source HTTP native Harbour server available 
+in the contribs. But the problem is that every request, including 
+images, and JavaScript, CSS files have to be served by that Harbour 
+server, or some complicated IIS/Apache/nginx system have to be 
+configured to deal with work loads.</div><div><br/></div><div>The optimum
+ solution would be to have a FastCGI EXE. That EXE would be started 
+automatically by a web server, and would stay running in a loop waiting 
+to respond to web page requests. As of the writing of this document, I 
+already have a prototype that would allow the generation of FastCGI 
+Harbour Apps, but it is currently only functional under Microsoft 
+Windows. I am hoping with the help of another Harbour developer, to 
+create a more generic contrib that could work on any platform. A future 
+article will be created on that subject, once available.</div><div><br/></div><div>What
+ about other web protocols? In Harbour, there is a contrib, hbcurl. I am
+ not yet familiar with this, and hope to learn and share more about it, 
+unless someone would be interested to write an article about it? (This 
+is a plug to become a harbour.wiki author).</div><div><br/></div><div>But there are some good commercial solutions as well to add more web protocol support. For example, <a href="https://www.chilkatsoft.com/" rel="noopener noreferrer" target="_blank">https://www.chilkatsoft.com</a>
+ has a royalty-free set of ActiveX controls that can be used to add FTP,
+ HTTP, HTTPS, Sockets, Web Sockets, Mail and more. I personally use it 
+under Windows with great success for VFP.   Should also work for 
+Harbour, even in 64-bit mode. Just not certain yet how it would work 
+under Unix/Mac.</div><div><br/></div><div>This ability to reach out to 
+the web via web protocols is also a wonderful way to bridge the 
+32/64-bit barrier, and also provide a good way to call Python or Node.js
+ code, for example. For this web site, I created a Python Rest API 
+internal server to allow me to call Python libraries to handle Web Push 
+Notifications, and provide support to Google Authenticator.</div><div><br/></div><div>Harbour
+ can be one of the best languages to create future web apps! Compiling 
+down to C provides speed, easy packaging, and protection for your 
+intellectual property. Harbour is truly a 4GL language!</div><div><br/></div></div>
+
+      <h2 id="in-memory-tables-and-local-sql-syntax">In-Memory Tables and Local SQL Syntax</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Sadly, this is an area where Harbour is not as featured as VFP.</div><div><br/></div><div>Let me first explain the concept of pseudo in-memory tables and local SQL syntax.</div><div><br/></div><div>An
+ in-memory table, also called "cursor" in VFP is basically the 
+equivalent of a DBF table, but with the ability to have long field 
+names, that only exist while there is at least one work area using it.</div><div>In
+ VFP, cursors are mainly in memory, but if they are too large, will 
+overflow to disk. Any commands that can be executed against a regular 
+DBF table can also work on a cursor, including APPEND, REPLACE, DELETE, 
+creating indexes, LOCATE, SEEK, etc.</div><div><br/></div><div>Cursor can be created in 3 different ways.</div><div><br/></div><div><strong>Method 1</strong>.
+ Calling the "CREATE CURSOR" command which is similar to "CREATE TABLE".
+ A list of fields with their attributes can be specified in the command,
+ or an array can be used as input. Even extended attributes, like 
+support to nulls, autoincrement, long field names can be added. Using 
+this method always create read/write tables.</div><div><br/></div><div><strong>Method 2</strong>.
+ Calling the ODBC SQLConnect functions to fetch data from any ODBC 
+backend, like PostgreSQL, MySQL, Advantage Database, even Microsoft SQL 
+Server. By default, the cursor will be read only, but it is possible to 
+make it also writable.</div><div><br/></div><div><strong>Method 3</strong>. Calling the VFP native SQL commands against DBF tables. </div><div>For example: SELECT <span>fname,lname,dob,UPPER(lname+fname) AS tag1 FROM TABLE contacts ORDER BY tag1 INTO CURSOR ListOfContacts READWRITE</span></div><div>This
+ is one of the most powerful features in VFP. The resulting cursor 
+(in-memory table), ListOfContacts, can be used as any tables. You can 
+create indexes on it, or even use it again in additional SELECT 
+statements.</div><div><br/></div><div>Imagine you use Method 2 getting 
+some data from a PostgreSQL backend, then again Method 2 from a MySQL 
+backend, than use Method 3, on the resulting cursors from the two 
+previous Method 2 to refine or combine data into another cursor. In just
+ a few line of code, you can compare data from multiple backends.</div><div><br/></div><div>In
+ Harbour, you could do Method 2 against an Advantage database, but the 
+cursor is read-only, and you cannot reuse the table in more than one 
+area, or execute additional SQL statements against it. Also, this 
+requires a commercial, non-royalty-free license. In VFP, it is 
+royalty-free, and that is most likely the reason why Microsoft killed 
+VFP. The downfall of VFP was that it was too powerful and it was 
+royalty-free.</div><div>But if we can add these features to Harbour, it would be better than all the other open source languages!</div><div><br/></div><div>So now let's look into the SQL commands of VFP. </div><div>You
+ could think of the SQL support of VFP as having SQLite  backed in 
+to the VFP language. Virtually all the SQL options are supported by VFP,
+ like all type of JOINs, UNIONs, WHERE, HAVING, ORDER BY and more.</div><div>Here is the definition of the SELECT command as defined in the VFP help file, available from <a href="https://github.com/VFPX/HelpFile" rel="noopener noreferrer" target="_blank">https://github.com/VFPX/HelpFile:</a></div><div><br/></div><div><span>SELECT [ALL | DISTINCT] [TOP nExpr [PERCENT]] Select_List_Item [, ...]<br/>FROM [FORCE] Table_List_Item [, ...]<br/>[[JoinType] JOIN DatabaseName!]Table [[AS] Local_Alias]<br/>[ON JoinCondition [AND | OR [JoinCondition | FilterCondition] ...]<br/>[WITH (BUFFERING = lExpr)]<br/>[WHERE JoinCondition | FilterCondition [AND | OR JoinCondition | FilterCondition] ...]<br/>[GROUP BY Column_List_Item [, ...]] [HAVING FilterCondition [AND | OR ...]]<br/>[UNION [ALL] SELECTCommand]<br/>[ORDER BY Order_Item [ASC | DESC] [, ...]]<br/>[INTO StorageDestination | TO DisplayDestination]<br/>[PREFERENCE PreferenceName] [NOCONSOLE] [PLAIN] [NOWAIT]</span></div><div><br/></div><div>But
+ one of the most powerful options is the INTO clause.  The result 
+can be sent into a 2-dimensional array, a local physical table (dbf), or
+ ideally in a cursor (in-memory table).</div><div>The array output has 
+the major disadvantage that we lose the concept of field names, and that
+ we cannot use any commands like "INDEX", "LOCATE", and SCAN (a while 
+loop on the records).</div><div>The table output has the major 
+disadvantage of restricting the fields names to 10 characters. This is 
+especially an issue if you join multiple tables, and want to call the 
+resulting field something like tablename_fieldname.</div><div>The best 
+and most practical output are cursors. If the result is small enough, 
+they can fit in-memory, if too big, will be cached to disk. The field 
+names can be long, and you can do all the usual post-processing commands
+ like indexing, searching, data replaces, and most importantly, you can 
+use as input for more local SQL commands.</div><div><br/></div><div>Also,
+ any local functions you would create in your program, or any methods of
+ any objects in scope, can be used in any of the expressions used to 
+build fields in the JOIN, WHERE, ORDER BY, HAVING clauses.</div><div>This
+ is also one of the major advantages of having native SQL command 
+support in the language. This is like have access to STORED FUNCTIONS 
+(SQL Server concept), created in your own language, locally, and not on a
+ remote server. More and more developers are not using STORED PROCEDURES
+ and STORED FUNCTIONS in backend database, since they are hard to 
+maintain, platform-specific, and not supported by most ORMs (see note 
+below).</div><div><br/></div><div>Realistically, for us to implement this
+ in Harbour, we will probably have to rely on SQLite and the very 
+powerful RDD (Replaceable Database Driver) engine that Harbour already 
+has. But we may have difficulties in supporting local functions in 
+FIELD, WHERE, JOIN, HAVING clauses.</div><div><br/></div><div>As a side 
+note, it would be nice to add the SCAN/ENDSCAN syntax that VFP has to 
+Harbour, natively to the language, and not simply via some precompiler 
+#COMMAND tricks. The SCAN/ENDSCAN loop ensures that whenever the loop is
+ processed again, that the current work area is on the one that started 
+the SCAN commands. So whenever the LOOP command is called, the work area
+ is also reset to the scope of the SCAN/ENDSCAN command.</div><div><br/></div><div>What
+ about the RDD that Harbour has? If you are a VFP developer, this is 
+completely new. RDD stands for "Replaceable Database Driver". This is 
+incredibly powerful! You can switch the database engine you rely on. In 
+VFP, we are limited to DBF (FPT, CDX, NDX) tables, or old FoxBase files.
+ In Harbour, you can switch to SQLite, MySQL, Advantage Database 
+(commercial), PostgreSQL (not fully implemented, unless commercial), and
+ in theory you could create your own drivers. </div><div><br/></div><div>Many
+ other languages decided not to use this approach, and virtualize data 
+access via ORMs (Object-Relational Mapping). With this method, the 
+result of SQL commands are always arrays or a collection of objects. The
+ problem here is that you cannot really use the result as source for 
+follow-up SELECT commands (FROM or JOINS). As a side note, 
+Alaska-Software, to my knowledge, implemented some support to SQL in 
+their Xbase++ commercial product, but they failed to finish sending 
+output to cursors.</div><div><br/></div><div>Please contact me, the author, if you would like to add to this subject.</div><div><br/></div><div>ERRATA December 2019:</div><div>Harbour
+ does support in-memory tables, but the entire content of the table must
+ be in-memory, no spanning to disk for really large result. But Harbour 
+can be compiled as a 64-bit app, so as long as we have enough ram, we 
+can hold a big result. Still having issues with nullable fields and no 
+"SQL on DBF" for now.</div><div>Also VFP Pseudo  in-memory tables 
+can handle field names longer than 10 characters, which is a must if 
+fetching data from a SQL backend.</div><div><br/></div></div>
+
+      <h2 id="vfp-cursors-and-local-sql-engine">VFP cursors and Local SQL engine</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>This
+ section was added after the initial release of the article, following 
+comments and questions in the Harbour Users Google Forum.</div><div><br/></div><div>It
+ was brought to my attention that it is possible to create in-memory 
+tables in Harbour as well. I still will need to do some more research in
+ that and will probably create a separate article about this to help VFP
+ developers.</div><div><br/></div><div>But in this section I will focus 
+on showing mainly to Harbour developers, the power of integration 
+between the "cursors" (semi-in-memory tables) and the local SQL engine 
+of VFP. </div><div><br/></div><div>Local SQL can be executed on DBFs or cursors (regardless how they were created).</div><div><br/></div><div>In
+ the example below I will create 4 cursors and execute 3 SQL statements 
+to create 3 additional cursors. The easiest, is to see the results in 
+the following print screens, and review the VFP source code.</div><div><br/></div><div>The source cursor (data) used in the SQL Commands:</div><div><img alt="" class="img-fluid" src="images/index_010.png" style="width: 521px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 821px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div>The 3 cursors created by the local SQL commands:</div><div><img alt="" class="img-fluid" src="images/index_005.png" style="width: 1001px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 651px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div></div>
+
+      <pre class="ELS1"><span class="ELS2">close all   <span aria-label="Closes all work areas" class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Closes all work areas"></span><nobr></nobr></span><span class="ELS2">clear all   <span aria-label="Clear all memory variables and objects" class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Clear all memory variables and objects"></span><nobr></nobr></span><span class="ELS2"></span><span class="ELS2">LOCAL l_MininumInvoiceAmount</span><span class="ELS2"></span><span class="ELS2"><span>* Create cursors that will be used in local SQL commands</span></span><span class="ELS2"></span><span class="ELS2">SELECT 0</span><span class="ELS2">CREATE CURSOR Clients (key I AUTOINC, Name C(50))   <span aria-label="The AUTOINC keyword will ensure a unique sequential number in placed in the field, whenever the APPEND BLANK or SQL INSERT commands are used." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="The AUTOINC keyword will ensure a unique sequential number in placed in the field, whenever the APPEND BLANK or SQL INSERT commands are used."></span><nobr></nobr></span><span class="ELS2"></span><span class="ELS2">SELECT 0</span><span class="ELS2">CREATE CURSOR Invoices (key I AUTOINC,p_Clients I, Date D, Status N(1),PaidAmount N(14,2))   <span aria-label="The p_Clients field is the foreign key to the table Clients." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="The p_Clients field is the foreign key to the table Clients."></span><nobr></nobr></span><span class="ELS2"></span><span class="ELS2">SELECT 0</span><span class="ELS2">CREATE CURSOR LineItems (key I AUTOINC,p_Invoices I,p_Catalog I,Quantity N(4), UnitPrice N(10,2))   <span aria-label="The p_* fields are used as foreign keys to their respective tables." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="The p_* fields are used as foreign keys to their respective tables."></span><nobr></nobr></span><span class="ELS2"></span><span class="ELS2">SELECT 0</span><span class="ELS2">CREATE CURSOR Catalog (key I AUTOINC, Name C(100), UnitPrice N(10,2))   <span aria-label="The UnitPrice field represent the current sale price of the item. The UnitPrice in the LineItems field is the 'frozen' amount." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="The UnitPrice field represent the current sale price of the item. The UnitPrice in the LineItems field is the 'frozen' amount."></span><nobr></nobr></span><span class="ELS2"></span><span class="ELS2">INSERT INTO Catalog (Name,UnitPrice) VALUES ("Hammer",23.50)                           <span>&amp;&amp; Key will be 1   <span aria-label="Example of SQL INSERT command. We do not assign a value to the field Key, since it is auto incremented." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Example of SQL INSERT command. We do not assign a value to the field Key, since it is auto incremented."></span><nobr></nobr></span></span><span class="ELS2">INSERT INTO Catalog (Name,UnitPrice) VALUES ("Wrenche Kit",142.99)                     <span>&amp;&amp; Key will be 2</span></span><span class="ELS2">INSERT INTO Catalog (Name,UnitPrice) VALUES ("Locking pliers",32.49)                   <span>&amp;&amp; Key will be 3</span></span><span class="ELS2">INSERT INTO Catalog (Name,UnitPrice) VALUES ("Phillips Screwdriver Size 10",17.22)     <span>&amp;&amp; Key will be 4</span></span><span class="ELS2">INSERT INTO Catalog (Name,UnitPrice) VALUES ("Claw Hammer",24.97)                      <span>&amp;&amp; Key will be 5</span></span><span class="ELS2"></span><span class="ELS2">INSERT INTO Clients (Name) VALUES ("Albert Einstein")      <span>&amp;&amp; Key will be 1</span></span><span class="ELS2">INSERT INTO Clients (Name) VALUES ("Marie Curie")          <span>&amp;&amp; Key will be 2</span></span><span class="ELS2"></span><span class="ELS2">INSERT INTO Invoices (p_Clients,Date,Status,PaidAmount) VALUES (1,DATE()   ,1,0)         <span>&amp;&amp; Key will be 1   <span aria-label="Since this is a local SQL engine, we can call the VFP DATE() built-in function" class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Since this is a local SQL engine, we can call the VFP DATE() built-in function"></span><nobr></nobr></span></span><span class="ELS2">INSERT INTO Invoices (p_Clients,Date,Status,PaidAmount) VALUES (1,DATE()-10,2,205.98)    <span>&amp;&amp; Key will be 2</span></span><span class="ELS2"></span><span class="ELS2">INSERT INTO Invoices (p_Clients,Date,Status,PaidAmount) VALUES (2,DATE()-10,1,0)         <span>&amp;&amp; Key will be 3</span></span><span class="ELS2">INSERT INTO Invoices (p_Clients,Date,Status,PaidAmount) VALUES (2,DATE()-20,2, 853.20)   <span>&amp;&amp; Key will be 4</span></span><span class="ELS2">INSERT INTO Invoices (p_Clients,Date,Status,PaidAmount) VALUES (2,DATE()-30,2,3601.63)   <span>&amp;&amp; Key will be 5</span></span><span class="ELS2"></span><span class="ELS2"></span><span class="ELS2">INSERT INTO LineItems (p_Invoices,p_Catalog,Quantity,UnitPrice) VALUES (1,1,1,23.50)</span><span class="ELS2">INSERT INTO LineItems (p_Invoices,p_Catalog,Quantity,UnitPrice) VALUES (1,2,42,120.99)</span><span class="ELS2"></span><span class="ELS2">INSERT INTO LineItems (p_Invoices,p_Catalog,Quantity,UnitPrice) VALUES (2,1,2,23.50)</span><span class="ELS2">INSERT INTO LineItems (p_Invoices,p_Catalog,Quantity,UnitPrice) VALUES (2,1,4,23.50)</span><span class="ELS2">INSERT INTO LineItems (p_Invoices,p_Catalog,Quantity,UnitPrice) VALUES (2,3,2,32.49)</span><span class="ELS2"></span><span class="ELS2">INSERT INTO LineItems (p_Invoices,p_Catalog,Quantity,UnitPrice) VALUES (3,1,100,23.50)</span><span class="ELS2">INSERT INTO LineItems (p_Invoices,p_Catalog,Quantity,UnitPrice) VALUES (3,2,3,120.99)</span><span class="ELS2">INSERT INTO LineItems (p_Invoices,p_Catalog,Quantity,UnitPrice) VALUES (3,4,2,15.22)</span><span class="ELS2"></span><span class="ELS2">INSERT INTO LineItems (p_Invoices,p_Catalog,Quantity,UnitPrice) VALUES (4,1,1,23.50)</span><span class="ELS2">INSERT INTO LineItems (p_Invoices,p_Catalog,Quantity,UnitPrice) VALUES (4,3,24,32.49)</span><span class="ELS2">INSERT INTO LineItems (p_Invoices,p_Catalog,Quantity,UnitPrice) VALUES (4,5,2,24.97)</span><span class="ELS2"></span><span class="ELS2">INSERT INTO LineItems (p_Invoices,p_Catalog,Quantity,UnitPrice) VALUES (5,5,22,120.99)</span><span class="ELS2">INSERT INTO LineItems (p_Invoices,p_Catalog,Quantity,UnitPrice) VALUES (5,3,13,32.49)</span><span class="ELS2">INSERT INTO LineItems (p_Invoices,p_Catalog,Quantity,UnitPrice) VALUES (5,4,34,15.22)</span><span class="ELS2"></span><span class="ELS2"></span><span class="ELS2">SELECT   Clients.Name                                AS Clients_Name,;</span><span class="ELS2">            Invoices.date                               AS Invoices_Date,;</span><span class="ELS2">            Invoices.key                                AS Invoices_key,;</span><span class="ELS2">            SUM(LineItems.Quantity*LineItems.UnitPrice) AS InvoiceTotal,;   <span aria-label="Aggregate function used in conjunction with the GROUP BY clause." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Aggregate function used in conjunction with the GROUP BY clause."></span><nobr></nobr></span><span class="ELS2">            Invoices.PaidAmount                         AS Invoices_PaidAmount ,;</span><span class="ELS2">            UPPER(Clients.Name)                         AS tag1;</span><span class="ELS2">    FROM  Invoices;</span><span class="ELS2">    INNER JOIN Clients   ON Invoices.p_Clients = Clients.key;</span><span class="ELS2">    INNER JOIN LineItems ON LineItems.p_Invoices = Invoices.key;</span><span class="ELS2">    INNER JOIN Catalog   ON LineItems.p_Catalog = Catalog.key;</span><span class="ELS2">    GROUP BY Invoices.key,Clients.Name,Invoices.date,Invoices.PaidAmount,tag1;   <span aria-label="tag1 refers to the resulting field name that renders the Clients.Name upper case." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="tag1 refers to the resulting field name that renders the Clients.Name upper case."></span><nobr></nobr></span><span class="ELS2">    ORDER BY tag1,Invoices.date descending;</span><span class="ELS2">    INTO CURSOR ListOfInvoices   <span aria-label="Name of the first result cursor" class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Name of the first result cursor"></span><nobr></nobr></span><span class="ELS2"></span><span class="ELS2">SELECT   Clients.Name                AS Clients_Name,;</span><span class="ELS2">            Invoices.date               AS Invoices_Date,;</span><span class="ELS2">            ListOfInvoices.InvoiceTotal AS InvoiceTotal,;</span><span class="ELS2">            Invoices.PaidAmount         AS Invoices_PaidAmount,;   <span aria-label="Field names can be more that 10 Characters long, since we are using 'IN CURSOR' instead of 'IN TABLE'." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Field names can be more that 10 Characters long, since we are using 'IN CURSOR' instead of 'IN TABLE'."></span><nobr></nobr></span><span class="ELS2">            LineItems.Quantity          AS LineItems_Quantity,;</span><span class="ELS2">            LineItems.UnitPrice         AS LineItems_UnitPrice,;</span><span class="ELS2">            Catalog.Name                AS Catalog_Name,;</span><span class="ELS2">            Catalog.UnitPrice           AS Catalog_UnitPrice;</span><span class="ELS2">    FROM  Invoices;</span><span class="ELS2">    INNER JOIN Clients   ON Invoices.p_Clients = Clients.key;</span><span class="ELS2">    INNER JOIN LineItems ON LineItems.p_Invoices = Invoices.key;</span><span class="ELS2">    INNER JOIN Catalog   ON LineItems.p_Catalog = Catalog.key;</span><span class="ELS2">    LEFT OUTER JOIN ListOfInvoices ON ListOfInvoices.Invoices_key = Invoices.Key;   <span aria-label="The LEFT OUTER JOIN could have been an INNER JOIN in this case. Was used for demonstration purpose." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="The LEFT OUTER JOIN could have been an INNER JOIN in this case. Was used for demonstration purpose."></span><nobr></nobr></span><span class="ELS2">    INTO CURSOR ListOfInvoiceDetails</span><span class="ELS2"></span><span class="ELS2">l_MininumInvoiceAmount = 1000   <span aria-label="Variable that will be used in the next SQL statement. Again showing this is a local SQL engine." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Variable that will be used in the next SQL statement. Again showing this is a local SQL engine."></span><nobr></nobr></span><span class="ELS2"></span><span class="ELS2">SELECT   ListOfInvoices.Clients_Name ,;</span><span class="ELS2">            NicelyFormattedDate(ListOfInvoices.Invoices_Date) AS NiceDate,;</span><span class="ELS2">            ListOfInvoices.InvoiceTotal - ListOfInvoices.Invoices_PaidAmount AS UnpaidAmount ;</span><span class="ELS2">    FROM  ListOfInvoices;</span><span class="ELS2">    WHERE ListOfInvoices.InvoiceTotal &lt;&gt; ListOfInvoices.Invoices_PaidAmount;</span><span class="ELS2">    AND   ListOfInvoices.InvoiceTotal &gt; l_MininumInvoiceAmount;   <span aria-label="Using the local variable defined above" class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Using the local variable defined above"></span><nobr></nobr></span><span class="ELS2">    INTO CURSOR ListOfUnPaidInvoiceOfMinimumAmount</span><span class="ELS2"></span><span class="ELS2">RETURN</span><span class="ELS2"></span><span class="ELS2">FUNCTION NicelyFormattedDate   <span aria-label="This function is used in the previous SQL command, showing to power of local SQL engine." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="This function is used in the previous SQL command, showing to power of local SQL engine."></span><nobr></nobr></span><span class="ELS2">lparameter par_Date</span><span class="ELS2">return padr(cdow(par_Date)+", "+cmonth(par_Date)+" "+trans(day(par_Date))+", "+trans(year(par_Date)),30)   <span class="fas fa-comment-alt-dots" style="color: blue;font-size: 120%;"></span><nobr></nobr></span><span class="ELS2"></span></pre>
+
+      <h2 id="functions-and-commands">Functions and commands</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>VFP's
+ approach is to make all of its functions and commands are available in 
+any PRG. It has so many options that it is hard to describe. Thousands 
+of developers have contributed on wish lists to ensure the language is 
+as rich as possible. Please see <a href="https://github.com/VFPX/HelpFile" rel="noopener noreferrer" target="_blank">https://github.com/VFPX/HelpFile</a> for more info. </div><div><br/></div><div>In
+ Harbour, you need to use the #include compiler statement to ensure a 
+function's definition is available. It can be tricky sometime to know 
+what to include in the header of your PRG. But this approach allows you 
+to create smaller EXEs, and to swap out how your program executes some 
+functions. Also, in Harbour, there are many options to "translate" 
+functions and commands syntax in your source code. This could be used to
+ map some VFP functions to the Harbour's equivalent.</div><div><br/></div><div>Both
+ languages have great support for the Object-Oriented (OO) architecture.
+ VFP has OO for visual objects, but Harbour has deeper implementation in
+ PRGs, like multiple inheritance, also class based properties (meaning 
+not object-level properties)  and the ability to allow 
+implementation of classes to be coded in multiple PRGs.</div><div><br/></div><div>Harbour
+ has some very nice and powerful functions and options on its own. Like 
+Hash Arrays and Codeblocks. Entire articles can be written on those two.
+ But since VFP has cursors, you would not need Hash Arrays, and since 
+most UIs have hooks for events and methods, Codeblocks are not needed. 
+But searching through arrays using Codeblocks is an extremely powerful 
+feature. But again having cursors that can be indexed and searched with 
+the LOCATE commands means you can achieve the same results.</div><div><br/></div><div>Both
+ languages are very similar and luckily share some key properties, like:
+ case-insensitive syntax, arrays' first element is number 1 (not 
+0-based), non-enforcement of indentation, PUBLIC, PRIVATE and LOCAL 
+variables (Harbour also has STATIC), work areas (for tables).  But 
+since Harbour is a lot closer to C, some of the C features, like 
+compiler statements, in-line assignments, can be a challenge for VFP 
+developers.</div></div>
+
+      <h2 id="documentation-and-training">Documentation and Training</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>VFP used to have so many user groups. I personally was on the board of the San Diego User group, see <a href="https://www.foxdevsd.org/index.asp?page=MeetingPast" rel="noopener noreferrer" target="_blank">https://www.foxdevsd.org/index.asp?page=MeetingPast</a>.</div><div><br/></div><div>Some colleges even provided classes on VFP. </div><div><br/></div><div>There is still a book publisher dedicated to VFP, <a href="https://www.hentzenwerke.com/catalog/zcatalog.htm" rel="noopener noreferrer" target="_blank">https://www.hentzenwerke.com/catalog/zcatalog.htm</a></div><div><br/></div><div>And if you Google VFP/Visual FoxPro, a lot of material can be found.</div><div><br/></div><div>There is still a yearly commercial conference for VFP developers, see <a href="http://www.swfox.net/" rel="noopener noreferrer" target="_blank">http://www.swfox.net</a> in English.</div><div><br/></div><div>For Harbour, a non-commercial conference is being organized by <a href="https://medium.com/harbour-magazine" rel="noopener noreferrer" target="_blank">https://medium.com/harbour-magazine</a> , but in Spanish.</div><div><br/></div><div>On
+ the other hand, Harbour is a fragmented community. With xHarbour, 
+Xbase++, and the large set of UI frameworks, it is hard to find a 
+definitive set of documentation. The core repo has some docs, but it is 
+not structured in a way to make it easy for newcomers. This is where 
+hopefully harbour.wiki can help.</div><div><br/></div><div>Please contact the harbour.wiki site administrator to add links to training materials.</div></div>
+
+      <h2 id="core-developers">Core developers</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Core developers ...  none for VFP since it is dead, and closed code by Microsoft.</div><div>There is still an open source initiative to extend VFP; see <a href="https://vfpx.github.io/" rel="noopener noreferrer" target="_blank">https://vfpx.github.io/</a></div><div><br/></div><div>On
+ the Harbour side, there are a few incredibly talented developers, like 
+Viktor Szakats, Pritpal Bedi, Przemyslaw Czerpak, Antonio Linares, with 
+around 30 total core developers, see 
+https://github.com/harbour/core/graphs/contributors.</div><div><br/></div><div>But
+ some developers created their own branch; this, of course, does not 
+help if the code is not merged back in the mail repos. </div><div><br/></div><div>The best would be to have a Foundation to help steer the language, and coordinate the effort of the core developers.</div><div>See <a href="https://www.infoworld.com/article/3329781/python-to-be-guided-by-a-steering-council.html" rel="noopener noreferrer" target="_blank">https://www.infoworld.com/article/3329781/python-to-be-guided-by-a-steering-council.html</a></div><div><br/></div><div>Python, with its Python Software Foundation (<a href="https://www.python.org/psf/" rel="noopener noreferrer" target="_blank">https://www.python.org/psf/</a>) and its Package Installer (<a href="https://pypi.org/" rel="noopener noreferrer" target="_blank">https://pypi.org/</a>) definitely, has one of the best approaches to ensure the language is popular and evolves to match the needs of its community.</div><div><br/></div></div>
+
+      <h2 id="conclusion">Conclusion</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>This
+ article is just a starting point for conversation about differences and
+ similarities between Harbour and VFP, and to compare Harbour to other 
+languages.</div><div><br/></div><div>Hopefully, a lot of articles will be
+ made available on this wiki to assist new developers in using and 
+contributing to the Harbour language.</div><div><br/></div><div>Harbour could also become a wonderful language to also develop secure and fast web apps.</div><div>Easy access to databases is key for any successful business solution.</div></div>
+
+      <div class="hw-close-fallback" data-close-fallback hidden>
+        The browser did not close this tab. It may have been opened directly instead of from the Articles list. Use <a href="/articles/">Back to Articles</a>.
+      </div>
+    </article>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/assets/js/article-page.js"></script>
+  <script src="/assets/js/article-copy-code.js"></script>
+  <script src="/assets/js/article-tooltips.js"></script>
+</body>
+</html>

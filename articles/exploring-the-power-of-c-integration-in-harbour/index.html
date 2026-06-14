@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Exploring the Power of C Integration in Harbour, Introdution to book from Manu Expósito Suárez | Harbour Wiki</title>
+  <meta name="description" content="Exploring the Power of C Integration in Harbour, Introdution to book from Manu Expósito Suárez. Original Harbour.wiki article converted to a static article page.">
+  <link rel="icon" type="image/svg+xml" href="/images/harbour.svg">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="/assets/css/site.css" rel="stylesheet">
+  <link href="/assets/css/articles.css" rel="stylesheet">
+  <link href="/assets/css/article-migration.css" rel="stylesheet">
+</head>
+<body class="hw-article-page">
+  <header class="hw-article-tab-header">
+    <a class="hw-article-tab-brand" href="/" aria-label="Harbour Wiki home">
+      <img class="hw-article-tab-logo" src="/images/harbour.svg" alt="" aria-hidden="true">
+      <span class="hw-article-tab-title">
+        <span class="hw-article-tab-site">Harbour Wiki</span>
+        <span class="hw-article-tab-subtitle">Static article</span>
+      </span>
+    </a>
+    <div class="hw-article-tab-actions">
+      <a class="btn btn-light" href="/articles/"><i class="bi bi-arrow-left" aria-hidden="true"></i> Back to Articles</a>
+      <button class="btn btn-outline-light" type="button" data-close-article><i class="bi bi-x-lg" aria-hidden="true"></i> Close</button>
+    </div>
+  </header>
+
+  <main class="hw-article-main">
+    <article class="hw-article-content">
+      <!-- Source: uploaded saved article HTML: 008 Exploring the Power of C Integration in Harbour, Introdution to book from Manu Expósito Suárez.htm -->
+      <!-- Conversion: visible article content converted from original article HTML; saved-page navigation/scripts excluded. -->
+      <h1>Exploring the Power of C Integration in Harbour, Introdution to book from Manu Expósito Suárez</h1>
+
+      
+      <div class="hw-article-author">
+        <img src="images/author.png" alt="Eric Lendvai" class="hw-article-author-photo">
+        <span><strong>Author:</strong> Eric Lendvai</span>
+      </div>
+
+      <h2>Table of Contents</h2>
+      <ul class="hw-article-toc">
+        <li><a href="#exploring-the-power-of-c-integration-in-harbour">Exploring the Power of C Integration in Harbour</a></li>
+      </ul>
+
+      <h2 id="exploring-the-power-of-c-integration-in-harbour">Exploring the Power of C Integration in Harbour</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><h1><span>Download and Learn</span></h1><div>The complete English translation — <strong>“How to Interface Between C and the Harbour Language”</strong> — is available in Markdown format and pdf on GitHub:</div><div>🔗 <a href="https://github.com/EricLendvai/harbour-language-for-ai-training/tree/main/How_to_Interface_Between_C_and_Harbour" rel="noopener noreferrer" target="_blank">https://github.com/EricLendvai/harbour-language-for-ai-training/tree/main/How_to_Interface_Between_C_and_Harbour</a></div><div>It includes all 21 chapters, each formatted for readability and documentation purposes, and can be freely used under the <strong>Creative Commons Attribution–NonCommercial–ShareAlike 4.0 International License</strong>.</div><div><br/></div><hr/><h3><em>The New Buccaneers — Episode 2</em> by Manu Expósito Suárez</h3><p>In 2021, Harbour developer <strong>Manu Expósito Suárez</strong> released one of the most valuable educational works ever written for the Harbour community:</p><blockquote><p><strong><em>Los nuevos bucaneros. Episodio 2. Lenguaje C para programadores Harbour</em></strong><br/>(<em>The New Buccaneers, Episode 2 – The C Language for Harbour Programmers</em>)</p></blockquote><p>Although written several years ago, this book remains <strong>as relevant today as the day it was published</strong>.
+ Harbour’s architecture has stabilized and matured, and because its C 
+interfaces and Virtual Machine internals have remained consistent, every
+ topic in this book continues to apply perfectly to modern Harbour 
+development.<br/><br/><strong>Special thanks to Manu for allowing the translation and publication of your book!</strong></p><hr/><h2>A Practical Guide to Harbour’s Inner Workings</h2><p>The book is not just about the C language — it’s about <strong>understanding Harbour from the inside out</strong>.</p><p>Through clear explanations and practical examples, Manu Expósito shows how Harbour’s Virtual Machine (HVM) works, how the <strong>stack</strong>, <strong>symbol table</strong>, and <strong>Item API</strong> interact, and how developers can use these concepts to extend Harbour’s functionality with native C code.</p><p>This combination makes the book both a <strong>technical reference</strong> and a <strong>hands-on guide</strong>.
+ It demystifies Harbour’s core — what really happens when you call a 
+function, push parameters onto the stack, or pass values between PRG and
+ C — and then shows how to build real working examples that take 
+advantage of this internal design.</p><hr/><h2>Why This Knowledge Still Matters</h2><p>Unlike
+ many other programming ecosystems, Harbour has achieved long-term 
+stability. Its APIs — including the Extended System, Item API, and 
+Virtual Machine interfaces — have not required major breaking changes 
+for years.</p><p>That stability means that a book written in 2021 is still a <strong>current</strong> and <strong>reliable reference</strong> for any developer who wants to explore:</p><ul><li>How to call <strong>C functions directly from Harbour</strong>,</li><li>How to expose Harbour procedures to be invoked from C,</li><li>How to work with <strong>codeBlocks</strong>, <strong>arrays</strong>, and <strong>hash tables</strong> across both languages,</li><li>How to build <strong>static and dynamic libraries</strong> (<code>.lib</code>, <code>.a</code>, <code>.dll</code>, <code>.so</code>),</li><li>And how to safely interface Harbour code with <strong>external libraries and APIs</strong>.</li></ul><p>In essence, this book turns Harbour into a language that can stand shoulder to shoulder with C, Python, or Go when it comes to <strong>performance and extensibility</strong>.</p><hr/><h2>Extending Harbour with C — A Bridge to the Modern World</h2><p>For many Harbour developers, performance or external integration has often been the point where pure PRG code reaches its limit.<br/>That’s where this book becomes a bridge — a manual on how to <strong>go beyond</strong> the PRG layer safely and efficiently.</p><p>By applying the techniques explained by Manu Expósito Suárez, it becomes possible to:</p><ul><li>Embed high-performance routines written in C directly into Harbour applications.</li><li>Integrate
+ existing C or C++ libraries — for example, graphics engines, encryption
+ toolkits, database connectors, or machine-learning models.</li><li>Create hybrid applications where Harbour acts as the business logic layer while C handles compute-intensive tasks.</li><li>Build modules that serve as communication layers between Harbour and other languages.</li></ul><p>The
+ possibilities are nearly endless. Once you understand how Harbour’s 
+stack, symbols, and Items interact with C structures, you realize that <strong>any C-compatible language</strong> (Python, Rust, Go, or even Java via JNI) can become interoperable with Harbour.</p><hr/><h2>Real-World Applications</h2><p>Several modern Harbour projects have already benefited from these ideas.</p><p>For instance, <strong>Eric Lendvai</strong> (maintainer of <em>harbour.wiki</em> and several open-source Harbour projects) applied the same principles from this book to:</p><ul><li><strong>Integrate CPython</strong> into Harbour, allowing native Python functions and modules to be called directly from Harbour code. <strong>Many thanks to Antonio Linares</strong> for opening the doors for CPython integration into Harbour!</li><li><strong>Develop a FastCGI-based Harbour web server</strong>, enabling high-performance web applications written entirely in Harbour.</li><li>Create seamless <strong>C-based bridges</strong>
+ that allow Harbour to interact with other runtimes or technologies — 
+effectively extending Harbour’s reach far beyond its original scope.</li></ul><p>These
+ examples demonstrate the long-term potential of Manu Expósito’s work. 
+His book is not just historical documentation; it is a <strong>practical toolkit</strong> that continues to inspire real innovation across the Harbour ecosystem.</p><hr/><h2>Inside the Book</h2><p>The English translation of <em>The New Buccaneers — Episode 2</em> preserves all 21 chapters of the original Spanish edition, including:</p><ol><li>The fundamentals of the C language for Harbour programmers</li><li>Operators, control structures, and data types in C</li><li>How Harbour represents variables internally (<code>HB_ITEM</code>, stack management, and symbol tables)</li><li>Creating and calling C functions from PRG code</li><li>Passing parameters and returning values between C and Harbour</li><li>Understanding and extending the Item API</li><li>Working with arrays, hashes, and objects across both languages</li><li>Handling errors and files through Harbour’s C APIs</li><li>Building and linking static and dynamic libraries</li><li>Interfacing with DLL functions from Harbour applications</li></ol><p>Each topic is reinforced with practical examples and complete working code — including both Harbour (<code>.prg</code>) and C (<code>.c</code>) source files. These examples can be compiled directly with <code>hbmk2</code>, Harbour’s multi-compiler build tool.</p><hr/><h2>A Lasting Contribution to the Harbour Community</h2><p><em>The New Buccaneers, Episode 2</em> is more than a book — it is a lasting contribution to the Harbour ecosystem.<br/>It connects the present with the roots of Clipper and the future of multi-language integration.</p><p>For
+ any developer who wants to understand Harbour deeply or extend its 
+capabilities beyond what is possible in pure PRG, this book remains the 
+definitive guide.<br/>Even years after its publication, it continues to 
+empower programmers to explore, extend, and modernize Harbour 
+applications with confidence.</p><blockquote><p><strong>Manu Expósito Suárez showed us that Harbour is not an island — it’s a gateway.</strong><br/>Through C, it connects to the entire world of programming.</p></blockquote></div>
+
+      <div class="hw-close-fallback" data-close-fallback hidden>
+        The browser did not close this tab. It may have been opened directly instead of from the Articles list. Use <a href="/articles/">Back to Articles</a>.
+      </div>
+    </article>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/assets/js/article-page.js"></script>
+  <script src="/assets/js/article-copy-code.js"></script>
+</body>
+</html>

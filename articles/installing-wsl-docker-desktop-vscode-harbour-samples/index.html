@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Installing and using WSL, Docker Desktop, VSCode and Harbour Samples | Harbour Wiki</title>
+  <meta name="description" content="Installing and using WSL, Docker Desktop, VSCode and Harbour Samples. Original Harbour.wiki article converted to a static article page.">
+  <link rel="icon" type="image/svg+xml" href="/images/harbour.svg">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="/scripts/FontAwesome_5_3_1/css/all.min.css" rel="stylesheet">
+  <link href="/assets/css/site.css" rel="stylesheet">
+  <link href="/assets/css/articles.css" rel="stylesheet">
+  <link href="/assets/css/article-migration.css" rel="stylesheet">
+</head>
+<body class="hw-article-page">
+  <header class="hw-article-tab-header">
+    <a class="hw-article-tab-brand" href="/" aria-label="Harbour Wiki home">
+      <img class="hw-article-tab-logo" src="/images/harbour.svg" alt="" aria-hidden="true">
+      <span class="hw-article-tab-title">
+        <span class="hw-article-tab-site">Harbour Wiki</span>
+        <span class="hw-article-tab-subtitle">Static article</span>
+      </span>
+    </a>
+    <div class="hw-article-tab-actions">
+      <a class="btn btn-light" href="/articles/"><i class="bi bi-arrow-left" aria-hidden="true"></i> Back to Articles</a>
+      <button class="btn btn-outline-light" type="button" data-close-article><i class="bi bi-x-lg" aria-hidden="true"></i> Close</button>
+    </div>
+  </header>
+
+  <main class="hw-article-main">
+    <article class="hw-article-content">
+      <!-- Source: uploaded saved article HTML: 013 Installing and using WSL, Docker Desktop, VSCode and Harbour Samples.htm -->
+      <!-- Conversion: visible article content converted from original article HTML; saved-page navigation/scripts excluded. -->
+      <h1>Installing and using WSL, Docker Desktop, VSCode and Harbour Samples</h1>
+
+      
+      <div class="hw-article-author">
+        <img src="images/author.png" alt="Eric Lendvai" class="hw-article-author-photo">
+        <span><strong>Author:</strong> Eric Lendvai</span>
+      </div>
+
+      <h2>Table of Contents</h2>
+      <ul class="hw-article-toc">
+        <li><a href="#introduction">Introduction</a></li>
+        <li><a href="#prerequisite-warnings-and-recommendation">Prerequisite, Warnings and Recommendation</a></li>
+        <li><a href="#terminology-acronyms-and-abbreviations">Terminology, Acronyms and Abbreviations</a></li>
+        <li><a href="#installing-wsl">Installing WSL</a></li>
+        <li><a href="#installing-docker-desktop">Installing Docker Desktop</a></li>
+        <li><a href="#setting-up-vscode">Setting up VSCode</a></li>
+        <li><a href="#running-and-debugging-harbour-samples-in-linux">Running and Debugging Harbour Samples in Linux</a></li>
+        <li><a href="#running-and-debugging-harbour-samples-in-windows">Running and Debugging Harbour Samples in Windows</a></li>
+        <li><a href="#direct-use-of-wsl">Direct use of WSL</a></li>
+        <li><a href="#wsl-backup-and-restore">WSL Backup and Restore</a></li>
+        <li><a href="#docker-basics">Docker Basics</a></li>
+        <li><a href="#conclusion">Conclusion</a></li>
+      </ul>
+
+      <h2 id="introduction">Introduction</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>As per <a href="https://learn.microsoft.com/en-us/windows/wsl/about" rel="noopener noreferrer" target="_blank">https://learn.microsoft.com/en-us/windows/wsl/about</a>
+ "The Windows Subsystem for Linux lets developers run a GNU/Linux 
+environment -- including most command-line tools, utilities, and 
+applications -- directly on Windows, unmodified, without the overhead of
+ a traditional virtual machine or dualboot setup."</div><div><br/></div><div>This
+ article will assist you in setting up WSL version 2 on Windows 10 or 
+11, which is one of the best methods to use for the VSCode (Visual 
+Studio Code) "Dev Containers" extension.</div><div>All the Harbour samples available at <a href="https://github.com/EricLendvai/Harbour_Samples" rel="noopener noreferrer" target="_blank">https://github.com/EricLendvai/Harbour_Samples</a>
+ can be developed and executed using the "Dev Containers" extension, 
+meaning develop/debug in Windows and compile/debug/run in Ubuntu. </div><div>The <a href="https://github.com/EricLendvai/Harbour_Samples/tree/main/ClientAPI" rel="noopener noreferrer" target="_blank">https://github.com/EricLendvai/Harbour_Samples/tree/main/ClientAPI</a>
+ example actually relies running in Ubuntu, since adding support to curl
+ can easily be done and Linux, while a true nightmare in Windows.</div><div><br/></div><div>We
+ will also cover how to setup VSCode on Windows (host side) to edit and 
+execute applications on an Ubuntu distro inside of WSL2.</div></div>
+
+      <h2 id="prerequisite-warnings-and-recommendation">Prerequisite, Warnings and Recommendation</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div><strong>Prerequisite</strong>: </div><ul><li>Windows 10 or above.</li></ul><div><br/></div><div><strong>Warnings</strong>: <span class="fas fa-exclamation-square" style="color:#FF0000;font-size: 120%;"></span> </div><ul><li>The
+ development described in this article is not meant for applications 
+with GUI (Graphical User Interface), but for console and web apps. 
+Hopefully at some point it could be used for developing FaaS (Function 
+as a Service) solutions like: AWS Lambda, Azure Functions, and Google 
+Cloud Functions. It seems that it would be possible to develop GUI apps 
+if we were to use Hyper-V instead of WSL. This requires Windows Pro 
+series.</li><li>Linux, including Ubuntu is case sensitive. All commands and parameters must be entered with the expected casing.</li><li>If
+ you are using Acronis Backup, you must disable the Windows service 
+"Acronis Cyber Protection Service". Set the service to start "Manual" 
+and reboot. That Acronis Windows service will conflict with then VSCode 
+Harbour Debugger by disabling the use of breakpoints.</li><li>Docker 
+Desktop is not free for companies with more than 250 employees or having
+ more than $10 million annual revenue. Please check for current pricing 
+requirements at <a href="https://www.docker.com/pricing/" rel="noopener noreferrer" target="_blank">https://www.docker.com/pricing/</a>. The cost per month/user is quite low otherwise. </li><li>Mac users could use Lima instead of Docker Desktop. See <a href="https://github.com/lima-vm/lima" rel="noopener noreferrer" target="_blank">https://github.com/lima-vm/lima</a> or <a href="https://georgik.rocks/how-to-develop-for-esp32-c3-with-rust-on-macos-with-lima-using-dev-container-in-vs-code/" rel="noopener noreferrer" target="_blank">example for using Lima</a>.</li><li>Docker Desktop will not run inside a VMware Workstation client. Install it on your host OS.</li><li>In Docker containers, <span>localhost </span>refers to the container itself. Use <span>host.docker.internal</span> instead of <span>localhost </span>to access the local machine.</li><li>Local
+ folder (Windows folder) mounted inside Docker containers DO NOT SUPPORT
+ FILE OR RECORD LOCKS. This means that using the Harbour USE command in 
+shared mode will appear to work, but using the APPEND, RLOCK Harbour 
+commands will fail, and most likely trigger an abnormal exit of your 
+application. To work around this, either copy tables inside your Docker 
+container (which is an instance of a running image), or only rely on 
+accessing SQL servers.</li></ul><div><strong>Recommendation:</strong></div><ul><li>Use
+ the "xpo.local-history" VSCode extension. It will keep ongoing diffs of
+ all the changes to source files, regardless if you are editing locally 
+or in container mode. This can help you undo changes, without the need 
+to constantly push to a repo.</li></ul><div><br/><br/><br/></div></div>
+
+      <h2 id="terminology-acronyms-and-abbreviations">Terminology, Acronyms and Abbreviations</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><table class="hw-article-data-table"><tbody><tr><td>WSL<br/></td><td>As per <a href="https://learn.microsoft.com/en-us/windows/wsl/about" rel="noopener noreferrer" target="_blank">https://learn.microsoft.com/en-us/windows/wsl/about</a><br/>Windows Subsystem for Linux<br/></td></tr><tr><td>Distribution<br/></td><td><div>As per <a href="https://en.wikipedia.org/wiki/Linux_distribution" rel="noopener noreferrer" target="_blank">https://en.wikipedia.org/wiki/Linux_distribution</a></div><div>A
+ Linux distribution[a] (often abbreviated as distro) is an operating 
+system made from a software collection that includes the Linux kernel</div></td></tr><tr><td>Distro / Distros<br/></td><td>Abbreviation for Linux Distribution<br/></td></tr><tr><td>VSCode<br/></td><td>Visual Studio Code<br/><a href="https://en.wikipedia.org/wiki/Visual_Studio_Code" rel="noopener noreferrer" target="_blank">https://en.wikipedia.org/wiki/Visual_Studio_Code</a><br/><a href="https://code.visualstudio.com/" rel="noopener noreferrer" target="_blank">https://code.visualstudio.com/</a><br/></td></tr><tr><td>LTS<br/></td><td>Long Term Support<br/><a href="https://en.wikipedia.org/wiki/Long-term_support" rel="noopener noreferrer" target="_blank">https://en.wikipedia.org/wiki/Long-term_support</a><br/></td></tr></tbody></table><div><br/></div><div><br/></div></div>
+
+      <h2 id="installing-wsl">Installing WSL</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Our first step is to install WSL in Windows. Go to the "Programs and Features" item in "Control Panel".<br/>Then select "Turn Windows features on or off".</div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_049.png" style="width: 703px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 302px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div>Then ensure "Windows Subsystem for Linux" and optionally "Windows PowerShell 2.0" are selected, then press OK.</div><div> </div><div><img alt="" class="img-fluid" src="images/index_046.png" style="width: 421px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 373px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div>Once the install completed, reboot as requested.</div><div><img alt="" class="img-fluid" src="images/index_031.png" style="width: 468px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 342px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div>After installing WSL, we need to install at least one distro (a version of Linux).</div><div>I recommend using Ubuntu 20.04 or higher. More than one distro can be installed. Most will use around 1Gb of disk space.</div><div>Later on, when we create docker images, they can be running under one of those distros.</div><div>All configuration of distros are done using the "wsl" command.</div><div><br/></div><div>Start Windows PowerShell or Command Prompt.</div><div><img alt="" class="img-fluid" src="images/index_027.png" style="width: 405px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 23px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_022.png" style="width: 615px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 344px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div>To be certain you will only configure distros in WSL2 mode execute the following:</div><div><br/></div><div><span>wsl --set-default-version 2 </span></div><div><br/></div><div><br/></div><div>The WSL system can have more than one distro installed. </div><div>Use the "<span>wsl -l -v</span>" command to list all installed distros.</div><div><br/></div><div>There
+ are 2 methods for adding distros. Either by adding one from a short 
+list of online available ones or using the Microsoft Store (for free).</div><ul><li>Use the "<span>wsl -l -o</span>" command to list all distros that can be installed without using Microsoft Store, then use "<span>wls -- install -d &lt;DistroName&gt;</span>"</li><li>Go to the Microsoft Store and search for Ubuntu for example.</li></ul><div><br/></div><div>Calling "<span>wsl</span>"
+ with no argument will start your default distro and place you inside a 
+bash (command) interface where you can use regular linux commands. </div><div>If you have more than one distro installed use the following command to change your default one:</div><div><br/></div><div><span>wsl --set-default &lt;Distribution Name&gt;</span></div><div><br/></div><div>If you want to install Ubuntu 22.04, you will need to get it from Microsoft Store (free).</div><div>The version numbers for Ubuntu are based on year and month. So 22.04 represents April 2022.</div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_045.png" style="width: 467px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 324px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div>Select the Ubuntu version you wish to install.</div><div><img alt="" class="img-fluid" src="images/index_002.png" style="width: 663px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 263px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div>As you can see the downloads can be quite large.</div><div><img alt="" class="img-fluid" src="images/index_023.png" style="width: 662px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 316px; position: relative; max-width: 100%; cursor: pointer;"/></div><div>Once the download phase is done, it will unpack and install the distro.</div><div><img alt="" class="img-fluid" src="images/index_039.png" style="width: 666px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 486px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div>You will need to "Launch" it at least once, to register a Linux user.</div><div><img alt="" class="img-fluid" src="images/index_048.png" style="width: 664px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 297px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div>Enter a simple username and password. Since this is only used locally, security is not too much of a concern.</div><div>The <span>wsl </span>command will automatically use that account when accessing the distro in the future.</div><div><img alt="" class="img-fluid" src="images/index_003.png" style="width: 753px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 204px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_036.png" style="width: 752px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 161px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_011.png" style="width: 750px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 403px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div>Afterwards simple enter "exit" to go back to your Windows Shell (PowerShell or Command Prompt)</div><div><img alt="" class="img-fluid" src="images/index_037.png" style="width: 747px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 398px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div>Using the "<span>wsl -l -v</span>" command you can verify the new distro is installed. You may need a reboot your machine to see the new distro.</div><div><img alt="" class="img-fluid" src="images/index_018.png" style="width: 481px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 164px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div></div>
+
+      <h2 id="installing-docker-desktop">Installing Docker Desktop</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Please check the Warnings about Docker Desktop License listed at the top of this article.</div><div>Download Docker Desktop first from <a href="https://www.docker.com/products/docker-desktop/" rel="noopener noreferrer" target="_blank">https://www.docker.com/products/docker-desktop/</a></div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_038.png" style="width: 922px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 550px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_010.png" style="width: 911px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 246px; position: relative; max-width: 100%; cursor: pointer;"/></div><div>Ensure "Use WSL2 ..." is selected. Then press "Ok"</div><div><img alt="" class="img-fluid" src="images/index.png" style="width: 558px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 387px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_009.png" style="width: 623px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 432px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div>Installing Docker may also turn on some additional Windows Feature.</div><div><img alt="" class="img-fluid" src="images/index_004.png" style="width: 553px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 384px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div>Either
+ use your Docker Desktop icon placed on your Desktop (if you had the 
+installer add it for you), or find it in your start menu.</div><div><img alt="" class="img-fluid" src="images/index_029.png" style="width: 75px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 90px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div>View the terms and Accept.</div><div><img alt="" class="img-fluid" src="images/index_040.png" style="width: 710px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 445px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div>If you go back to a Windows shell and issue the "<span>wsl -l -v</span>" command you will also see two new distros. Those are only use by Docker Desktop itself.</div><div>Optionally issue "<span>wsl --setdefault Ubuntu-22.04</span>" command. This will be useful if you simple use the "<span>wsl</span>" command with not arguments.</div><div><img alt="" class="img-fluid" src="images/index_006.png" style="width: 546px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 380px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div>The following will show entering the Ubuntu bash and how to verify your version.</div><div><span>cat /etc/os-release</span>  and <span>cat /proc/version</span></div><div><img alt="" class="img-fluid" src="images/index_033.png" style="width: 935px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 805px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div></div>
+
+      <h2 id="setting-up-vscode">Setting up VSCode</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>If you don't already have VSCode installed, you can follow the instructions from <a href="https://harbour.wiki/index.asp?page=PublicArticles&amp;mode=show&amp;id=190401174818&amp;sig=6893630672" rel="noopener noreferrer" target="_blank">here</a>.</div><div><br/></div><div>Please clone or download the following repo: <a href="https://github.com/EricLendvai/Harbour_Samples" rel="noopener noreferrer" target="_blank">https://github.com/EricLendvai/Harbour_Samples</a></div><div><br/></div><div>Open the HelloHarbour_windows.code-workspace using VSCode. This is a standard VSCode workspace settings file.</div><div>If you don't intend to also run Harbour code from Windows itself, you could simple call "<span>code .</span>" from the HelloHarbour folder using a Command Prompt.</div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_034.png" style="width: 762px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 467px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div>The following is a list of VSCode extensions you must or should install:</div><ul><li>Dev Containers from Microsoft. Required</li><li>Docker
+ from Microsoft. Optional/Recommended. Can assist in creating Dockerfile
+ (configuration files for Docker images). For the intellisense / code 
+coloring to work avoid Kai extension or other color theme extensions. 
+Use the built in color themes.</li><li>Harbour and xHarbour by Antonio 
+Perricone. At the time of the writing of this article versions above 
+1.0.3 to 1.0.6 would fail in containers. But 1.0.7+ works again.</li><li>Tasks by actboy168. Will create button to start VSCode tasks included in the Harbour_Samples.</li><li>WSL by Microsoft. Optional. Lets you use VSCode in WSL just as you would from Windows. Like using "<span>code .</span>" in Linux bash (command prompt).</li></ul><div><img alt="" class="img-fluid" src="images/index_019.png" style="width: 1085px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 688px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div>The
+ Tasks extension added "&lt;buttons&gt;" in the footer of VSCode and the
+ Dev Containers extension added the green &gt;&lt; pseudo button in the 
+left bottom corner.</div><div><br/></div><div>There are multiple samples in the repo, feel free to explore them.</div></div>
+
+      <h2 id="running-and-debugging-harbour-samples-in-linux">Running and Debugging Harbour Samples in Linux</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div><span class="fas fa-exclamation-square" style="color:#FF0000;font-size: 120%;"></span> Ensure you have Docker Desktop running first or at least before "Reopen in Container" !</div><div><br/></div><div>Let's use the HelloHarbour sample application from the Harbour_Samples <a href="https://github.com/EricLendvai/Harbour_Samples" rel="noopener noreferrer" target="_blank">repo</a>.</div><div><br/></div><div>The
+ idea of developing in Windows while running/debugging in Linux can be 
+implemented by using VSCode from our host Windows and telling VSCode how
+ to create/use Docker Containers. </div><div><br/></div><div>For 
+Microsoft Windows developers, if we want to also develop in Linux, 
+Ubuntu in this case, your choices was to install a Virtual Machine 
+application like VMware Workstation, Virtualbox (Oracle) or Microsoft 
+Hyper-V (Windows Pro), or to remote control inside another Linux machine
+ (VNC or other). </div><div><br/></div><div>With the introduction by
+ Microsoft of WSL2, and the use of Docker via Docker Desktop, the 
+process can be completely transparent. </div><div>Additionally your
+ source code does not even have to be copied into the Docker container. 
+The folder from where you opened VSCode will be "mounted" inside the 
+running docker "container" as a folder /workspaces/&lt;"name" property 
+inside devcontainer.json&gt;/.  So in the example below the 
+R:\Harbour_Samples\HelloHarbour Windows folder will appear as 
+/workspaces/HelloHarbour/</div><div><br/></div><div><span class="fas fa-smile-wink" style="color:#003aff;font-size: 120%;"></span>
+ If you bash inside the Docker container created by the "Dev Containers"
+ VSCode extension, you will be running as "root", which is kind of the 
+Windows administrator account. No need to prefix Linux commands with 
+"sudo" (super user do).</div><div><br/></div><div>Any folder or workspace
+ accessed via VSCode can have a ".vscode" folder where we usually see a 
+"launch.json" and "tasks.json" files. Those files are respectively use 
+to configure the debugger and create tasks that can be execute on 
+demand.</div><div><br/></div><div>The "Dev Containers" extension needs a 
+".devcontainer" folder where you need a "devcontainer.json" file and at 
+least one Dockerfile.</div><div>The "devcontainer.json" will have a list
+ of settings letting the "Dev Containers" extension know how to create a
+ docker image and run it as a docker container. </div><div>Currently
+ only one of those settings can exists at one time. We can create 
+multiple Dockerfiles. But only one of those can be referred to/used by 
+when creating a docker image.</div><div><br/></div><div>To see a complete list of attributes you can use in a devcontainer.json file go <a href="https://containers.dev/implementors/json_reference/" rel="noopener noreferrer" target="_blank">here</a>. We will review the attributes used in our Harbour_Samples.</div><div><br/></div><div>Line
+ 6: The "dockerfile" attribute will specify the name of a Dockerfile to 
+use. In the samples all come with two Dockerfiles, one to build from 
+scratch, and another one to get a pre-built image available from 
+DockerHub.</div><div><br/></div><div>Line 7: When Docker builds an image 
+if use a "Dockerfile" file, and a "context". The "context" is the 
+starting folder where COPY and ADD commands will use files from.</div><div>In Dev Containers, we actually don't need to COPY or ADD files, therefore the "context" (line 7 below) will be ignored</div><div><br/></div><div>Line
+ 11-17: The following are settings to be used while inside the 
+container. The Harbour extension install locally had its path local to 
+Windows, here we need to make them local ton inside the container.</div><div><br/></div><div>Line
+ 20: It is possible to mount additional local folder to appear as it 
+they are local to the container. In the Harbour_Samples, we placed all 
+the build and debug tools in a parallel folder named "BuildTools".</div><div><br/></div><div>Additional parameters:</div><ul><li>"postStartCommand":
+ In the HelloHarbour sample we wanted to use the Linux syslog as an 
+equivalent to Microsoft Windows DebugView. To capture syslog messages 
+and write them to a log file a service had to be started. "service 
+rsyslog start".  In Dev Containers there is no support for 
+Dokerfile instructions CMD and ENTRYPOINT. But it is possible to execute
+ one or many commands once the container is running, and before you can 
+access it.</li><li>"extensions": This is the list VSCode extensions that should be used while in container mode.</li></ul><div>For a complete reference of all the options in devcontainer.json visit <a href="https://containers.dev/implementors/json_reference/" rel="noopener noreferrer" target="_blank">here</a>.<br/><img alt="" class="img-fluid" src="images/index_012.png" style="width: 1065px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 387px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div>Use the pseudo button at the left bottom corner to go in Container mode.</div><div><img alt="" class="img-fluid" src="images/index_044.png" style="width: 635px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 254px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div>Select
+ "Reopen in Container". If you are already inside the container and you 
+edit the devcontainer.json or the related Dockerfile, you could also 
+select "Rebuild Container".</div><div><img alt="" class="img-fluid" src="images/index_032.png" style="width: 923px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 452px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div>If you want to see the progress for building the docker image and starting the container, use the "(show log)" link.</div><div><span class="fas fa-exclamation-square" style="color:#FF0000;font-size: 120%;"></span> Initial build, or rebuild after changes in configuration, can take many minutes.</div><div><img alt="" class="img-fluid" src="images/index_017.png" style="width: 515px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 134px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div>Example of a build log.</div><div><img alt="" class="img-fluid" src="images/index_024.png" style="width: 1148px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 815px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div>Also monitor the status in the running threads list (lower right area).</div><div><img alt="" class="img-fluid" src="images/index_021.png" style="width: 1150px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 816px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div>The "+" icon can also be used to open a bash terminal inside the container for example.</div><div><img alt="" class="img-fluid" src="images/index_041.png" style="width: 1154px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 323px; position: relative; max-width: 100%; cursor: pointer;"/></div><div>888</div><div><img alt="" class="img-fluid" src="images/index_007.png" style="width: 765px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 97px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div>You
+ will be logged in as "root" sitting on the mount of your local 
+development folder. The path will be 
+/&lt;workspaces/devcontainer.json.name&gt;.</div><div>Remember, this folder only exists in the container, not the image.</div><div><img alt="" class="img-fluid" src="images/index_025.png" style="width: 1159px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 410px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div>In
+ the HelloHarbour sample, you can also view a "DebugView" like log. Use 
+the "tail" linux command in a new bash terminal. The -n50 will specify 
+to see the last 50 log entries.</div><div>During your execution in debug mode (for now), you will be able to see tracing messages.</div><div><img alt="" class="img-fluid" src="images/index_020.png" style="width: 1161px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 542px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div>Use
+ the &lt;Compile and Debug&gt; button to start execution in debug mode. 
+If you are using a new version of the Harbour Debugger, also update 
+../BuildTools/vscode_debugger.prg from the Harbour VSCode extension.</div><div><img alt="" class="img-fluid" src="images/index_030.png" style="width: 724px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 99px; position: relative; max-width: 100%; cursor: pointer;"/></div><div> </div><div><img alt="" class="img-fluid" src="images/index_035.png" style="width: 1178px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 499px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div>In
+ this example we can see we are paused right after the Altd() function 
+call, and see the line 6 message appear in the "tail" bash terminal.</div><div><img alt="" class="img-fluid" src="images/index_015.png" style="width: 1168px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 521px; position: relative; max-width: 100%; cursor: pointer;"/></div><div>Review
+ the Dockerfile (in .devcontainer folder) and HelloHarbour.prg (bottom 
+area of file) to see what was needed for syslog to work.</div></div>
+
+      <h2 id="running-and-debugging-harbour-samples-in-windows">Running and Debugging Harbour Samples in Windows</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>To switch back to Windows development mode, use the lower left button and select "Reopen Folder Locally".</div><div><img alt="" class="img-fluid" src="images/index_026.png" style="width: 1206px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 555px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div>Before you use &lt;Compile and Debug&gt; again, you may want to start the DebugView application.</div><div><img alt="" class="img-fluid" src="images/index_008.png" style="width: 1207px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 768px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div>Instead of relying on a "tail" bash terminal, in native Windows the messages will appear in the DebugView app.</div><div><img alt="" class="img-fluid" src="images/index_028.png" style="width: 1209px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 557px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div>If
+ you want DebugView/Tracelog messages to also appear in "release" 
+compiles, update the BuildEXE.bat and BuildEXE.sh to add the 
+"-dDEBUGVIEW" flag on the hbmk2 line.</div><div><img alt="" class="img-fluid" src="images/index_016.png" style="width: 1209px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 488px; position: relative; max-width: 100%; cursor: pointer;"/></div><div>All executable files are build and placed under the build folder, win64 and lin64 / debug / release.</div><div>In
+ debug mode the executable files (also named that way in Linux, even 
+though the .exe extension is not needed) are build shared mode, meaning 
+they will use the Harbour runtime library.</div><div><span class="fas fa-smile-wink" style="color:#003aff;font-size: 120%;"></span> In release mode we use "-static" to encapsulate everything inside the EXE.</div></div>
+
+      <h2 id="direct-use-of-wsl">Direct use of WSL</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>It also possible to access a WSL distro directly, meaning not as a docker container.</div><div>Adding files and folders to the distro does not affect the docker containers.</div><div>You can start a bash instance of the default distro by calling the "<span>wsl</span>" command.</div>You will not be using the "root" account, but the account created when you installed the distro.<br/><div><br/></div><div><img alt="" class="img-fluid" src="images/index_043.png" style="width: 948px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 559px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div>The VSCode WSL extension, added support to start VSCode from within the bash instance. But after executing "<span>code .</span>" command a Windows instance of VSCode will appear.</div><div>In reality VSCode split itself, and is running a server instance in Linux and the GUI of VSCode in Windows.</div><div><img alt="" class="img-fluid" src="images/index_014.png" style="width: 946px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 710px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div>Creating files in VSCode, will actually add them inside the Ubuntu install, not the Windows file system or a Docker container.</div><div><img alt="" class="img-fluid" src="images/index_042.png" style="width: 857px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 295px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div>Using the Linux "<span>ls -ll</span>" command will prove the existence and properties of the new file. </div><div><img alt="" class="img-fluid" src="images/index_013.png" style="width: 650px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 78px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div>On
+ the other way, you were in a bash terminal inside of Dev Container 
+docker instance, we would be logged in as "root". But changes will not 
+persist when the container is rebuild or deleted.</div><div><img alt="" class="img-fluid" src="images/index_005.png" style="width: 1015px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 139px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div></div>
+
+      <h2 id="wsl-backup-and-restore">WSL Backup and Restore</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>If you decide to use and alter a WSL distro, you may want to back it up once a while. </div><div><br/></div><div>Create a local Windows Folder and run an export (after it is shutdown):</div><div><span>md C:\WSLBackup</span></div><div><span>cd  C:\WSLBackup</span></div><div><span>wsl -t &lt;DistroName&gt;<br/></span></div><div><span>C:\WSLBackups&gt; wsl --export &lt;DistroName&gt; &lt;filename.tar&gt;</span></div><div><br/></div><div>For example: <span>wsl --export Ubuntu-22.04 Ubuntu-22-04-001.tar</span></div><div><br/></div><div><span>To recreate a distro using the previous backup use for example the following commands:</span></div><div><span><span>C:\WSLBackups&gt;</span>md C:\Users\eric\AppData\Local\Packages\Ubuntu-22.04-001<br/><span>C:\WSLBackups&gt;</span>wsl --import Ubuntu-22.04 C:\Users\eric\AppData\Local\Packages\Ubuntu-22.04-001 <span>Ubuntu-22-04-001.tar</span><br/><span>C:\WSLBackups&gt;</span>Ubuntu-22.04 config --default-user eric</span></div><div><br/></div><div>Visit the following link <a href="https://learn.microsoft.com/en-us/windows/wsl/basic-commands" rel="noopener noreferrer" target="_blank">Basic commands for WSL</a> to view a list of most used wsl command options.</div></div>
+
+      <h2 id="docker-basics">Docker Basics</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>The easiest method to learn more about docker is to visit the official documentation page <a href="https://docs.docker.com/" rel="noopener noreferrer" target="_blank">https://docs.docker.com/</a></div></div>
+
+      <h2 id="conclusion">Conclusion</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>I hope this article is going to help you build Harbour console and web apps, from Microsoft Windows, using Ubuntu. </div><div>This should also help you get used to using Docker and Linux commands.</div><div><br/></div><div>For Mac users, skip the WSL sections, and you should also be able to learn development techniques.</div></div>
+
+      <div class="hw-close-fallback" data-close-fallback hidden>
+        The browser did not close this tab. It may have been opened directly instead of from the Articles list. Use <a href="/articles/">Back to Articles</a>.
+      </div>
+    </article>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/assets/js/article-page.js"></script>
+  <script src="/assets/js/article-copy-code.js"></script>
+</body>
+</html>

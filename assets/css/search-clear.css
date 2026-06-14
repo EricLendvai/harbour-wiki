@@ -1,0 +1,64 @@
+/* Shared search clear button -------------------------------------------------
+   Keep this deliberately simple:
+   - The clear button stays in the HTML immediately after the search input.
+   - It is absolutely positioned over the right edge of the text field.
+   - CSS shows it immediately when the search input is not empty.
+   - JavaScript only handles click-to-clear and synthetic input refresh.
+*/
+
+.hw-search-group {
+  position: relative;
+}
+
+.hw-search-group .form-control {
+  padding-right: 2.85rem;
+}
+
+.hw-search-group .hw-search-clear {
+  position: absolute !important;
+  top: 0;
+  right: 50px;
+  z-index: 8;
+  display: none !important;
+  align-items: center;
+  justify-content: center;
+  width: 2.65rem;
+  min-width: 2.65rem !important;
+  height: 46px;
+  min-height: 46px;
+  padding: 0 !important;
+  color: #646c73 !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  line-height: 1 !important;
+}
+
+.hw-search-group .form-control:not(:placeholder-shown) + .hw-search-clear,
+.hw-search-group .hw-search-clear.is-visible {
+  display: inline-flex !important;
+}
+
+.hw-search-group .hw-search-clear:hover,
+.hw-search-group .hw-search-clear:focus {
+  color: #084d82 !important;
+  background: rgba(0, 123, 255, .10) !important;
+  outline: none;
+}
+
+.hw-search-group .hw-search-clear i,
+.hw-search-group .hw-search-clear .bi {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.hw-search-group .hw-search-clear + .btn {
+  border-left: 1px solid #9faab3;
+}
+
+@media (max-width: 575.98px) {
+  .hw-search-group .hw-search-clear {
+    right: 48px;
+  }
+}

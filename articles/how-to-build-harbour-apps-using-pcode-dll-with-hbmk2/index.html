@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>How to build Harbour apps using pCode DLL with hbmk2 | Harbour Wiki</title>
+  <meta name="description" content="How to build Harbour apps using pCode DLL with hbmk2. Original Harbour.wiki article converted to a static article page.">
+  <link rel="icon" type="image/svg+xml" href="/images/harbour.svg">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="/assets/css/site.css" rel="stylesheet">
+  <link href="/assets/css/articles.css" rel="stylesheet">
+  <link href="/assets/css/article-migration.css" rel="stylesheet">
+</head>
+<body class="hw-article-page">
+  <header class="hw-article-tab-header">
+    <a class="hw-article-tab-brand" href="/" aria-label="Harbour Wiki home">
+      <img class="hw-article-tab-logo" src="/images/harbour.svg" alt="" aria-hidden="true">
+      <span class="hw-article-tab-title">
+        <span class="hw-article-tab-site">Harbour Wiki</span>
+        <span class="hw-article-tab-subtitle">Static article</span>
+      </span>
+    </a>
+    <div class="hw-article-tab-actions">
+      <a class="btn btn-light" href="/articles/"><i class="bi bi-arrow-left" aria-hidden="true"></i> Back to Articles</a>
+      <button class="btn btn-outline-light" type="button" data-close-article><i class="bi bi-x-lg" aria-hidden="true"></i> Close</button>
+    </div>
+  </header>
+
+  <main class="hw-article-main">
+    <article class="hw-article-content">
+      <!-- Source: uploaded saved article HTML: 011 How to build Harbour apps using pCode DLL with hbmk2.htm -->
+      <!-- Conversion: visible article content converted from original article HTML; saved-page navigation/scripts excluded. -->
+      <h1>How to build Harbour apps using pCode DLL with hbmk2</h1>
+
+      
+      <div class="hw-article-author">
+        <img src="images/author.png" alt="Eric Lendvai" class="hw-article-author-photo">
+        <span><strong>Author:</strong> Eric Lendvai</span>
+      </div>
+
+      <h2>Table of Contents</h2>
+      <ul class="hw-article-toc">
+        <li><a href="#introduction">Introduction</a></li>
+        <li><a href="#republication-of-message-from-przemyslaw-czerpak">Republication of message from Przemyslaw Czerpak</a></li>
+      </ul>
+
+      <h2 id="introduction">Introduction</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>This
+ entire article is a republication of a message/explanation Przemysław 
+Czerpak did in Feb 2010 about how to compile Harbour applications when 
+also creating and using Harbour build dlls that are compiled in pCode 
+mode (default method).<br/>Przemysław Czerpak is one of the core contributors to Harbour.<br/><br/>I found the email at <a href="https://www.mail-archive.com/harbour@harbour-project.org/msg26049.html" rel="noopener noreferrer" target="_blank">https://www.mail-archive.com/harbour@harbour-project.org/msg26049.html</a></div><div><br/></div><div>Some clarifications and concepts.</div><div><br/></div><div>Harbour
+ programs can be created is such manner that the C generated code relies
+ on pCode, a series of C arrays and Symbol tables. </div><div>It is also possible to create Harbour code that do not rely on pCode.</div><div>The
+ pCode (portable code machine ) method relies on a Virtual Machine. The 
+generated EXEs and DLLs are smaller and only slightly slower (20% worst 
+case scenario) than pure C code base compilation.</div><div>The Harbour pCode IS NOT like VFP fxp, C#, Python or Java bytecode . Harbour's pCode is still pure C, meaning extremely fast.</div><div><br/></div><div>1.
+ There are two methods to include the Virtual Machine and runtime 
+functions (core Harbour functions), including everything in your EXE 
+(non shared mode), or linked in shared mode with harbour*-dll supporting
+ files.</div><div>2. There are two methods to use Harbour DLLs, 
+statically linked to your main EXE, or like most Windows DLLs 
+dynamically (where the acronym is from "dynamic link library").</div><div><br/></div><div>The term DLL is not properly used here, since it could be linked statically. </div><div><br/></div><div>Since Harbour also runs on Linux, iOd (Based indirectly from BSD) and any platform supporting C, <a href="https://www.pcmag.com/encyclopedia/term/linux-dll" rel="noopener noreferrer" target="_blank">here </a>is an explanation of DLLs:</div><div>DLL
+ - An external software module used by the Linux operating system. The 
+official name for this type of module is a "shared object" or "shared 
+library," but due to the universal embrace of Windows, which uses DLLs, 
+the DLL term occasionally creeps into Linux lingo.</div><div><br/></div><div>So between the two methods in 1. and 2., we now have 4 (2*2) solutions for building EXEs that also use DLLs. </div></div>
+
+      <h2 id="republication-of-message-from-przemyslaw-czerpak">Republication of message from Przemyslaw Czerpak</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Let's
+ consider on MinGW only. Other C compilers are very similar but they 
+cannot use .DLL libraries directly and need import libraries so such 
+library have to be created together with PCODE DLLs using -implib hbmk2 
+option.<br/><br/><br/><span>1. 
+Main application is linked in shared mode with harbour*-dll using 
+-shared hbmk2 switch. It is suggested method to use PCODE DLL.</span></div><div><br/>In such case everything is trivial and works out of the box without any hacks and modifications in the code. i.e.:<br/><span><br/>/*** dllcode.prg ***/<br/>proc MY_PROC()<br/>? PROCNAME() + ": hello !!!"<br/>return<br/>init proc start<br/>? "INIT PROC", PROCNAME()<br/>return<br/>exit proc end<br/>? "EXIT PROC", PROCNAME()<br/>return</span><br/><br/><span>/*** maincode.prg ***/<br/>proc main()<br/>? "start"<br/>my_proc()<br/>? "end"<br/>?<br/>return</span><br/><br/>To create PCODE dll simply use: <strong>hbmk2 -shared -strip -hbdyn dllcode.prg -n -w -es2</strong><br/>and
+ dllcode.dll is generated, if you are using other then MinGW C compiler 
+then you should add -cflag=-DHB_DYNLIB (to force exporting public 
+functions inside .prg code - only MinGW supports auto export feature) 
+and -implib switches (to create import library - only MinGW supports 
+direct DLL usage by linker),<br/><br/>To compile and link final application use: <strong>hbmk2 -shared -strip -L. -ldllcode maincode.prg -n -w -es2</strong><br/><br/>Please
+ note that both DLL and final code are linked with harbour*.dll (-shared
+ switch) and to link final application I added -L. and -ldllcode so 
+linker was able to find dllcode.dll in current directory and MY_PROC() 
+function inside.<br/><br/>As you can see all works without any problems 
+and you do not need any tricks and/or hacks and/or additional code. You 
+do not have to even touch original code.<br/><br/>It's possible because 
+linker was able to cleanly resolve all references at link time. No 
+manual hacks which can only cause unexpected crash.<br/>In this version 
+code inside PCODE DLL can access all Harbour exported functions (in case
+ of MinGW all public functions when automatic export feature is 
+enabled).<br/><br/><br/><span>2. 
+Main application is linked in shared mode with harbour*-dll using 
+-shared hbmk2 switch but PCODE dll is not linked statically at link time
+ but rather loaded dynamically by HB_LIBLOAD().</span><br/><br/><span>/*** dllcode.prg ***/<br/>DYNAMIC QOUT, PROCNAME // added to inform compiler and linker that<br/>// references to above functions have to be<br/>// resolved dynamically at runtime<br/>proc MY_PROC()<br/>? PROCNAME() + ": hello !!!"<br/>return<br/>init proc start<br/>? "INIT PROC", PROCNAME()<br/>return<br/>exit proc end<br/>? "EXIT PROC", PROCNAME()<br/>return</span></div><div><br/></div><div><br/><span>/*** maincode.prg ***/<br/>DYNAMIC MY_PROC // declare functions from dynamically loaded DLLs<br/>// as DYNAMIC<br/>proc main()<br/>local hLib<br/>? "start"<br/>hLib := hb_libload( "dllcode" )<br/>if empty( hLib )<br/>? "Cannot load library."<br/>else<br/>my_proc()<br/>hb_libfree( hLib )<br/>endif<br/>? "end"<br/>?<br/>return</span><br/><br/>To create PCODE dll use: <strong>hbmk2 -nohblib -strip -hbdyn -lhbmaindllp dllcode.prg -n -w -es2</strong><br/><br/>Please
+ note that I added hbmaindllp which is linked with final PCODE DLL 
+binaries and used -nohblib to not link any Harbour libraries.<br/>With 
+this switch I'm sure that I do not link the same core code twice with 
+PCODE DLL and with final binaries and if I forget to declare some 
+functions as DYNAMIC then I will have link time error so I can easy add 
+missing declarations.<br/><br/>To compile and link final application use: <strong>hbmk2 -shared -strip maincode.prg -n -w -es2</strong><br/><br/>Please
+ note that in this version I haven't added -ldllcode because now it will
+ be loaded dynamically by hb_libload() and linker does not have to know 
+about it.<br/>And that's all. You can test maincode.exe to see how it works.<br/>This
+ version needs to declare functions called from external modules as 
+DYNAMIC to inform compiler and linker that they are bound dynamically at
+ runtime so it should not create any static references and special code 
+from hbmaindllp linked with PCODE DLL.<br/>But as you can see it also 
+does not need any link time hacks. All can be compiled and linked 
+cleanly without even single warning.<br/>If you have big application with
+ a lot of functions in the core part and you want to use them in PCODE 
+DLLs then you can make your life easier and automatically generate .ch 
+file with all such functions using this code in your main application:<br/><br/><span>#if 1 // uncomment it for tests */<br/>proc main()<br/>genFuncList()<br/>return<br/>#endif</span><br/><br/><span>proc genFuncList()<br/>local aFunc, hFile<br/>aFunc := getFuncList()<br/>asort( aFunc )<br/>hFile := fcreate("dynamic.ch")<br/>aeval( aFunc, {|x| fwrite( hFile, "DYNAMIC " + x + hb_osNewLine() ) } )<br/>fclose( hFile )<br/>return</span><br/><br/><span>func getFuncList()<br/>local aFunc, nCount := __dynsCount(), nDst:=0, n<br/>aFunc := array( nCount )<br/>for n := 1 to nCount<br/>if __dynsIsFun( n )<br/>aFunc[ ++nDst ] := __dynsGetName( n )<br/>endif<br/>next<br/>asize( aFunc, nDst )<br/>return aFunc</span><br/><br/>It
+ generates "dynamic.ch" file with DYNAMIC declaration for all functions 
+registered in HVM. Then in your .prg files used to create PCODE DLLs you
+ can simply add:<br/><span>#include "dynamic.ch"</span><br/>and you will not have to declare them manually.<br/><br/><br/><span>3.
+ Main application is linked in static mode with Harbour static libraries
+ and PCODE DLL is linked statically just like in point 1.</span><br/><br/>Such
+ version needs Harbour static libraries compiled with -DHB_DYNLIB so if 
+you want to use it then you have to recompile Harbour core code using:<br/>set HB_USER_CFLAGS=-DHB_DYNLIB<br/>This condition can be eliminated by adding small extension to existing core code and HBMK2.<br/><br/>The test code is the same as in point 1 above.<br/><br/>To create PCODE dll use: <strong>hbmk2 -nohblib -strip -hbdyn -lhbmaindllp -cflag=-DHB_DYNLIB dllcode.prg -n -w -es2</strong><br/><br/>Now -cflag=-DHB_DYNLIB is necessary also for MinGW because using hbmaindll disables auto export feature in MinGW.<br/><br/>To compile and link final application use: <strong>hbmk2 -static -strip -L. -ldllcode maincode.prg -n -w -es2</strong><br/><br/>And
+ that's all. Please only remember to recompile Harbour to create HVM lib
+ which exports hb_vmExecute() and hb_vmPorcessSymbols() or the final 
+binaries will not work. You will see only<br/>start<br/>end<br/>messages on the screen.<br/><br/><br/><span>4.
+ Main application is linked in static mode with harbour static libraries
+ but PCODE dll is not linked statically at link time but rather loaded 
+dynamically by HB_LIBLOAD() just like in point 2.</span><br/><br/>Such version also needs Harbour static libraries compiled with -DHB_DYNLIB - see point 3 for above.<br/><br/>The test code is the same as in point 2.<br/>To create PCODE dll use: <strong>hbmk2 -nohblib -strip -hbdyn -lhbmaindllp -cflag=-DHB_DYNLIB dllcode.prg -n -w -es2</strong><br/><br/>To compile and link final application use: <strong>hbmk2 -static -strip maincode.prg -n -w -es2</strong><br/><br/>and that's all.<br/><br/><br/><span><strong>The rest of the email are questions and answers on the topic</strong></span><br/><br/><br/>&gt; It seems to work like this using Blinker, and it offered yet the<br/>&gt; option to replace or not to replace a doubly defined symbol when<br/>&gt; loading the DLL, but we couldn't implement it unfortunatelly.<br/><br/>Forget about link time function overloading. Modern C compilers<br/>can inline code at different levels, i.e. during compilation and<br/>in such case it's not possible to decompile compiled modules,<br/>cleanly extract the code and insert different one in the same<br/>place. In general such operation is forbidden and modern compiler<br/>reports it as link time error.<br/><br/>&gt; That is not my case of use - we use harbour self contained<br/>&gt; executable + pCode dll.<br/><br/>See versions 3 and 4 in above description.<br/><br/>&gt; In xHarbour 0.9 it seems that hb_vmProcessSymbols and hb_vmExecute<br/>&gt; were declared inside maindllp.c but just as wrappers to<br/>&gt; (VM_DLL_EXECUTE) macro. Is this part of the same metodology you<br/>&gt; described?<br/><br/>They are declared in [hb]maindllp in all versions of Harbour and<br/>[x]Harbour but these are only wrappers to real functions. MAINDLLP<br/>is nothing more then manually written import library. It can work<br/>_ONLY_ when corresponding symbols in harbour*.dll or in main EXE file<br/>are exproted so they are visible for GetProcAddress() function.<br/><br/>If you are using statically linked application then it's necessary<br/>to recompile Harbour using with HB_DYNLIB macro to force exporting<br/>hb_vmProcessSymbols() and hb_vmExecute() functions. You can make it<br/>by setting HB_USER_CFLAGS envvar, i.e.:<br/><br/>set HB_USER_CFLAGS=-DHB_DYNLIB<br/><br/>before compiling harbour code.<br/>As I wrote above it's possible to eliminate this condition by<br/>small modification in HVM library and hbmk2.<br/><br/>In xHarbour it is __EXPORT__ macro and C_USR envvar though in recent<br/>version some symbols are always exported but it disables auto export<br/>functionality so it does not work in xHarbour MinGW builds.<br/><br/>&gt; &gt;We still do not support HRL (libraries for HRB files what in<br/>&gt; &gt;some cases can seriously reduce HRB functionality) anyhow HRB<br/>&gt; &gt;is portable and always preferred format which has also many<br/>&gt; &gt;features which are not available for DLLs.<br/>&gt; This HRL support could eliminate the need to use DLLs in my case. Is<br/>&gt; it planned to be done? How would it reduce HRB funcionality?<br/><br/>It's possible but if you haven't used HRB so far then it's<br/>big chance that you haven't understood me correctly and you<br/>are asking for sth what you do not know how to use. DLL does<br/>not have such functionality so if you lived without it so far<br/>then I do not understand why you need it to migrate from DLL<br/>to HRB. I think that you should try to use HRB files 1-st.<br/><br/>Please note that you can store them anywhere. I.e. in your<br/>own ZIP file or some other compressed file which you can<br/>automatically decompress and load at runtime. I.e. use this<br/>tool to collect all HRB files in current directory into<br/>single mylib.dat file:<br/><br/><span>proc main()<br/>local aFiles, file<br/>aFiles := directory( "*.hrb" )<br/>for each file in aFiles<br/>file := hb_memoread( file[ 1 ] )<br/>next<br/>hb_memowrit( "mylib.dat", hb_zCompress( hb_serialize( aFiles ) ) )<br/>return</span><br/><br/>and then load it at runtime using this function:<br/><br/><span>func loadmylib( cFile )<br/>local cBody, aHRB, hrb<br/>cBody := hb_memoread( cFile )<br/>if !empty( cFile )<br/>aHRB := hb_deserialize( hb_zUncompress( cBody ) )<br/>for each hrb in aHRB<br/>hrb := hb_hrbLoad( hrb )<br/>next<br/>endif<br/>return aHRB</span><br/><br/>Please remember that it returns array with handles to HRB files.<br/>When this array is destroyed then all loaded HRB files are automatically<br/>unloaded so you should store it some variable as long as you need them<br/>Then it's enough to assign NIL to this variable to force automatic<br/>unloading. Of course you can extend above code and add some error<br/>checking, password encryption, etc. All of the above can be done<br/>in few lines using Harbour core functions.<br/><br/>best regards,<br/>Przemek</div></div>
+
+      <div class="hw-close-fallback" data-close-fallback hidden>
+        The browser did not close this tab. It may have been opened directly instead of from the Articles list. Use <a href="/articles/">Back to Articles</a>.
+      </div>
+    </article>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/assets/js/article-page.js"></script>
+  <script src="/assets/js/article-copy-code.js"></script>
+</body>
+</html>

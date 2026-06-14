@@ -1,0 +1,780 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tips and Tricks for developers moving to PostgreSQL | Harbour Wiki</title>
+  <meta name="description" content="Tips and Tricks for developers moving to PostgreSQL. Original Harbour.wiki article converted to a static article page.">
+  <link rel="icon" type="image/svg+xml" href="/images/harbour.svg">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="/scripts/FontAwesome_5_3_1/css/all.min.css" rel="stylesheet">
+  <link href="/assets/css/site.css" rel="stylesheet">
+  <link href="/assets/css/articles.css" rel="stylesheet">
+  <link href="/assets/css/article-migration.css" rel="stylesheet">
+</head>
+<body class="hw-article-page">
+  <header class="hw-article-tab-header">
+    <a class="hw-article-tab-brand" href="/" aria-label="Harbour Wiki home">
+      <img class="hw-article-tab-logo" src="/images/harbour.svg" alt="" aria-hidden="true">
+      <span class="hw-article-tab-title">
+        <span class="hw-article-tab-site">Harbour Wiki</span>
+        <span class="hw-article-tab-subtitle">Static article</span>
+      </span>
+    </a>
+    <div class="hw-article-tab-actions">
+      <a class="btn btn-light" href="/articles/"><i class="bi bi-arrow-left" aria-hidden="true"></i> Back to Articles</a>
+      <button class="btn btn-outline-light" type="button" data-close-article><i class="bi bi-x-lg" aria-hidden="true"></i> Close</button>
+    </div>
+  </header>
+
+  <main class="hw-article-main">
+    <article class="hw-article-content">
+      <!-- Source: uploaded saved article HTML: 017 Tips and Tricks for developers moving to PostgreSQL.htm -->
+      <!-- Conversion: visible article content converted from original article HTML; saved-page navigation/scripts excluded. -->
+      <h1>Tips and Tricks for developers moving to PostgreSQL</h1>
+
+      
+      <div class="hw-article-author">
+        <img src="images/author.png" alt="Eric Lendvai" class="hw-article-author-photo">
+        <span><strong>Author:</strong> Eric Lendvai</span>
+      </div>
+
+      <h2>Table of Contents</h2>
+      <ul class="hw-article-toc">
+        <li><a href="#target-audience">Target Audience</a></li>
+        <li><a href="#the-big-picture">The Big Picture</a></li>
+        <li><a href="#pgadmin-a-must-have-tool">pgAdmin, a must have tool.</a></li>
+        <li><a href="#psql">psql</a></li>
+        <li><a href="#the-postgres-database">The postgres Database</a></li>
+        <li><a href="#namespaces">Namespaces</a></li>
+        <li><a href="#field-types">Field types</a></li>
+        <li><a href="#postgresql-naming-restrictions">PostgreSQL naming restrictions</a></li>
+        <li><a href="#maximum-sizes">Maximum sizes</a></li>
+        <li><a href="#duplicate-an-entire-database">Duplicate an entire database</a></li>
+        <li><a href="#database-size-and-monitoring">Database Size and Monitoring</a></li>
+        <li><a href="#adding-columns-default-values">Adding columns default values</a></li>
+        <li><a href="#distinct-on">DISTINCT ON</a></li>
+        <li><a href="#stored-functions">Stored Functions</a></li>
+        <li><a href="#anonymous-code-blocks">Anonymous code blocks</a></li>
+        <li><a href="#connection-info">Connection Info</a></li>
+        <li><a href="#where-is-my-iif-case-to-the-rescue">Where is my IIF()? CASE to the rescue</a></li>
+        <li><a href="#cyan-audit">Cyan Audit</a></li>
+        <li><a href="#datawharf">DataWharf</a></li>
+        <li><a href="#running-multiple-versions-of-postgresql">Running Multiple Versions of Postgresql</a></li>
+        <li><a href="#partitioning-and-sharding">Partitioning and Sharding</a></li>
+        <li><a href="#parallel-queries">Parallel Queries</a></li>
+        <li><a href="#ownership">Ownership</a></li>
+        <li><a href="#multi-tenancy">Multi-Tenancy</a></li>
+        <li><a href="#unlogged-tables">Unlogged Tables</a></li>
+        <li><a href="#explain">Explain</a></li>
+        <li><a href="#the-having-clause">The Having Clause</a></li>
+        <li><a href="#foreign-data-wrapper">Foreign Data Wrapper</a></li>
+        <li><a href="#extensions">Extensions</a></li>
+        <li><a href="#generating-uuids">Generating UUIDs</a></li>
+        <li><a href="#enumerations-avoid-them-in-most-cases">Enumerations - Avoid them in most cases</a></li>
+      </ul>
+
+      <h2 id="target-audience">Target Audience</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><ul><li>Software developer moving from MS SQL, MySQL (and forks) or Oracle to PostgreSQL.</li><li>Software developer still new to PostgreSQL.</li></ul></div>
+
+      <h2 id="the-big-picture">The Big Picture</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Much
+ of the information presented here can also be found using ChatGPT; 
+however, the content in this document has been vetted for accuracy.</div><div><br/></div><div>The
+ most challenging aspect of transitioning to PostgreSQL is knowing what 
+to look for. This article will provide valuable tips and tricks, along 
+with a list of important topics to be aware of.</div></div>
+
+      <h2 id="pgadmin-a-must-have-tool">pgAdmin, a must have tool.</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>pgAdmin
+ is a popular open-source administration and management tool for 
+PostgreSQL databases. It provides a graphical user interface (GUI) to 
+simplify database management tasks. Here are some of its primary uses:<br/><br/><span>Key Features of pgAdmin</span><br/><br/>1. <strong>Database Management</strong>: You can create, modify, and delete databases, schemas, tables, and other database objects easily through the interface.<br/>2. <strong>Query Tool</strong>:
+ pgAdmin includes a powerful query editor that supports SQL syntax 
+highlighting, autocomplete, and the ability to run queries 
+interactively.<br/>3. <strong>Data Visualization</strong>:
+ It provides tools for visualizing data, including graphical 
+representations of query results and data export options. NOT A MODELING
+ TOOL.<br/>4. <strong>User Management</strong>: You can manage database users and roles, including assigning permissions and setting up authentication.<br/>5. <strong>Backup and Restore</strong>: pgAdmin allows you to perform database backups and restores, providing options for both full and incremental backups.<br/>6. <strong>Monitoring and Maintenance</strong>: It includes features for monitoring database performance, viewing logs, and managing scheduled tasks.<br/>7. <strong>Multi-Platform Support</strong>:
+ pgAdmin is available for various operating systems, including Windows, 
+macOS, and Linux, making it accessible for a wide range of users.<br/>8. <strong>Extensions and Plugins</strong>: You can extend pgAdmin's functionality through plugins and add-ons to tailor it to your specific needs.</div><div><br/></div><div><span class="fas fa-smile-wink" style="color:#003aff;font-size: 240%;"></span> Use the "CREATE script" option on the context menu to assist in creating code to create users, alter tables and many more.</div><div><br/></div><div><a href="https://www.pgadmin.org/download/" rel="noopener noreferrer" target="_blank">https://www.pgadmin.org/download/</a></div><div><br/>Overall,
+ pgAdmin is a comprehensive tool that makes it easier to interact with 
+PostgreSQL databases, providing both beginners and experienced users 
+with the features they need to manage their database environments 
+effectively.</div><div><br/></div><div><span class="fas fa-exclamation-square" style="color:#FF0000;font-size: 240%;"></span>  Problem with pgAdmin when running queries returning <strong>more than 1000 rows.</strong></div><div><br/>Please review the following article to change the max returned rows.</div><div><a href="https://stackoverflow.com/questions/62595257/pgadmin-is-only-returning-1000-rows-for-a-query-on-a-table-with-over-225000-rows" rel="noopener noreferrer" target="_blank">https://stackoverflow.com/questions/62595257/pgadmin-is-only-returning-1000-rows-for-a-query-on-a-table-with-over-225000-rows</a></div><div><br/></div><div><span>Alternative Applications</span>:</div><div><br/></div><div>There are several alternatives to pgAdmin for managing PostgreSQL databases. Here are a few popular ones:</div><div>This is a list from ChatGPT with the addition of PgManage.</div><div><br/></div><div>1. <strong>PgManage  </strong><a href="https://www.commandprompt.com/products/pgmanage/" rel="noopener noreferrer" target="_blank">https://www.commandprompt.com/products/pgmanage/</a></div><div>2. <strong>DBeaver</strong>:
+ A universal database tool that supports various databases, including 
+PostgreSQL. It offers a user-friendly interface and powerful features.<br/>3. <strong>HeidiSQL</strong>: While primarily focused on MySQL, it also supports PostgreSQL and offers a lightweight, easy-to-use interface.<br/>4. <strong>DataGrip</strong>:
+ A commercial IDE from JetBrains that supports multiple database 
+systems, including PostgreSQL. It has robust features for code 
+completion, refactoring, and more.<br/>5. <strong>TablePlus</strong>:
+ A modern, native client with a clean interface that supports various 
+databases, including PostgreSQL. It provides a good mix of simplicity 
+and advanced features.<br/>6. <strong>Adminer</strong>: A lightweight, single-file PHP application for database management. It’s simple to set up and use.<br/>7. <strong>Navicat</strong>: A comprehensive database management tool that supports PostgreSQL and offers features like data modeling and reporting.<br/>8. <strong>Postico</strong>: A modern PostgreSQL client for macOS, known for its intuitive interface and usability.<br/><br/>Each of these tools has its own strengths, so the best choice depends on your specific needs and preferences!</div><div><br/></div><div><span>Additional Tool - Self Promotion </span><span class="fas fa-smile-wink" style="color:#003aff;font-size: 120%;"></span> </div><div><br/></div><div><strong>DataWharf </strong>- For database modeling, not a replacement of pgAdmin, but to help document, data mine, visualize databases.</div><div><br/></div><div><a href="https://github.com/EricLendvai/DataWharf" rel="noopener noreferrer" target="_blank">https://github.com/EricLendvai/DataWharf</a></div><div><br/></div></div>
+
+      <h2 id="psql">psql</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div><strong>psql</strong> is the command-line interface (CLI) for interacting with PostgreSQL databases. </div><div>Could be useful if you are working on a non graphical platform like Ubuntu in docker.</div></div>
+
+      <h2 id="the-postgres-database">The postgres Database</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>The "<strong>postgres</strong>" database typically refers to the default database that is created when you install PostgreSQL. Here's a brief overview:</div><div><br/></div><div><span class="fas fa-exclamation-square" style="color:#FF0000;font-size: 120%;"></span> <strong>Don't modify it</strong>, but use it as a current database when you want to alter the name or connection access to other databases.</div><div><br/>1. <strong>Default Database</strong>:
+ The "postgres" database serves as a general-purpose database for 
+administration and testing. It’s often used by database administrators 
+and developers for various tasks.<br/>2. <strong>Role</strong>:
+ It can be used to connect to the PostgreSQL server and perform 
+administrative functions, run queries, and manage other databases.<br/>3. <strong>Ownership</strong>: The database is usually owned by the default superuser role, often named "postgres."<br/>4. <strong>Creation</strong>: While it’s there by default, you should create additional databases for your applications or projects as needed.<br/>5. <strong>Use Cases</strong>: You might use the "postgres" database to experiment with SQL commands, test connections, or run maintenance tasks.<br/><br/>If
+ you’re setting up a new application, it’s common to create a dedicated 
+database for that specific application instead of using the default one.</div></div>
+
+      <h2 id="namespaces">Namespaces</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>In
+ PostgreSQL, schemas provide a way to organize and manage database 
+objects, such as tables, views, indexes, and functions. You can think of
+ a schema as a namespace within a database that allows you to group 
+related objects together, helping to avoid name conflicts and manage 
+permissions more effectively. It’s important to note that this is a 
+single-level structure; schemas cannot contain other schemas.<br/><br/><span>Key Points about Schemas:</span><br/><br/>1. <strong>Namespace</strong>:
+ Each schema can contain objects with the same name, as long as they are
+ in different schemas. For example, you could have two tables named 
+"employees" in two different schemas.<br/>2. <strong>Organization</strong>: Schemas help in logically grouping related database objects, which can make it easier to manage large databases.</div><div>3. <strong>Type of Schema elements</strong>: Using pgAdmin we can list the Schema elements:</div><div><img alt="" class="img-fluid" src="images/index_005.png" style="width: 163px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 316.933px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/>4. <strong>Permissions</strong>:
+ You can set permissions at the schema level, allowing you to control 
+access to the objects within the schema. This can enhance security by 
+restricting access to sensitive data.<br/>5. <strong>Default Schema</strong>: PostgreSQL has a default schema called "<strong>public</strong>." If you do not specify a schema when creating or accessing an object, it defaults to the "public" schema.<br/>6. <strong>Creating Schemas</strong>: You can create a schema using the a safer command:</div><div><span>CREATE SCHEMA IF NOT EXISTS </span><em><code><span>schema_name</span></code></em></div><div>7. <strong>Schema Search Path</strong>:
+ Setting and using the PostgreSQL schema search path allows you to 
+control which schemas are searched for objects when you reference them 
+without specifying a schema. Here’s how to set and use the search path 
+in PostgreSQL:</div><div><span>SET search_path TO schema1, schema2, public;</span></div><div>8. <strong>Safe method to use schemas</strong>: Always qualify the schema name in front of schema based element, also known as "Fully Qualified Name".</div><div><span>SELECT * FROM schema1.employees; </span></div><div><br/>In this example, the table "employees" is created within the "schema1" schema.</div><div><br/></div><div><span class="fas fa-exclamation-square" style="color:#FF0000;font-size: 120%;"></span>
+ In PostgreSQL, by default, all users have access to the "public" 
+schema. This can expose your database objects to unauthorized access or 
+manipulation.<br/><br/>For simple applications, such as web apps where 
+only the application knows how to connect to the database, using the 
+"public" schema may be acceptable.</div><div><br/></div><div><span class="fas fa-exclamation-square" style="color:#FF0000;font-size: 120%;"></span> In <strong>MySQL </strong>a schema is actually a database, NOT a namespace!</div><div><br/></div><div>In
+ Oracle and Microsoft SQL Server (MSSQL), the concept of schemas exists 
+but with some differences in implementation and usage compared to 
+PostgreSQL.</div><div><br/></div><div><strong>In </strong><strong>Oracle:</strong></div><div><br/></div><div>1. <strong>Schemas</strong>:
+ In Oracle, a schema is synonymous with a user. Each user has their own 
+schema, which contains all the database objects owned by that user 
+(tables, views, indexes, etc.). When you create an object as a user, it 
+resides in that user's schema.<br/>2. <strong>Namespace</strong>:
+ Just like in PostgreSQL, schemas in Oracle help avoid name conflicts. 
+However, since each schema corresponds to a user, managing permissions 
+and access can be more straightforward.<br/>3. <strong>Accessing Objects</strong>: To access objects in another user's schema, you typically need to prefix the object name with the schema name (user name).</div><div><br/></div><div><strong>In MSSQL: </strong>Unlike Oracle, schemas are not tied to users; multiple users can own objects within the same schema.<strong> </strong>SQL Server has a default schema (usually `dbo` for database owner) if none is specified when creating objects.</div><div><br/></div><div>In
+ PostgreSQL, you can grant access rights to schemas using the `GRANT` 
+statement. This allows you to control which users or roles can access 
+and perform operations on the objects within a schema. Here’s how to do 
+it:<br/><br/><strong><span>Granting Schema Access</span></strong><br/><br/>1. <strong>Grant Usage on Schema</strong>:
+ To allow a user or role to access objects within a schema, you need to 
+grant usage on that schema. This does not automatically grant access to 
+the objects within the schema but allows the user to refer to the 
+schema.<br/><span>GRANT USAGE ON SCHEMA schema_name TO username;</span><br/>2. <strong>Grant Select on All Tables in Schema</strong>: To allow a user to select data from all tables in a schema, you can use the following command:<br/><span>GRANT SELECT ON ALL TABLES IN SCHEMA schema_name TO username;</span><br/>3. <strong>Grant Insert, Update, Delete</strong>: Similarly, you can grant other privileges like `INSERT`, `UPDATE`, or `DELETE` on all tables:<br/><span>GRANT INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA schema_name TO username;</span><br/>4. <span class="fas fa-exclamation-square" style="color:#FF0000;font-size: 120%;"></span> <strong>Grant Privileges on Future Tables</strong>: To ensure that the user also has access to any future tables created in that schema, use the following command:<br/><span>ALTER DEFAULT PRIVILEGES IN SCHEMA schema_name GRANT SELECT ON TABLES TO username;<br/></span><br/><span>Revoking Schema Access</span><br/><br/>If you need to revoke access at any time, you can use the `REVOKE` statement:<br/><span>REVOKE USAGE ON SCHEMA schema_name FROM username;<br/>REVOKE SELECT ON ALL TABLES IN SCHEMA schema_name FROM username;<br/></span></div><div><br/></div><div><span class="fas fa-smile-wink" style="color:#003aff;font-size: 120%;"></span> A username in PostgreSQL can be a role, aka group:</div><div><span>CREATE ROLE "Group1" WITH NOLOGIN NOSUPERUSER INHERIT NOCREATEDB CREATEROLE NOREPLICATION NOBYPASSRLS;</span></div></div>
+
+      <h2 id="field-types">Field types</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>PostgreSQL
+ offers a wide variety of field types, and you can also create custom 
+types known as "Composite Types." In this discussion, we will focus on 
+the most commonly used field types, especially for those transitioning 
+from other SQL servers.<br/><br/><span>Characters</span><br/>In PostgreSQL, there are several text field types designed to handle varying amounts of text data. Here are the main types:</div><div><br/>1. <strong>text</strong>:<br/>- This type stores variable-length strings with no specific limit on size.<br/>- Ideal for storing large amounts of text, such as articles or descriptions.<br/>- <strong>The maximum size is 1 GB</strong>. This limit is in byte not characters. UTF8 has a variable number of bytes per characters, 1 to 4 bytes.<br/><br/>2. <strong>varchar</strong><strong>(n)</strong>: Equivalent to <strong>character varying</strong>.<br/>- A variable-length character type with a specified maximum length `n`. `n` may not exceed 10,485,760 characters.<br/>- Useful when you want to enforce a limit on the length of the text.<br/>- For example, `VARCHAR(255)` can store up to 255 characters.<br/><br/>3. <strong>char</strong><strong>(n)</strong>:  Equivalent to <strong>character</strong>.<br/>- A fixed-length character type that always reserves space for `n` characters. `n` may not exceed 10,485,760 characters.<br/>- If the input string is shorter than `n`, it is padded with spaces.<br/>- Best used for storing data that has a consistent length, such as country codes.<br/><br/><strong>Considerations</strong>:</div><div>- <strong>Errors</strong>:
+ If you attempt to store a string that exceeds the defined length in 
+CHAR(n) or VARCHAR(n), PostgreSQL will raise an error, and NOT store a 
+trimmed value.<br/>- <strong>Performance</strong>:
+ Generally, `TEXT` and `VARCHAR` are treated the same in terms of 
+performance, but using `VARCHAR(n)` can enforce data integrity by 
+limiting the length of entries.<br/>- <strong>Usage</strong>:
+ Choose `TEXT` for flexibility when dealing with potentially long text, 
+`VARCHAR(n)` when you need constraints, and `CHAR(n)` for fixed-length 
+requirements.</div><div><br/></div><div><span>Binary data</span><br/><br/>- They are used to store any bytes, not related to character encoding.<br/>- Not be be confused with "bit" types, which are the equivalent of flags.<br/><br/>In PostgreSQL, the primary field types that can store binary data are:<br/><br/>1. <strong>bytea</strong>:<br/>- This data type is specifically designed for storing binary data.<br/>- It allows you to store raw byte sequences and is suitable for data such as images, files, or any other binary formats.<br/>- The maximum size for a `BYTEA` field is 1 GB.<br/><br/>2. <strong>Large Objects (LOB)</strong>:<br/>- For larger binary data, you can use the Large Object feature.<br/>- Large Objects are stored in a separate system table and can hold up to 2 GB per object.<br/>- You interact with Large Objects using special functions (like `lo_*` functions) to read, write, and manage the data.<br/>- <span class="fas fa-exclamation-square" style="color:#FF0000;font-size: 120%;"></span> These are global to a server, not individual database.</div><div><br/></div><div><span class="fas fa-smile-wink" style="color:#003aff;font-size: 120%;"></span>
+ Since the system table used to store large object is not partitioned by
+ default and is then limited to 32 TB, I would recommend using BYTEA 
+fields instead of Large Objects and implement your own splitting of 
+content at 1 GB.</div><div><br/><span>Numeric Types</span></div><div><br/></div><div>PostgreSQL
+ provides several numeric field types to accommodate a variety of 
+numerical data needs. Here’s an overview of the different numeric types 
+available:<br/><br/>1. <strong>Integer</strong><strong> Types</strong>:<br/>- <strong>smallint</strong>: 2 bytes, range from -32,768 to 32,767.<br/>- <strong>integer</strong>: 4 bytes, range from -2,147,483,648 to 2,147,483,647.<br/>- <strong>bigint</strong>: 8 bytes, range from -9,223,372,036,854,775,808 to 9,223,372,036,854,775,807.<br/><br/>2. <strong>Floating-Point Types</strong>:<br/>- <strong>real</strong>: 4 bytes, single-precision floating-point, with an approximate range of -3.14E-37 to 3.14E+37.<br/>- <strong>double precision</strong>: 8 bytes, double-precision floating-point, with an approximate range of -1.70E-308 to 1.70E+308.<br/>- <strong>numeric </strong>aka
+ decimal: This type can store numbers with a user-defined precision and 
+scale. For example, `numeric(10, 2)` can store up to 10 digits, with 2 
+digits after the decimal point. This type is ideal for exact numerical 
+calculations, such as monetary values.</div><div><br/></div><div><span class="fas fa-exclamation-square" style="color:#FF0000;font-size: 120%;"></span> Only the numeric type will not truncate/round values.</div><div><br/>3. <strong>Serial Types</strong>:<br/>- <strong>serial</strong>: An auto-incrementing integer (4 bytes) that is essentially an integer with a sequence behind it.<br/>- <strong>bigserial</strong>: An auto-incrementing bigint (8 bytes) for larger integer values.</div><div><br/></div><div><span class="fas fa-exclamation-square" style="color:#FF0000;font-size: 120%;"></span> Serial types are essentially integer types that are automatically associated with sequences.<br/><br/>- Use <strong>integer types</strong> for counting and whole numbers.<br/>- Use <strong>floating-point types</strong> when you need approximate values and can tolerate some precision loss.<br/>- Use <strong>numeric types</strong> when you require exact precision, such as in financial calculations.</div><div><br/></div><div><span>Date and Time</span></div><div><br/></div><div>PostgreSQL
+ offers several date and time field types to handle various temporal 
+data needs. Here’s a summary of the different date and time types:<br/><br/>1. <strong>Date Types</strong>:<br/>- <strong>date</strong>: Stores the calendar date (year, month, day) without time. The range is from 4713 BC to 5874897 AD.<br/><br/>2. <strong>Time Types</strong>:<br/>- <strong>time</strong>:
+ Stores time of day (hour, minute, second) without time zone 
+information. It can be defined with optional precision (e.g., `time(3)` 
+for milliseconds). The range is from 00:00:00 to 24:00:00.<br/>- <strong>time with time zone</strong>: Similar to `time`, but includes time zone information.<br/><br/>3. <strong>Timestamp Types</strong>:<br/>- <strong>timestamp</strong>:
+ Stores both date and time without time zone information. Like `time`, 
+it can also have optional precision (e.g., `timestamp(3)` for 
+milliseconds). The range is from 4713 BC to 5874897 AD.<br/>- <strong>timestamp with time zone</strong>:
+ Stores both date and time along with time zone information. It 
+automatically converts to UTC for storage and converts back to the 
+specified time zone when queried.<br/><br/>4. <strong>Interval Type</strong>:<br/>- <strong>interval</strong>:
+ Represents a span of time, which can be expressed in terms of years, 
+months, days, hours, minutes, and seconds. This type is useful for 
+calculating durations between dates and times.</div><div><br/></div><div><span class="fas fa-smile-wink" style="color:#003aff;font-size: 120%;"></span>  Use the <strong>timestamp with time zone</strong>
+ when you need to record a date and time. You can also specify to record
+ up to 6 decimal point of a second. This is the safest way to not loose 
+temporal information. </div><div><br/></div><div>For example to get as a string the elapsed time since the value in a timestamp with time zone field use the following:</div><div><span>to_char(now()-EnumValue.sysm,'DD "Days" HH24 "Hours" MI "Minutes" SS "Seconds"')</span><br/><br/></div><div>It is always possible to retrieve the value of a <strong>timestamp with time zone</strong> based on a particular time zone:</div><div><span>SELECT timezone('US/Pacific',"TableName"."DatetimeWithTimezonFieldName") AS "TimeInMyTimeZone", ....</span></div><div><br/></div><div>To get the list of all supported time zone names, you can use the following:</div><div><span>SELECT name   as "Name",<br/><span>  <span>   </span> </span> abbrev as "Abbreviation",<br/><span>   <span>   </span></span>(EXTRACT(EPOCH FROM utc_offset)/60)::int as "UTCOffset",<br/><span>   <span>   </span></span>is_dst as "DaylightSavingTime"<br/>FROM pg_timezone_names</span></div><div><br/></div><div><span>Boolean</span><br/><br/>1. boolean :</div><div>- A boolean value takes 1 byte of storage.<br/>- The boolean type can hold three distinct values: TRUE, FALSE or NULL if the field is NULLABLE.<br/>- You can insert boolean values using: `TRUE` or `FALSE`, `'t'` or `'f'`, `1` (for true) and `0` (for false)<br/>-
+ PostgreSQL provides various functions and operators to work with 
+boolean values, such as logical operators (`AND`, `OR`, `NOT`).<br/><br/><span class="fas fa-exclamation-square" style="color:#FF0000;font-size: 120%;"></span>
+ If you are using ODBC to connect to a PostgreSQL database and want to 
+retrieve boolean fields not as numeric 1 and 0, add "BoolsAsChar=0;" in 
+the connection string.</div><div><br/></div><div><span>UUID </span><span>Universally Unique Identifier</span></div><div><br/></div><div>The
+ UUID field type in PostgreSQL is a powerful option for generating 
+globally unique identifiers, making it useful for distributed systems 
+and applications where uniqueness across multiple tables or databases is
+ essential.</div><div><br/>- A UUID occupies 16 bytes of storage.<br/>- 
+UUIDs are typically represented as 32 hexadecimal characters, displayed 
+in five groups separated by hyphens, like this: 
+`550e8400-e29b-41d4-a716-446655440000`.<br/>- UUIDs are designed to be 
+globally unique. The chance of generating the same UUID is extremely 
+low, making them suitable for use as primary keys in distributed 
+systems.<br/>- PostgreSQL provides several built-in functions to generate UUIDs, such as:<br/>-- uuid_generate_v1(): Timestamp and MAC address-based; predictable, but offers global uniqueness across space and time.<br/>-- uuid_generate_v4(): Randomly generated; highly unique and unpredictable, suitable for privacy-sensitive applications.</div><div>--
+ uuid_generate_v7(): New to PostgreSQL 17. It provides a modern approach
+ that combines timestamp-based generation with randomness, making it 
+ideal for various applications needing unique and sortable identifiers.<br/>-
+ While UUIDs provide uniqueness, they are larger than traditional 
+integer types, which may affect performance in some cases, especially 
+for indexing.<br/><br/></div><div><span>JSON</span></div><div><br/></div><div>PostgreSQL
+ provides powerful JSON and JSONB data types to store and manipulate 
+JSON data, with JSONB being the more efficient option for most use cases
+ due to its binary storage format and support for indexing. When 
+deciding between them, consider your application's specific needs for 
+performance and functionality. </div><div><br/></div><div>There are two primary JSON-related data types:<br/><br/>1. <strong>json</strong><br/>- The `JSON` data type stores JSON data as text.<br/>- It validates the input to ensure that it is well-formed JSON before storing it.<br/>-
+ When you query JSON data stored in this format, it can be less 
+efficient for certain operations compared to the `JSONB` type because it
+ requires parsing each time you access it.<br/><br/>2. <strong>jsonb</strong><br/>- The `JSONB` data type stores JSON data in a binary format.<br/>- It is optimized for storage and query performance. JSONB supports indexing, making it faster for certain types of queries.<br/>- Allows for efficient querying using operators and functions.<br/>- Supports indexing, enabling faster lookups.<br/>- Automatically eliminates duplicate keys and orders the keys, which can save space.<br/>- JSONB is typically preferred over JSON when you need to perform complex queries or work with large datasets.</div><div><br/></div><div><span>Arrays</span></div><div>In
+ PostgreSQL, the array data type allows you to store multiple values of 
+the same data type within a single column. Additionally, all PostgreSQL 
+data types can be defined as arrays. </div><div><br/></div><div>For example: <strong>uuid[]</strong> would allow to store a list of uuids.</div><div><br/></div><div><span class="fas fa-exclamation-square" style="color:#FF0000;font-size: 120%;"></span>
+ This feature is not available in other SQL backend and makes it easier 
+to break the 3rd normalization rule. I would highly recommend not using 
+arrays.</div><div>PostgreSQL has several functions to deal with arrays: array_length,unnest,any,array_append,array_remove ...</div><div>Indexing
+ can not be done on an array, only to one of its element. There is no 
+sorting inside arrays. AVOID this feature if used to replace an entire 
+table or a many to many relationship.</div><div><br/></div><div><span>Enumerations</span></div><div><br/></div><div>In
+ PostgreSQL, enumerations (enums) are a special data type that allows 
+you to define a column with a fixed set of possible values. This can be 
+particularly useful for situations where a column should only contain a 
+specific set of predefined values, enhancing data integrity and 
+readability.<br/><br/>- An enumeration type is created using the `CREATE 
+TYPE` statement, where you specify the name of the enum and its possible
+ values.<br/>- Once an enum type is defined, the values it can take are 
+fixed. This means that any column of this type can only contain one of 
+the specified values, ensuring consistency.<br/>- Using enums helps prevent invalid data from being inserted into the database, as only the predefined values are allowed.<br/>-
+ Enums improve the readability of your database schema and queries, as 
+the defined values often convey meaning more clearly than generic 
+strings or integers.<br/>- <span class="fas fa-exclamation-square" style="color:#FF0000;font-size: 120%;"></span>
+ Removing values from an enum is not directly supported, but you can 
+work around it by creating a new enum type and migrating the data.</div><div>-
+ If you intend to create a multi-language application you may want to 
+avoid enumeration and create your own association of numbers or code to 
+text/description.</div></div>
+
+      <h2 id="postgresql-naming-restrictions">PostgreSQL naming restrictions</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>The following is a partial list of naming restrictions:</div><ul><li>Names
+ of tables, columns, schemas, indexes, enumerations, enumeration values 
+... can be up to 63 characters long. If you exceed this limit, 
+PostgreSQL will truncate the name.</li><li>By default, names are case-insensitive and are folded to lowercase. For example, <code>MyTable</code> and <code>mytable</code> refer to the same table.</li><li>If you want to preserve the case sensitivity, you must enclose the name in double quotes (e.g., <code>"MyTable"</code>). </li><li>While
+ it’s technically possible to use special characters in names by 
+enclosing them in double quotes, it's not recommended due to potential 
+confusion and portability issues. </li><li>Table, column, schema, index, enumeration names must begin with a letter or an underscore. </li><li>Table names must be unique within its schema (namespace). You can have tables with the same name in different schemas. </li><li>Column names must be unique within the same table, but the same column name can exist in different tables.</li><li><span class="fas fa-exclamation-square" style="color:#FF0000;font-size: 120%;"></span> Index names must be unique within the same schema. You can have indexes with the same name in different schemas.</li></ul><div><strong>Please note that DataWharf will optionally issue a warning if these restrictions are not met. </strong></div></div>
+
+      <h2 id="maximum-sizes">Maximum sizes</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>In PostgreSQL, various maximum sizes apply to different data types and structures. </div><div>For a complete list of limits, refer to <a href="https://www.postgresql.org/docs/current/limits.html" rel="noopener noreferrer" target="_blank">https://www.postgresql.org/docs/current/limits.html</a></div><div><br/></div><div>Here are the key maximum sizes you should be aware of:<br/>1. <strong>Columns per Table</strong>: 1600</div><div>2. <strong>Any Identifiers</strong>, like Table, Column, Index, enumeration names: 63 characters.<br/>3. <strong>Column Type Limits</strong>: Please refer to the "Field Types" section of this document.</div><div>4. <strong>Row Size</strong>: The maximum size of a single row is 1.6 TB, but this is subject to the maximum size of individual columns and other factors.</div></div>
+
+      <h2 id="duplicate-an-entire-database">Duplicate an entire database</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>As
+ developers, we often wish we could reset a database to a specific point
+ in time. However, the backup and restore process can be time-consuming.<br/><br/>To
+ work around this issue, there is a method for copying or duplicating a 
+database that operates at the speed of physically copying an entire 
+database.<br/><br/>The key is to create a copy of the database on the same
+ server, leveraging the multi-tenancy feature. A significant limitation 
+of this process is that no connections may exist on the database being 
+copied. Fortunately, in PostgreSQL, we can prevent new connections by 
+setting the "ALLOW_CONNECTIONS" parameter to false on the source 
+database and then terminating all existing connections.<br/><br/>Once the 
+database has no active connections, it can be used as a "TEMPLATE" for 
+creating a new database. After the new copy has been created, we can 
+re-enable connections on the source database.<br/><br/>All the steps 
+outlined below can be performed using pgAdmin in a query entry form that
+ is NOT connected to the source database. The easiest approach is to use
+ the "postgres" database as our working area.</div><div><br/></div><div>PostgreSQL also has command to rename a database, with no active connections.</div><div><br/></div><div><span class="fas fa-exclamation-square" style="color:#FF0000;font-size: 120%;"></span> The "CREATE DATABASE" command may not be called from stored procedure, meaning execute the following steps manually.</div><div><br/></div><div>The following example outlines the steps to copy a database named "DataWharf" to a new database named "DataWharf_backup_1":</div></div>
+
+      <pre class="ELS1"><span class="ELS2">ALTER DATABASE "DataWharf" WITH ALLOW_CONNECTIONS false;</span><span class="ELS2"></span><span class="ELS2">SELECT pg_terminate_backend(pg_stat_activity.pid)</span><span class="ELS2">FROM pg_stat_activity</span><span class="ELS2">WHERE datname = 'DataWharf'</span><span class="ELS2">AND pid &lt;&gt; pg_backend_pid();</span><span class="ELS2"></span><span class="ELS2">CREATE DATABASE "DataWharf_backup_1" WITH TEMPLATE "DataWharf";</span><span class="ELS2"></span><span class="ELS2">ALTER DATABASE "DataWharf" WITH ALLOW_CONNECTIONS true;</span><span class="ELS2"></span><span class="ELS2"><span>-- Example of renaming a database</span></span><span class="ELS2">ALTER DATABASE "DataWharf_backup_1" RENAME TO "DataWharf";</span><span class="ELS2"></span></pre>
+
+      <h2 id="database-size-and-monitoring">Database Size and Monitoring</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>When you need to find out the total size of a database use the pg_database_size() function.</div><div><br/></div><div>For example to get the size of the database DataWharf, in an user friendly format (Mb/Gb) use the following:</div></div>
+
+      <pre class="ELS1"><span class="ELS2">SELECT pg_size_pretty(pg_database_size('DataWharf'));</span><span class="ELS2"></span></pre>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>To
+ avoid write locks, PostgreSQL adds any changes as a tuple of data (also
+ known as a row in a table) and marks the previous version for deletion 
+once there are no active sessions that need to access it. The removal of
+ old (or dead) tuples is handled through the vacuum process. </div><div><br/></div><div>The
+ following query can be used to view the list of tables in the database,
+ along with their number of rows/"live tuples" and "dead tuples". The 
+ratio of "live" to "dead" tuples can be considered an indicator of 
+fragmentation. When a table exhibits excessive fragmentation, a vacuum 
+operation should be performed, if it is not already being executed 
+automatically.</div></div>
+
+      <pre class="ELS1"><span class="ELS2">SELECT pg_stat_user_tables.schemaname AS namespace_name,</span><span class="ELS2">         pg_stat_user_tables.relname    AS table_name,</span><span class="ELS2">         pg_stat_user_tables.n_live_tup AS live_tuple,</span><span class="ELS2">         pg_stat_user_tables.n_dead_tup AS dead_tuple,</span><span class="ELS2">         CASE</span><span class="ELS2">            WHEN pg_stat_user_tables.n_live_tup = 0 THEN 0.00</span><span class="ELS2">            ELSE round((pg_stat_user_tables.n_dead_tup::numeric / pg_stat_user_tables.n_live_tup::numeric) * 100,2)</span><span class="ELS2">         END AS framentation_percentage</span><span class="ELS2">   FROM pg_stat_user_tables</span><span class="ELS2">   ORDER BY namespace_name,table_name</span><span class="ELS2"></span></pre>
+
+      <h2 id="adding-columns-default-values">Adding columns default values</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Adding
+ a column with a default value in PostgreSQL can be slower than adding a
+ column without a default value. This is primarily due to the way 
+PostgreSQL handles the addition of a default value:<br/><br/>1. <strong>Column without Default</strong>:
+ When you add a column without a default value, PostgreSQL simply adds 
+the column definition to the table's metadata. No existing rows need to 
+be modified, so this operation is generally very fast.<br/><br/>2. <strong>Column with Default</strong>:
+ When you add a column with a default value, PostgreSQL must update all 
+existing rows to set the default value for that column. This means that 
+the database has to write to the storage for each row, which can 
+significantly increase the time it takes to perform the operation, 
+especially on large tables.<br/><br/>If you're dealing with a large table and performance is a concern, you can use the "<span>ALTER TABLE ... ADD COLUMN</span>" command to add the column without a default value first, and then subsequently set the default value. For example:<br/><br/>1. <strong>Add the column without a default</strong>:<br/><br/><span>ALTER TABLE your_table<br/>ADD COLUMN new_column INTEGER;<br/></span><br/><br/>2. <strong>Update existing rows if needed</strong>:<br/><br/><span>UPDATE your_table<br/>SET new_column = 0<br/>WHERE new_column IS NULL;<br/></span><br/><br/>3. Finally, <strong>set the default value for future inserts</strong>:<br/><br/><span>ALTER TABLE your_table<br/>ALTER COLUMN new_column SET DEFAULT 0;<br/></span><br/>This approach minimizes the impact on performance during the initial column addition.</div></div>
+
+      <h2 id="distinct-on">DISTINCT ON</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>In
+ PostgreSQL, both "DISTINCT" and "DISTINCT ON" clauses are used to 
+eliminate duplicate rows from query results, but they function 
+differently and serve different purposes.</div><div><br/></div><div>As in
+ all other SQL backends the "DISTINCT" clause is used to return unique 
+rows from the result set based on all columns selected.</div><div><br/></div><div>SQL
+ Queries in PostgreSQL also have a "DISTINCT ON" clause that allows you 
+to specify one or more columns to determine uniqueness while returning 
+the first row of each set of duplicates based on the specified ordering,
+ therefore requiring the "ORDER BY" clause.</div><div><br/></div><div>For example, to list all the latest released Books for all Authors with the actual released data we can use the following query:</div></div>
+
+      <pre class="ELS1"><span class="ELS2">select distinct on (Author_Name,Book_Title)</span><span class="ELS2">         "Author"."Name"      as Author_Name,</span><span class="ELS2">         "Book"."Title"       as Book_Title,</span><span class="ELS2">         "Book"."ReleaseDate" as Book_ReleaseDate</span><span class="ELS2">   from "Author"</span><span class="ELS2">   inner join "Book" on "Book"."fk_Author" = "Author"."pk"</span><span class="ELS2">   order by Author_Name,Book_Title,Book_ReleaseDate desc</span><span class="ELS2"></span></pre>
+
+      <h2 id="stored-functions">Stored Functions</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>In
+ PostgreSQL, stored functions are database objects that encapsulate a 
+sequence of SQL statements or operations that can be executed as a 
+single unit. They are useful for encapsulating complex business logic, 
+simplifying code reuse, and improving performance through reduced 
+network traffic.<br/><br/><span>Key Features</span></div><div><br/>1. <strong>Multiple Languages</strong>:
+ PostgreSQL supports nearly 20 programming languages for creating stored
+ functions and procedures. The primary language is PL/pgSQL, which 
+facilitates more complex programming constructs such as loops, 
+conditional statements, and error handling. This capability allows 
+developers to implement logic that extends beyond simple SQL queries. 
+Some of these languages are classified as "trusted," while others are 
+deemed "untrusted."</div><div><br/></div><div><strong>Trusted languages</strong>
+ have restricted access to the system and do not permit potentially 
+harmful operations. Functions written in trusted languages can be 
+executed without special security considerations, as PostgreSQL verifies
+ that the code does not perform actions that could compromise the 
+database or its data integrity. Examples of trusted languages include 
+PL/pgSQL, Tcl, and JavaScript.</div><div><br/></div><div><strong>Untrusted languages</strong>
+ provide greater freedom regarding what can be executed, including 
+operations that may affect the operating system or the database server 
+itself. Functions written in untrusted languages can perform arbitrary 
+actions, which could pose security risks. Examples of untrusted 
+languages include Python, Perl, and Java.</div><div><br/></div><div>List of currently supported languages: <a href="https://wiki.postgresql.org/wiki/PL_Matrix" rel="noopener noreferrer" target="_blank">https://wiki.postgresql.org/wiki/PL_Matrix</a></div><div><br/></div><div>Hosted versions of PostgreSQL, such as those offered by AWS, typically support only certain trusted languages.</div><div><br/>2. <strong>Multiple Return Types</strong>:
+ Stored functions in PostgreSQL can return various types, including 
+scalar values, composite types (like rows), and sets of values (using 
+the `RETURNS SETOF` syntax).<br/><br/>3. <strong>Transactional Control</strong>:
+ Functions in PostgreSQL can manage transactions using `BEGIN`, 
+`COMMIT`, and `ROLLBACK` statements. This allows for finer control over 
+how changes are applied to the database.<br/><br/>4. <strong>Security and Permissions</strong>:
+ Functions in PostgreSQL can execute with the permissions of the user 
+who defined (or owned) them, enhancing security by allowing controlled 
+access to database operations.<br/><span class="fas fa-smile-wink" style="color:#003aff;font-size: 120%;"></span>
+ Using stored functions with the "SECURITY DEFINER" clause can shield a 
+user from direct access to a table while still providing a mechanism to 
+update it. In this case, a stored function acts like an API.<br/><br/>5. <strong>Volatility Categories</strong>:
+ Functions can be marked as `IMMUTABLE`, `STABLE`, or `VOLATILE`, which 
+informs the query planner how to optimize calls to the function based on
+ its behavior.<br/><br/>6. <strong>Support for Overloading</strong>:
+ PostgreSQL allows multiple functions with the same name but different 
+parameter types, enabling cleaner and more intuitive interfaces.</div><div><span class="fas fa-exclamation-square" style="color:#FF0000;font-size: 120%;"></span>  To remove a function, it needs to match its list of parameters.<br/><br/>7. <strong> More complex tasks</strong>:
+ PostgreSQL’s functions can perform more complex tasks than in many 
+other databases, thanks to support for advanced features like window 
+functions and common table expressions (CTEs).</div><div><br/></div><div>FYI: <strong>Window functions</strong>
+ in PostgreSQL are advanced functions that perform calculations across a
+ set of table rows that are somehow related to the current row. Unlike 
+regular aggregate functions, which collapse rows into a single output 
+row, window functions return a value for each row in the result set 
+while maintaining the individual rows.<br/><br/></div></div>
+
+      <h2 id="anonymous-code-blocks">Anonymous code blocks</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>In
+ PostgreSQL, you can execute anonymous code blocks using the"DO" 
+statement. This allows you to run procedural code without needing to 
+create a function. Here's the basic syntax and a simple example:<br/><br/><span>Basic Syntax</span><br/><span><br/>DO $$<br/></span></div><div><span>BEGIN<br/>-- Your code here<br/>END $$;</span></div><div><br/></div><div>"<strong>$$</strong>" could be any string, but should not be part of you code except for the last delimiter.</div><div><br/></div><div><strong><span>Notes</span></strong><br/>- The anonymous block runs in the context of a transaction, meaning if any error occurs, the whole block can be rolled back.<br/>- It's useful for performing one-time operations or testing logic without creating a permanent function.</div><div><br/><span>Example</span></div></div>
+
+      <pre class="ELS1"><span class="ELS2">DO $$</span><span class="ELS2">DECLARE</span><span class="ELS2">   my_value INTEGER := 10;</span><span class="ELS2">BEGIN</span><span class="ELS2">IF my_value &gt; 5 THEN</span><span class="ELS2">   INSERT INTO my_table (column1) VALUES ('Value greater than 5');</span><span class="ELS2">ELSE</span><span class="ELS2">   INSERT INTO my_table (column1) VALUES ('Value 5 or less');</span><span class="ELS2">END IF;</span><span class="ELS2">END $$;</span><span class="ELS2"></span></pre>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>1. <strong>DO $$</strong>: Starts the anonymous code block. The `$$` is a delimiter for the code.<br/>2. <strong>DECLARE</strong>: Starts the section where variable can be defined.<br/>3. <strong>BEGIN...END</strong>: Encloses the block of procedural code and represents a transaction.<br/>4. <strong>SQL Statements</strong>:
+ You can include any valid SQL statements inside the block, such as 
+"INSERT", "UPDATE", or even control structures like loops and 
+conditionals.</div></div>
+
+      <h2 id="connection-info">Connection Info</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>The following technique is available in nearly all SQL backends, yet it remains underutilized by many developers: <strong>you can assign a name to an active connection</strong>.</div><div><br/></div><div>Why
+ is this useful? For example, if the name you assign includes an 
+embedded identifier linked to a history log of connections - such as the
+ application user, version information, OS name and version, or any 
+other relevant local information - you can provide your IT and support 
+teams with more valuable insights. </div><div><br/></div><div>In PostgreSQL, once the connection is established, simply execute the following statement:</div><div><span>set application_name  = '&lt;some name&gt;';</span></div><div><br/></div><div>To list all current connections to a database, you can run the following query: </div></div>
+
+      <pre class="ELS1"><span class="ELS2">SELECT application_name</span><span class="ELS2">   FROM pg_stat_activity</span><span class="ELS2">   WHERE datname = '&lt;DatabaseName&gt;';</span><span class="ELS2"></span></pre>
+
+      <h2 id="where-is-my-iif-case-to-the-rescue">Where is my IIF()? CASE to the rescue</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>PostgreSQL
+ does not have the IIF() function that MSSQL and Oracle do, but we can 
+achieve similar functionality by using the CASE statement.</div><div><br/></div><div>The
+ "CASE" statement in PostgreSQL is a powerful tool that allows you to 
+perform conditional logic directly within your SQL queries. It evaluates
+ a series of conditions and returns a value based on the first condition
+ that evaluates to true. It can be used in "SELECT", "UPDATE", "ORDER 
+BY", and other SQL clauses.</div><div><br/></div><div>To make a true 
+equivalent to 
+IIF(&lt;Condition&gt;,&lt;ValueOnTrue&gt;,&lt;ValueOnFalse&gt;) we can 
+use the CASE statement as represented by the following:</div></div>
+
+      <pre class="ELS1"><span class="ELS2">SELECT</span><span class="ELS2">      CASE</span><span class="ELS2">         WHEN &lt;Condition&gt; THEN &lt;ValueOnTrue&gt;</span><span class="ELS2">         ELSE &lt;ValueOnFalse&gt;</span><span class="ELS2">      END AS column_alias_name</span><span class="ELS2">FROM your_table;</span><span class="ELS2"></span></pre>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>There are two types of "CASE" statements: simple and searched.<br/><br/>1. <strong>Simple CASE Statement:</strong> compares an expression to a series of values.</div><div><span><br/></span></div><div><span>CASE expression<br/>WHEN value1 THEN result1<br/>WHEN value2 THEN result2<br/>...<br/>ELSE result_default<br/>END</span></div><div><br/></div><div>2. <strong>Searched CASE Statement</strong>: evaluates a series of boolean expressions.</div><div><br/></div><div><span>CASE<br/>WHEN condition1 THEN result1<br/>WHEN condition2 THEN result2<br/>...<br/>ELSE result_default<br/>END<br/></span><br/><span>Features</span></div><div>- <strong>Multiple Conditions</strong>: You can include as many "WHEN" clauses as needed.<br/>- <strong>Else Clause</strong>: The "ELSE" clause is optional. If none of the conditions are met and "ELSE" is omitted, "NULL" will be returned.<br/>- <strong>Return Types</strong>:
+ The return type of a "CASE" expression is determined by the types of 
+the return values. PostgreSQL tries to implicitly convert them to a 
+common type.</div><div><br/></div><div><span>Examples</span></div></div>
+
+      <pre class="ELS1"><span class="ELS2"><span>-- Example of a Simple CASE Statement</span></span><span class="ELS2">SELECT employee_id,</span><span class="ELS2">         CASE department_id</span><span class="ELS2">            WHEN 1 THEN 'Sales'</span><span class="ELS2">            WHEN 2 THEN 'Marketing'</span><span class="ELS2">            WHEN 3 THEN 'Engineering'</span><span class="ELS2">            ELSE 'Other'</span><span class="ELS2">         END AS department_name</span><span class="ELS2">FROM employees;</span><span class="ELS2"></span><span class="ELS2"><span>--Example of a Searched CASE Statement</span></span><span class="ELS2">SELECT employee_id, salary,</span><span class="ELS2">         CASE</span><span class="ELS2">            WHEN salary &gt; 80000 THEN 'High'</span><span class="ELS2">            WHEN salary BETWEEN 50000 AND 80000 THEN 'Medium'</span><span class="ELS2">            ELSE 'Low'</span><span class="ELS2">         END AS salary_category</span><span class="ELS2">FROM employees;</span><span class="ELS2"></span></pre>
+
+      <h2 id="cyan-audit">Cyan Audit</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Cyan
+ Audit is a PostgreSQL utility providing comprehensive and 
+easily-searchable logs of DML (INSERT/UPDATE/DELETE) activity in your 
+database. </div><div>Cyan Audit is not a typical extension, since you don't use the "CREATE EXTENSION" command. It is 100% trigger based.</div><div>It is most useful for developers to help track what is being changed.</div><div>Even
+ though it is an old extensions (2018-05-24), written entirely in 
+pl/pgsql and is trigger-based, it is safe and can be used on hosted 
+versions of PostgreSQL like AWS.</div><div><br/></div><div>Main documentation available at <a href="https://pgxn.org/dist/cyanaudit/doc/cyanaudit.html" rel="noopener noreferrer" target="_blank">https://pgxn.org/dist/cyanaudit/doc/cyanaudit.html</a></div><div><br/></div><div>Source code at <a href="https://bitbucket.org/neadwerx/cyanaudit/src/master/" rel="noopener noreferrer" target="_blank">https://bitbucket.org/neadwerx/cyanaudit/src/master/</a></div><div><br/></div><div>To install, you can simply execute the file cyanaudit--2.2.1.sql in pgAdmin.</div><div><br/></div><div>Requirement, all tables need a primary key, preferably an integer or big-integer.</div><div><br/></div><div>To activate Cyan Audit on the public schema:</div><div><span>select cyanaudit.fn_update_audit_fields('public')</span></div><div><br/></div><div>To remove the audit trail triggers in Cyan Audit:</div></div>
+
+      <pre class="ELS1"><span class="ELS2">DO $$</span><span class="ELS2">DECLARE</span><span class="ELS2">      v_record record;</span><span class="ELS2">      v_sqlcommand text;</span><span class="ELS2">BEGIN</span><span class="ELS2">      FOR v_record IN</span><span class="ELS2">         SELECT DISTINCT 'DROP TRIGGER IF EXISTS tr_log_audit_event on public."' || event_object_table || '";' as sqlcommand from information_schema.triggers where trigger_name = 'tr_log_audit_event'</span><span class="ELS2">      LOOP</span><span class="ELS2">      v_sqlcommand := v_record.sqlcommand;</span><span class="ELS2">      RAISE NOTICE 'sqlcommand = %',v_sqlcommand;</span><span class="ELS2">      EXECUTE v_sqlcommand;</span><span class="ELS2">   END LOOP;</span><span class="ELS2">END;</span><span class="ELS2">$$;</span><span class="ELS2"></span></pre>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Example of a query to view the Cyan Audit Log:</div></div>
+
+      <pre class="ELS1"><span class="ELS2">   SELECT ae.recorded,</span><span class="ELS2">      ae.uid,</span><span class="ELS2">      cyanaudit.fn_get_email_by_uid(ae.uid) AS user_email,</span><span class="ELS2">      ae.txid,</span><span class="ELS2">      att.label AS description,</span><span class="ELS2">         CASE</span><span class="ELS2">            WHEN af.table_schema::text = ANY (current_schemas(true)) THEN af.table_name::text</span><span class="ELS2">            ELSE (af.table_schema::text || '.'::text) || af.table_name::text</span><span class="ELS2">         END::character varying AS table_name,</span><span class="ELS2">      af.column_name,</span><span class="ELS2">      ae.pk_vals,</span><span class="ELS2">      ae.row_op AS op,</span><span class="ELS2">      ae.old_value,</span><span class="ELS2">      ae.new_value</span><span class="ELS2">   FROM cyanaudit.tb_audit_event ae</span><span class="ELS2">      -- JOIN cyanaudit.tb_audit_field af USING (audit_field)</span><span class="ELS2">      JOIN cyanaudit.tb_audit_field af ON  af.audit_field = ae.audit_field</span><span class="ELS2">      LEFT JOIN cyanaudit.tb_audit_transaction_type att USING (audit_transaction_type)</span><span class="ELS2"><span>--WHERE ae.recorded &gt;= (NOW() - INTERVAL '10 hour')</span></span><span class="ELS2"><span>--WHERE af.table_name = 'Column'</span></span><span class="ELS2"><span>--AND ae.pk_vals[1] = '171937'</span></span><span class="ELS2"><span>--AND att.label = 'SomeText'</span></span><span class="ELS2">   ORDER BY ae.recorded DESC, af.table_name, af.column_name;</span><span class="ELS2"><span>--LIMIT 100</span></span><span class="ELS2"></span></pre>
+
+      <h2 id="datawharf">DataWharf</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>DataWharf is a Database Designer/Modeler/Analyzer Tool web application.</div><ul><li>100% free and open-source.</li><li>It combined visualization and active data dictionary features.</li><li>It can be installed using Docker Desktop.</li><li>It can be used to migrate schemas from MSSQL, MySQL, Oracle to PostgreSQL in minutes.</li></ul><div>For more information go to <a href="https://github.com/EricLendvai/DataWharf" rel="noopener noreferrer" target="_blank">https://github.com/EricLendvai/DataWharf</a>  or <a href="http://datawharf.org/" rel="noopener noreferrer" target="_blank">http://datawharf.org</a></div><div><br/></div></div>
+
+      <h2 id="running-multiple-versions-of-postgresql">Running Multiple Versions of Postgresql</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>As
+ a developer, you often need to experiment with a new version of 
+PostgreSQL or maintain an older version. If you want to run multiple 
+versions of PostgreSQL locally, you can either install them in Docker 
+containers or directly on your host operating system.</div><div><br/></div><div>To
+ ensure you can run more than one version simultaneously, make sure to 
+select a different port for each installation during the setup process. 
+The default port is 5432; for example, you could assign port 5437 for 
+PostgreSQL 17.</div><div><br/></div><div>On Windows, the installation 
+program will register a Windows Service for each version. Fortunately, 
+each version has a unique service name.</div><div>Here’s an example of PostgreSQL versions 15 and 17 being installed concurrently on localhost.</div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_004.png" style="width: 564px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 37.7px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div><span>Backup / Restore</span></div><div><br/></div><div><span class="fas fa-exclamation-square" style="color:#FF0000;font-size: 120%;"></span>
+ When transferring databases between different versions of PostgreSQL, 
+always use the pg_dump and pg_restore from the newest version of 
+PostgreSQL.</div><div><br/></div><div>pg_dump is a utility for backing up
+ a PostgreSQL database. It makes consistent backups even if the database
+ is being used concurrently. </div><div><span class="fas fa-exclamation-square" style="color:#FF0000;font-size: 120%;"></span>
+ pg_dump does not block other users accessing the database (readers or 
+writers). While this means the backup may not reflect an exact snapshot 
+of the database—since other users can change the data simultaneously—it 
+is still a solid solution for your local installations.</div><div><br/></div><div>Create an empty database on the target PostgreSQL server before you restore into.</div><div><br/></div><div>For example:</div><div><span>CREATE DATABASE "DataWharf" WITH OWNER = postgres ENCODING = 'UTF8';</span></div><div><br/></div><div><span>Use
+ the "--format=c" option. It is a custom-format archive suitable for 
+input into pg_restore. This format is also compressed by default. </span><span><br/></span></div><div><br/></div><div>Example of pg_dump and pg_restore commands used from a Windows command prompt:</div></div>
+
+      <pre class="ELS1"><span class="ELS2">"C:\Program Files\PostgreSQL\17\bin\pg_dump" -hlocalhost -Upostgres -p5435 -dDataWharf --format=c --file=C:\Postgresql_backup\Postgresql_15_DataWharf_2024_10_18_001.dmp</span><span class="ELS2"></span><span class="ELS2">"C:\Program Files\PostgreSQL\17\bin\pg_restore" -hlocalhost -Upostgres -p5437 -dDataWharf --format=c C:\Postgresql_backup\Postgresql_15_DataWharf_2024_10_18_001.dmp</span><span class="ELS2"></span></pre>
+
+      <h2 id="partitioning-and-sharding">Partitioning and Sharding</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>In PostgreSQL, <strong>Partitioning</strong> and <strong>Sharding</strong> are both techniques used to manage and scale large datasets, but they serve different purposes and operate in distinct ways.<br/><br/><span>Partitioning </span><br/><br/>Partitioning refers to dividing a large table into smaller, more manageable pieces called partitions.<br/><br/>- Range Partitioning: Divides data based on a range of values, like dates.<br/>- List Partitioning: Segments data based on a predefined list of values.<br/>- Hash Partitioning: Distributes data across partitions using a hash function.<br/><br/>Partitioning
+ helps with maintenance tasks (like vacuuming or indexing) and can 
+improve query performance by allowing PostgreSQL to scan only relevant 
+partitions or taking advantage of parallel queries.</div><div>PostgreSQL's support for parallel queries can significantly improve performance when working with partitioned tables.</div><div><br/></div><div>Example for creating a table with partitions:</div><div><br/></div><div><div><span>CREATE TABLE sales (<br/> id SERIAL PRIMARY KEY,<br/>sale_date DATE NOT NULL,<br/>amount NUMERIC<br/>) PARTITION BY RANGE (sale_date);</span></div></div><div><br/></div><div><strong>Indexes</strong>: You can create indexes on partitions, but remember that each partition is treated as a separate table. </div><div><strong>Maintenance</strong>: Keep in mind partition management tasks such as adding new partitions for future data.</div><div><br/><span>Benefits of Parallel Queries on Partitioned Tables</span><br/><br/>1. <strong>Work Distribution</strong>:
+ When a query is executed against a partitioned table, PostgreSQL can 
+divide the work among multiple CPU cores. Each partition can be 
+processed independently, which allows for faster execution of large 
+queries.<br/>2. <strong>Selective Scanning</strong>:
+ If the query targets specific partitions (e.g., using a `WHERE` clause 
+that filters on partitioned columns), PostgreSQL can only scan the 
+relevant partitions. This reduces the amount of data processed in 
+parallel, making it more efficient.<br/>3. <strong>Aggregate Operations</strong>:
+ Operations like aggregations and joins can also benefit from parallel 
+execution. Each partition can compute its results independently before 
+combining them, which speeds up the overall processing.<br/>4. <strong>Data Locality</strong>:
+ Partitioning can enhance cache utilization, as data related to specific
+ queries may be stored closer together, improving performance during 
+parallel scans.<br/><br/>In summary, using partitioned tables in 
+conjunction with parallel query execution can lead to significant 
+performance improvements in PostgreSQL, especially for large datasets 
+and complex queries.</div><div><br/></div><div><span>Sharding</span><br/><br/>Sharding
+ involves distributing a database across multiple servers or instances, 
+each containing a subset of the total data. This is often done to 
+enhance performance and scalability, particularly for very large 
+datasets or high-traffic applications. Sharding typically requires 
+application-level logic to route queries to the correct shard.<br/><br/>Key aspects of sharding include:<br/>- <strong>Horizontal Scaling</strong>: Each shard holds a portion of the data (e.g., users, transactions) rather than splitting a single table.<br/>- <strong>Decentralization</strong>: Each shard can operate independently, potentially on different hardware.<br/><br/>In
+ summary, partitioning is about dividing tables within a single 
+database, while sharding is about spreading the data across multiple 
+databases or servers. Both techniques can enhance performance and 
+manageability, but they cater to different scaling needs.</div></div>
+
+      <h2 id="parallel-queries">Parallel Queries</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>This
+ topic is more relevant for Database Administrators than for Developers,
+ but understanding how PostgreSQL leverages parallel queries is crucial.
+ While no code changes are necessary, this feature can still impact your
+ development process. It’s essential to use the latest stable version of
+ PostgreSQL, as the query engine is continuously being enhanced to 
+maximize the benefits of parallel queries.</div><div><br/></div><div><span>Enabling Parallel Queries</span><br/><br/>To take advantage of parallel query execution, ensure the following settings in your PostgreSQL configuration:<br/>- <strong>max_parallel_workers_per_gather</strong>:
+ This setting controls how many parallel workers can be used for a 
+single query. Increasing this can improve performance but may impact 
+other concurrent workloads.<br/>- <strong>max_parallel_workers</strong>:
+ This is the total number of workers available for parallel processing. 
+Adjusting this value allows for more parallelism across your database.<br/><br/>- <strong>parallel_setup_cost </strong>and <strong>parallel_tuple_cost</strong>:
+ These cost parameters influence the planner's decision to use parallel 
+execution. Lowering these values may make PostgreSQL more likely to use 
+parallelism.<br/><br/><span>Considerations</span><br/><br/>- <strong>Overhead</strong>:
+ While parallel processing can improve performance, it also incurs 
+overhead. For smaller datasets or simpler queries, the cost of managing 
+parallel workers may outweigh the benefits.<br/>- <strong>Monitoring</strong>:
+ Use PostgreSQL's built-in statistics and logging to monitor the 
+effectiveness of parallel queries and adjust configurations accordingly.</div></div>
+
+      <h2 id="ownership">Ownership</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>In
+ PostgreSQL, several database objects have an ownership attribute, which
+ indicates who has the ability to manage or control the object. The main
+ objects with ownership attributes include:<br/><br/>1. <strong>Schemas</strong>:
+ Each schema has an owner. The owner of a schema can perform operations 
+on all objects within that schema, including altering tables.<br/>2. <strong>Tables</strong>:
+ Each table has an owner, typically the user who created it. The owner 
+has full privileges to perform actions like altering or dropping the 
+table.<br/>3. <strong>Indexes</strong>: Indexes are owned by the same user who owns the table they are associated with.<br/>4. <strong>Sequences</strong>: Each sequence in PostgreSQL has an owner, which typically corresponds to the user who created it.<br/>5. <strong>Views</strong>: Views are owned by the user who creates them, and the owner can manage the view’s structure and permissions.<br/>6. <strong>Functions and Procedures</strong>:
+ Functions and stored procedures have ownership attributes as well, with
+ the owner having control over their execution and permissions.<br/>7. <strong>Foreign Tables</strong>: In the context of foreign data wrappers, foreign tables also have ownership.<br/>8. <strong>Materialized Views</strong>: These views, which store the results of a query physically, have owners as well.<br/><br/>Ownership
+ in PostgreSQL is a key concept for managing security and access 
+control, as the owner of an object can grant or revoke privileges to 
+other users or roles.</div><div><br/></div><div><span class="fas fa-smile-wink" style="color:#003aff;font-size: 120%;"></span>
+ In PostgreSQL, an owner can be a "Group Role," which provides 
+group-like behavior. In pgAdmin, you create a "Group Role" in the same 
+way as you create a user ("Login Role"), but you set "Can Login" to 
+false and do not assign a password. After creating the "Group Role", you
+ can assign multiple users ("Login Roles") to it.</div><div><br/></div><div><span class="fas fa-exclamation-square" style="color:#FF0000;font-size: 120%;"></span>
+ A user ("Login Role") or group ("Group Role") can be flagged as a 
+"Superuser". As the name implies anything can be done by a Superuser.</div><div><br/></div><div><span class="fas fa-exclamation-square" style="color:#FF0000;font-size: 120%;"></span>
+ Sequences are often used to generate unique identifiers for primary 
+keys. When a sequence is tied to a table, you generally cannot change 
+its ownership directly. You will need to "Drop and Recreate" the 
+existing sequence.</div><div><br/></div><div><strong>The following are code example for changing element ownership</strong></div></div>
+
+      <pre class="ELS1"><span class="ELS2"><span>-- To change ownership of all tables in the public schema (namespace):</span></span><span class="ELS2">DO $$</span><span class="ELS2">DECLARE</span><span class="ELS2">      r RECORD;</span><span class="ELS2">      v_SchemaName TEXT := 'public';</span><span class="ELS2">      v_NewOwnerName TEXT := 'datawharf';</span><span class="ELS2">BEGIN</span><span class="ELS2">      FOR r IN</span><span class="ELS2">         SELECT schemaname,tablename</span><span class="ELS2">         FROM pg_tables</span><span class="ELS2">         WHERE schemaname = v_SchemaName</span><span class="ELS2">      LOOP</span><span class="ELS2">         EXECUTE format('ALTER TABLE %I.%I OWNER TO %I', r.schemaname, r.tablename, v_NewOwnerName);</span><span class="ELS2">      END LOOP;</span><span class="ELS2">END $$;</span><span class="ELS2"></span><span class="ELS2"></span><span class="ELS2"><span>-- To change ownership of all sequences in the public schema (namespace):</span></span><span class="ELS2">DO $$</span><span class="ELS2">DECLARE</span><span class="ELS2">      r RECORD;</span><span class="ELS2">      v_SchemaName TEXT := 'public';</span><span class="ELS2">      v_NewOwnerName TEXT := 'datawharf';</span><span class="ELS2">BEGIN</span><span class="ELS2">      FOR r IN</span><span class="ELS2">         SELECT schemaname,sequencename</span><span class="ELS2">         FROM pg_sequences</span><span class="ELS2">         WHERE schemaname = v_SchemaName</span><span class="ELS2">      LOOP</span><span class="ELS2">         EXECUTE format('ALTER SEQUENCE %I.%I OWNER TO %I', r.schemaname, r.sequencename, v_NewOwnerName);</span><span class="ELS2">      END LOOP;</span><span class="ELS2">END $$;</span><span class="ELS2"></span><span class="ELS2"></span><span class="ELS2"><span>-- To change ownership of all views in the public schema (namespace):</span></span><span class="ELS2">DO $$</span><span class="ELS2">DECLARE</span><span class="ELS2">      r RECORD;</span><span class="ELS2">      v_SchemaName TEXT := 'store';</span><span class="ELS2">      v_NewOwnerName TEXT := 'datawharf';</span><span class="ELS2">BEGIN</span><span class="ELS2">      FOR r IN</span><span class="ELS2">         SELECT table_schema as schemaname, table_name as viewname</span><span class="ELS2">         FROM information_schema.views</span><span class="ELS2">         WHERE table_schema = v_SchemaName</span><span class="ELS2">      LOOP</span><span class="ELS2">         EXECUTE format('ALTER VIEW %I.%I OWNER TO %I', r.schemaname, r.viewname, v_NewOwnerName);</span><span class="ELS2">      END LOOP;</span><span class="ELS2">END $$;</span><span class="ELS2"></span><span class="ELS2"></span><span class="ELS2"><span>-- To change ownership of all stored functions and stored procedures in the public schema (namespace):</span></span><span class="ELS2">DO $$</span><span class="ELS2">DECLARE</span><span class="ELS2">      r RECORD;</span><span class="ELS2">      v_SchemaName TEXT := 'public';</span><span class="ELS2">      v_NewOwnerName TEXT := 'datawharf';</span><span class="ELS2">BEGIN</span><span class="ELS2">      -- Change ownership of all functions</span><span class="ELS2">      FOR r IN</span><span class="ELS2">         SELECT specific_schema,routine_name, routine_type</span><span class="ELS2">         FROM information_schema.routines</span><span class="ELS2">         WHERE specific_schema = v_NewOwnerName AND routine_type IN ('FUNCTION', 'PROCEDURE')</span><span class="ELS2">      LOOP</span><span class="ELS2">         EXECUTE format('ALTER %s %I.%I() OWNER TO %I',</span><span class="ELS2">                        r.routine_type,</span><span class="ELS2">                        r.specific_schema,</span><span class="ELS2">                        r.routine_name,</span><span class="ELS2">                        v_NewOwnerName);</span><span class="ELS2">      END LOOP;</span><span class="ELS2">END $$;</span><span class="ELS2"></span></pre>
+
+      <h2 id="multi-tenancy">Multi-Tenancy</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Multi-tenancy
+ in PostgreSQL refers to the design pattern used to serve multiple 
+clients (tenants) from a single server (optionally with replication).</div><div>There are several approaches to implementing multi-tenancy, each with its own pros and cons.<br/><br/><span>Approaches to Multi-Tenancy:</span><br/><br/>1. <strong>Shared Database, Shared Schema</strong>:<br/>- All tenants share the same tables and schema.<br/>- Tenant data is distinguished using a tenant identifier (e.g., a tenant ID column).</div><div>- Developer has to account for multi-tenancy.</div><div><br/></div><div><strong>Pros</strong>:<br/>- <strong>Resource Efficiency</strong>: Lower overhead since all tenants share the same resources.<br/>- <strong>Simplified Management</strong>: Easier to manage a single schema; updates and maintenance apply to all tenants simultaneously.<br/><br/><strong>Cons</strong>:<br/>- <strong>Security Risks</strong>: Higher risk of data leakage if tenant data is not properly segregated.<br/>- <strong>Complex Queries</strong>: Queries may become complex with the need to filter data by tenant ID.</div><div><br/></div><div>2. <strong>Shared Database, Separate Schemas (Namespace)</strong>:</div><div>- All tenants share the same database but have separate schemas (namespaces).</div><div>- Each tenant's data is kept in its own schema.</div><div>- Developer has to parametrize which schema to use.</div><div><br/></div><div><strong>Pros</strong>:<br/>- <strong>Data Isolation</strong>: Better data isolation compared to a shared schema; less risk of accidental data leaks.<br/>- <strong>Easier Customization</strong>: Easier to apply schema changes for specific tenants.<br/><br/><strong>Cons</strong>:<br/>- <strong>Management Overhead</strong>: Increased complexity in managing multiple schemas.<br/>- <strong>Performance</strong>: Depending on the number of schemas, performance may degrade due to system catalog overhead.</div><div><br/>3. <strong>Separate Databases</strong>:<br/>- Each tenant has its own database.<br/>- This approach provides the highest level of isolation.</div><div>- Low involvement from developer.</div><div><br/></div><div><strong>Pros</strong>:<br/>- <strong>Strong Isolation</strong>: Complete isolation of tenant data, enhancing security and compliance.<br/>- <strong>Customization</strong>: Each tenant can have a completely customized schema.<br/><br/>Cons:<br/>- <strong>Resource Intensive</strong>: More resource-intensive as each database requires its own connections, configurations, and backups.<br/>- <strong>Management Complexity</strong>: Managing multiple databases can be cumbersome, particularly for updates and migrations.</div><div><br/></div><div><span><span class="fas fa-exclamation-square" style="color:#FF0000;font-size: 120%;"></span> WARNINGS</span></div><ul><li><div>User
+ accounts are configured at the level of the PostgreSQL server 
+(including its replicas), not at the database level. Essentially, this 
+means that PostgreSQL user settings are shared across all tenants.</div></li><li><div>A single Write-Ahead Logging (WAL) mechanism is utilized on a server, rather than being specific to any one database.</div></li><li><div>The
+ vacuum process can only clear data from the oldest ended sessions 
+across all databases. If any tenant (database) has a process that is 
+stuck for hours or even days, the vacuum operation will be delayed, 
+potentially leading to degraded performance.</div></li></ul></div>
+
+      <h2 id="unlogged-tables">Unlogged Tables</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>In PostgreSQL, <strong>unlogged tables</strong> are a type of table that does not write its data to the write-ahead log (WAL).<br/><br/>1. <strong>Performance</strong>:
+ Since unlogged tables do not generate WAL entries, they can offer 
+better performance for write-heavy operations because they reduce disk 
+I/O.<br/>2. <strong>Durability</strong>:
+ Data in unlogged tables is not crash-safe. If the PostgreSQL server 
+crashes or if there is a system failure, all data stored in unlogged 
+tables will be lost. However, data is preserved for the duration of the 
+session as long as the server remains running.</div><div>3. <strong>Replication</strong>: Because they do not write WAL for changes, they are not included in the replication process, including logical replication.</div><div>4. <strong>Use Cases</strong>:
+ Unlogged tables are useful for temporary data storage, such as caching 
+results, or for scenarios where performance is critical, and the data 
+can be easily recreated or is not crucial to persist.<br/>5. <strong>Creation</strong>: You can create an unlogged table by using the "UNLOGGED" keyword in the "CREATE TABLE" statement:<br/><br/><span>CREATE UNLOGGED TABLE my_unlogged_table (<br/>id SERIAL PRIMARY KEY,<br/>data TEXT<br/>);</span></div></div>
+
+      <h2 id="explain">Explain</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Using the <strong>EXPLAIN </strong>command
+ in PostgreSQL allows you to analyze how the database executes a query. 
+This is crucial for performance tuning and understanding query plans.<br/><br/><span>Basic Usage</span><br/>-To
+ see the execution plan for a query, simply prefix it with "EXPLAIN". 
+This will NOT run the query. This will already help to determine which 
+indexes are going to be used.</div><div>-The result will be a list of rows with a single column "QUERY PLAN", that will list all the steps the query plans to use.</div><div>-To
+ get more detailed information, including actual execution times and row
+ counts, use "EXPLAIN ANALYZE". This will execute the query and provide 
+both the plan and performance metrics. <span class="fas fa-exclamation-square" style="color:#FF0000;font-size: 120%;"></span> This will run the query, so be cautious with queries that modify data or are resource-intensive.</div><div>-To get buffer usage statistics, add the "BUFFERS" keyword.</div><div>-Refresh to the official documentation for more options <a href="https://www.postgresql.org/docs/current/sql-explain.html" rel="noopener noreferrer" target="_blank">https://www.postgresql.org/docs/current/sql-explain.html</a>.</div><div><br/></div><div><span class="fas fa-exclamation-square" style="color:#FF0000;font-size: 240%;"></span> After you create indexes, unless on a "simple column" run the <span>ANALYZE &lt;tablename&gt;</span></div><div>The query planner relies on statistics gathered by the ANALYZE process. (NOT THE SAME AS IN THE EXPLAIN TOOL).</div><div>See <a href="https://dba.stackexchange.com/questions/241257/is-it-necessary-to-analyze-a-table-after-an-index-has-been-created" rel="noopener noreferrer" target="_blank">https://dba.stackexchange.com/questions/241257/is-it-necessary-to-analyze-a-table-after-an-index-has-been-created</a></div><div><br/></div><div><strong><span>Practical Tips</span></strong><br/>1. <strong>Check for Sequential Scans</strong>: If you see a `Seq Scan` where you expect an `Index Scan`, it may indicate that the query could <strong>benefit from indexing</strong>.<br/>2. <strong>Look for High Costs</strong>: Identify operations with high costs or long execution times, as these are often the targets for optimization.<br/>3. <strong>Analyze Joins</strong>:
+ For queries with joins, pay attention to the type of join being used 
+(e.g., Nested Loop, Hash Join) and their respective costs.<br/>4. <strong>Buffers</strong>:
+ The other indicator for performance would be the use of buffers. Buffer
+ settings are more of a DBA task, but the existence of indexes is often a
+ developers decision.</div><div>5. <strong>Iterate</strong>: After making changes to your query or indexes, use `EXPLAIN` again to see how those changes affect the execution plan.</div><div>6. <strong>Enhanced Results using pgAdmin</strong>: Add "<strong>EXPLAIN (ANALYZE,BUFFERS,FORMAT JSON)</strong>" to use a really nice UI to review the query.</div><div><br/></div><div><img alt="" class="img-fluid" src="images/index.png" style="width: 649px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 356.7px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_003.png" style="width: 652px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 153.7px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div>Examples of using the EXPLAIN prefix:</div></div>
+
+      <pre class="ELS1"><span class="ELS2">EXPLAIN SELECT * FROM your_table WHERE some_column = 'some_value';</span><span class="ELS2">EXPLAIN ANALYZE SELECT * FROM your_table WHERE some_column = 'some_value';</span><span class="ELS2">EXPLAIN (BUFFERS, ANALYZE) SELECT * FROM your_table WHERE some_column = 'some_value';</span><span class="ELS2">EXPLAIN (ANALYZE,BUFFERS,FORMAT JSON) select "Table"."pk" from "Table" inner join "Column" on "Column"."fk_Table" = "Table"."pk";</span><span class="ELS2"></span></pre>
+
+      <h2 id="the-having-clause">The Having Clause</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div><span>Issue 1</span></div><div><br/></div><div>In PostgreSQL, we <strong>cannot </strong>use
+ the aliases defined in the SELECT column clauses directly in the HAVING
+ clause. This behavior differs from some other SQL databases where using
+ aliases in HAVING is allowed.</div><div><br/></div><div>Consider the following query:<br/><br/><span>SELECT department, COUNT(*) AS employee_count<br/>FROM employees<br/>GROUP BY department<br/>HAVING employee_count &gt; 10; -- <strong>This will result in an error</strong></span><br/><br/>In
+ this case, using employee_count in the HAVING clause will result in an 
+error because PostgreSQL does not recognize the alias employee_count at 
+that point in the query.<br/><br/><strong>Correct Usage</strong><br/><br/>To achieve the same result, you should repeat the aggregate function in the HAVING clause:<br/><br/><span>SELECT department, COUNT(*) AS employee_count<br/>FROM employees<br/>GROUP BY department<br/>HAVING COUNT(*) &gt; 10; -- <strong>This works correctly</strong></span><br/><br/>In PostgreSQL, if you want to reference an alias in the HAVING clause, <strong>you need to use the original aggregate expression</strong> instead of the alias. This behavior is specific to PostgreSQL, so it's important to be mindful of this when writing queries.</div><div><br/></div><div><span>Issue 2</span></div><div><br/></div><div>You
+ can use both aggregate functions and non-aggregated columns in the 
+"HAVING" clause. However, non-aggregated columns must be included in the
+ "GROUP BY" clause. This requirement ensures clarity and prevents 
+ambiguity in the results.</div><div><br/></div><div><strong><span>Issue 3</span></strong></div><div><br/></div><div>The
+ logical processing order is strict. The "HAVING" clause is applied 
+after "GROUP BY" but before the final selection of results. This means 
+that you can filter groups after they are formed. <strong>MySQL</strong> also follows this logic, but the permissiveness with non-aggregated columns can lead to variations in expected behavior.</div></div>
+
+      <h2 id="foreign-data-wrapper">Foreign Data Wrapper</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Foreign
+ Data Wrappers (FDWs) in PostgreSQL are a powerful feature that allows 
+you to access data stored in external sources as if they were regular 
+tables within your PostgreSQL database. This enables PostgreSQL to 
+interact with various data sources, including other PostgreSQL 
+databases, NoSQL databases, flat files, and more.<br/><br/><span>Key Concepts of Foreign Data Wrappers</span><br/><br/>1. <strong>Foreign Data Wrapper</strong>
+ (FDW): This is a database extension that defines the interface for 
+connecting to an external data source. It abstracts the details of how 
+data is retrieved from that source.<br/>2. <strong>Foreign Server</strong>:
+ A foreign server is an instance of an external data source defined in 
+your PostgreSQL database. It specifies connection details such as host, 
+port, and database name.<br/>3. <strong>User Mapping</strong>:
+ User mappings associate a PostgreSQL user with the credentials needed 
+to access the foreign server. This is necessary for authentication.<br/>4. <strong>Foreign Table</strong>:
+ A foreign table is a representation of a table that exists in the 
+external data source. You can query it just like a regular PostgreSQL 
+table.<br/><br/><span>Benefits of Using FDWs</span><br/><br/>- <strong>Data Integration</strong>: FDWs allow you to integrate and query data from multiple sources without needing to move the data into PostgreSQL.<br/>- <strong>Simplified Querying</strong>: You can write SQL queries that join local and foreign tables, making it easier to work with distributed data.<br/>- <strong>Support for Various Data Sources</strong>: PostgreSQL supports several FDWs, including:<br/>- postgres_fdw: for accessing other PostgreSQL databases.<br/>- mysql_fdw: for MySQL databases.</div><div>- oracle_fdw: For Oracle Databases<br/>- tds_fdw: Can be use to access MS SQL<br/>- mongo_fdw: for MongoDB.<br/>- file_fdw: for reading from flat files<br/><br/><span>Considerations</span><br/><br/>- <strong>Performance</strong>: Accessing foreign tables may introduce latency, as data retrieval depends on the performance of the external source.<br/>- <strong>Data Types</strong>: Ensure compatibility between the data types in PostgreSQL and the external source.<br/>- <strong>Transaction Management</strong>: FDWs typically do not support distributed transactions, so be aware of this limitation when designing your applications.<br/><br/>Foreign
+ Data Wrappers provide a flexible way to work with heterogeneous data 
+sources in PostgreSQL, making it easier to build applications that 
+integrate data from various systems.</div><div><br/></div><div>Here's a simple example to illustrate how to set up and use an FDW in PostgreSQL to another PostgreSQL server/database:</div></div>
+
+      <pre class="ELS1"><span class="ELS2"><span>-- Install the FDW Extension (if necessary)</span></span><span class="ELS2">CREATE EXTENSION postgres_fdw;</span><span class="ELS2"></span><span class="ELS2"><span>-- Create a Foreign Server</span></span><span class="ELS2">CREATE SERVER foreign_server</span><span class="ELS2">FOREIGN DATA WRAPPER postgres_fdw</span><span class="ELS2">OPTIONS (host 'remote_host', dbname 'remote_db', port '5432');</span><span class="ELS2"></span><span class="ELS2"><span>-- Create a Foreign Table</span></span><span class="ELS2">CREATE FOREIGN TABLE foreign_table (</span><span class="ELS2">   id INT,</span><span class="ELS2">   name TEXT</span><span class="ELS2">   )</span><span class="ELS2">   SERVER foreign_server</span><span class="ELS2">   OPTIONS (schema 'public', table 'local_table');</span><span class="ELS2"></span><span class="ELS2"><span>-- Query the Foreign Table</span></span><span class="ELS2">SELECT * FROM foreign_table;</span><span class="ELS2"></span></pre>
+
+      <h2 id="extensions">Extensions</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>In
+ PostgreSQL, extensions are packages that provide additional 
+functionality to the database. They can include new data types, 
+functions, operators, and even entire frameworks that enhance the 
+capabilities of PostgreSQL beyond its default features. Extensions allow
+ users to customize and extend their PostgreSQL installations to meet 
+specific needs without altering the core system.<br/><br/><span>Key Features of Extensions</span><br/><br/>1. <strong>Modularity</strong>:
+ Extensions allow for modular addition of features, so users can install
+ only what they need without bloating the database system.<br/>2. <strong>Ease of Use</strong>: Many extensions can be installed with a single command, making it easy to add new capabilities.<br/>3. <strong>Community and Third-Party Contributions</strong>:
+ Many extensions are developed by the PostgreSQL community or 
+third-party developers, providing a wide range of additional 
+functionality.<br/>4. <strong>Version Control</strong>: Extensions can have their own versioning, making it easier to manage dependencies and compatibility. <span class="fas fa-exclamation-square" style="color:#FF0000;font-size: 120%;"></span> Certain extension versions are specific to versions of PostgreSQL servers.<br/>5. <strong>Custom Configuration</strong>: Some extensions allow users to configure settings specific to the extension’s functionality.</div><div>6. Extensions are installed/enabled at the <strong>database</strong> level, not at the server level (except for "Server Installation" note below).<br/><br/><span>Commonly Used Extensions</span><br/><br/>- <strong>PostGIS</strong>: Adds geographic object support, enabling spatial queries and GIS functionality.<br/>- <strong>pg_stat_statements</strong>: Provides a means to track execution statistics of all SQL statements executed by the server, useful for performance tuning.</div><div>- <strong>pgcrypto</strong>: Provides cryptographic functions for data encryption, decryption, and hashing.<br/>- <strong>hstore</strong>: Allows for storing key-value pairs within a single PostgreSQL column, useful for semi-structured data.<br/>- <strong>uuid-ossp</strong>: Provides functions to generate universally unique identifiers (UUIDs).<br/><br/><span>How to Use Extensions</span></div><ul><li><div><strong>Server Installation</strong>:
+ Extensions must first be available on the PostgreSQL server. This means
+ they need to be installed in the PostgreSQL installation itself. Some 
+extensions come pre-installed with PostgreSQL, while others may need to 
+be added manually (e.g., uuid-ossp, pgcrypto, etc.).</div></li><li><div><strong>Database Installation</strong>:
+ After the extension is available on the server, you can use the "CREATE
+ EXTENSION" command to install it in each individual database where you 
+want to use it. This installation makes the extension’s functions and 
+features accessible within that specific database.</div></li><li><div><strong>Independent Across Databases</strong>:
+ Each database can have its own set of installed extensions. You might 
+have one database using pgcrypto for encryption while another does not 
+have it installed at all.</div></li></ul><div>The following <strong>instructions </strong>(with examples) are to be used while on a particular database.</div><div><br/>1. <strong>Check Installed Extensions</strong>: You can check which extensions are currently installed using:<br/><span>SELECT * FROM pg_available_extensions;</span><br/><br/>2. <strong>Install an Extension</strong>: To install an extension, you use the "CREATE EXTENSION" command:<br/><span>CREATE EXTENSION postgis;</span><br/><br/>3. <strong>Remove an Extension</strong>: To remove an extension, you can use:<br/><span>DROP EXTENSION postgis;</span><br/><br/>4. <strong>List Installed Extensions</strong>: You can list the installed extensions in your database with:<br/>SELECT * FROM pg_extension;</div><div><br/></div><div><span class="fas fa-exclamation-square" style="color:#FF0000;font-size: 120%;"></span>
+ By default extensions are installed in the public schema. If you don't 
+have a public schema use "WITH SCHEMA &lt;SchemaName&gt;" in the CREATE 
+EXTENSION command.</div><div>If the extension was installed in a 
+different schema than public, or public is not part of the 
+"search_path", you must prefix the SchemaName when calling functions 
+defined in the extension.</div><div><br/></div><div><span class="fas fa-exclamation-square" style="color:#FF0000;font-size: 120%;"></span>
+ The user installing the extension must have the necessary permissions 
+to do so, typically requiring superuser privileges or ownership of the 
+database.</div></div>
+
+      <h2 id="generating-uuids">Generating UUIDs</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>In PostgreSQL, you can generate UUIDs (Universally Unique Identifiers) using the built-in <strong>uuid-ossp</strong> extension or the <strong>pgcrypto</strong> extension. Additionally, starting from PostgreSQL 13, you can use the built-in <strong>gen_random_uuid()</strong> function. </div><div><br/></div><div>Here are the methods to generate UUIDs:<br/><br/>1. <strong>Using the uuid-ossp extension</strong><br/>The `uuid-ossp` extension provides several functions to generate UUIDs based on different algorithms.</div><div><br/></div><div>- Generate a Version 1 UUID (time-based):<br/><span>SELECT uuid_generate_v1();</span><br/><br/>- Generate a Version 3 UUID (namespace-based using MD5 hashing):<br/><span>SELECT uuid_generate_v3(uuid_ns_dns(), 'example.com');</span><br/><br/>- Generate a Version 4 UUID (random):<br/><span>SELECT uuid_generate_v4();</span><br/><br/>- Generate a Version 5 UUID (namespace-based using SHA-1 hashing):<br/><span>SELECT uuid_generate_v5(uuid_ns_dns(), 'example.com');</span></div><div><br/></div><div>- Generate a Version 7 UUID (random but sequential):</div><div>COULD NOT VERIFY ITS AVAILABILITY YET.</div><div><br/>2. <strong>Using the pgcrypto Extension</strong><br/><span>SELECT gen_random_uuid();</span><br/><br/>3. <strong>Using Built-in Function in PostgreSQL 13+</strong><br/><span>SELECT gen_random_uuid();<br/></span><br/><span class="fas fa-exclamation-square" style="color:#FF0000;font-size: 120%;"></span>  Ensure the appropriate extensions are enabled if you choose to use them.</div></div>
+
+      <h2 id="enumerations-avoid-them-in-most-cases">Enumerations - Avoid them in most cases</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>In PostgreSQL, while <strong>enumerations</strong>
+ (enums) can be a useful feature in some cases, there are several 
+reasons why developers might choose to avoid or be cautious when using 
+them:<br/><br/>1. <strong>Limited Flexibility</strong>:<br/>
+ Enums are inherently static. Once you define an enumeration type with a
+ set of possible values, altering it (e.g., adding, removing, or 
+renaming values) is cumbersome and can require significant effort, 
+especially in a production environment. While it is possible to alter an
+ enum by adding new values, removing or renaming values is more 
+complicated and could require careful migration.<br/><br/>2. <strong>Migration Challenges</strong>:<br/>-
+ Harder to Modify: If your application evolves and needs to adjust the 
+valid values of an enum, PostgreSQL doesn't provide a straightforward 
+way to rename or delete values without having to alter the database 
+schema or perform complex migrations.<br/>- Difficult to Scale: As 
+business logic and requirements change, the enum might need to be 
+updated, which is more difficult and risky than working with other types
+ like integers or strings, where changes don't require schema 
+modifications.<br/><br/>3. <strong>Portability</strong>:<br/>
+ Database-Specific: Enums in PostgreSQL are a proprietary feature, 
+meaning that if you later decide to switch to a different relational 
+database (like MySQL, SQLite, or SQL Server), you'll need to convert 
+your enum fields into another type (e.g., VARCHAR or INTEGER) and 
+rewrite part of your application logic. This introduces a potential 
+source of compatibility issues if you're developing software that needs 
+to be database-agnostic.<br/><br/>4. <strong>Language</strong>:<br/> No support for multiple languages. Each Enum value is a single text.<br/><br/><span>Alternatives to PostgreSQL Enums</span></div><div><br/>If
+ you're looking for the benefits of a limited set of options but want to
+ avoid the downsides of enums, there are some alternative approaches you
+ can consider:<br/><br/>1. <strong>Use a Lookup Table</strong>:<br/>Instead
+ of using an enum type, you could create a reference table (e.g., 
+`status_lookup`) with a primary key and a description field. This is 
+more flexible because you can add new statuses without modifying the 
+database schema.<br/><br/>2. <strong>Use a Check Constraint</strong>:<br/>For
+ simple use cases, you might be able to use a check constraint to 
+enforce a set of allowed values. This gives you some flexibility without
+ committing to the rigidity of an enum type.<br/><br/></div><div>For example:<br/><span>CREATE TABLE orders (<br/>order_id SERIAL PRIMARY KEY,<br/>status TEXT CHECK (status IN ('pending', 'shipped', 'delivered'))<br/>);<br/></span><br/>3. <strong>Use Integer Codes with a Reference Table</strong>:<br/>In
+ cases where performance is crucial, you can combine the flexibility of a
+ lookup table with the performance of integer-based foreign keys.<br/><br/><span>Conclusion</span><br/>While
+ PostgreSQL enums can be useful in some cases, especially for columns 
+with a limited and relatively static set of values, their inflexibility,
+ potential migration challenges, and limited portability make them less 
+ideal for dynamic applications or ones that require frequent schema 
+changes. Depending on the use case, you might want to consider using 
+lookup tables, check constraints, or other alternatives that offer more 
+flexibility and scalability.</div></div>
+
+      <div class="hw-close-fallback" data-close-fallback hidden>
+        The browser did not close this tab. It may have been opened directly instead of from the Articles list. Use <a href="/articles/">Back to Articles</a>.
+      </div>
+    </article>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/assets/js/article-page.js"></script>
+  <script src="/assets/js/article-copy-code.js"></script>
+</body>
+</html>

@@ -1,0 +1,481 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FastCGI Web Development with Harbour | Harbour Wiki</title>
+  <meta name="description" content="FastCGI Web Development with Harbour. Original Harbour.wiki article converted to a static article page.">
+  <link rel="icon" type="image/svg+xml" href="/images/harbour.svg">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="/scripts/FontAwesome_5_3_1/css/all.min.css" rel="stylesheet">
+  <link href="/assets/css/site.css" rel="stylesheet">
+  <link href="/assets/css/articles.css" rel="stylesheet">
+  <link href="/assets/css/article-migration.css" rel="stylesheet">
+</head>
+<body class="hw-article-page">
+  <header class="hw-article-tab-header">
+    <a class="hw-article-tab-brand" href="/" aria-label="Harbour Wiki home">
+      <img class="hw-article-tab-logo" src="/images/harbour.svg" alt="" aria-hidden="true">
+      <span class="hw-article-tab-title">
+        <span class="hw-article-tab-site">Harbour Wiki</span>
+        <span class="hw-article-tab-subtitle">Static article</span>
+      </span>
+    </a>
+    <div class="hw-article-tab-actions">
+      <a class="btn btn-light" href="/articles/"><i class="bi bi-arrow-left" aria-hidden="true"></i> Back to Articles</a>
+      <button class="btn btn-outline-light" type="button" data-close-article><i class="bi bi-x-lg" aria-hidden="true"></i> Close</button>
+    </div>
+  </header>
+
+  <main class="hw-article-main">
+    <article class="hw-article-content">
+      <!-- Source: uploaded saved article HTML: 009 FastCGI Web Development with Harbour.htm -->
+      <!-- Conversion: visible article content converted from original article HTML; saved-page navigation/scripts excluded. -->
+      <h1>FastCGI Web Development with Harbour</h1>
+
+      
+      <div class="hw-article-author">
+        <img src="images/author.png" alt="Eric Lendvai" class="hw-article-author-photo">
+        <span><strong>Author:</strong> Eric Lendvai</span>
+      </div>
+
+      <h2>Table of Contents</h2>
+      <ul class="hw-article-toc">
+        <li><a href="#target-audience">Target Audience</a></li>
+        <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#introduction">Introduction</a></li>
+        <li><a href="#current-implementation-status">Current Implementation Status</a></li>
+        <li><a href="#installing-msvc-compiler">Installing MSVC Compiler</a></li>
+        <li><a href="#compiling-habour-in-64-bit-mode-with-msvc">Compiling Habour in 64-bit mode with MSVC</a></li>
+        <li><a href="#installing-harbour-fastcgi">Installing harbour_FastCGI</a></li>
+        <li><a href="#installing-apache">Installing Apache</a></li>
+        <li><a href="#configuring-apache-for-harbour-fastcgi">Configuring Apache For harbour_FastCGI</a></li>
+        <li><a href="#your-first-fastcgi-web-site">Your First FastCGI Web Site</a></li>
+        <li><a href="#using-postman">Using Postman</a></li>
+        <li><a href="#fcgitaskmanager-program">FCGITaskManager program</a></li>
+        <li><a href="#debugging-with-vscode">Debugging with VSCODE</a></li>
+        <li><a href="#extra-debugging-options-under-windows">Extra Debugging Options under Windows</a></li>
+        <li><a href="#anatomy-of-the-echo-app">Anatomy of the echo app</a></li>
+        <li><a href="#conclusion">Conclusion</a></li>
+      </ul>
+
+      <h2 id="target-audience">Target Audience</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><ul><li>Harbour developers interested in developing Web Apps.</li><li>Any developers interested in advancing their knowledge in using VSCODE, code editor and debugger.</li></ul></div>
+
+      <h2 id="prerequisites">Prerequisites</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><ul><li>Set up your development environment, and use all the tools created in the article, <a href="https://harbour.wiki/index.asp?page=PublicArticles&amp;mode=show&amp;id=190129210053&amp;sig=7790451073" rel="noopener noreferrer" target="_blank">How to Install Harbour on Windows.</a></li><li>Basic knowledge of VSCODE (Microsoft Visual Studio Code) is recommended. See article <a href="https://harbour.wiki/index.asp?page=PublicArticles&amp;mode=show&amp;id=190401174818&amp;sig=6893630672" rel="noopener noreferrer" target="_blank">Developing and Debugging Harbour Programs with VSCODE</a></li><li>Basic knowledge of HTML.</li></ul></div>
+
+      <h2 id="introduction">Introduction</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div><strong>A brief history:</strong></div><ul><li>Clipper, first released in 1985, was a language that mainly targeted desktop applications.<br/>See <a href="https://en.wikipedia.org/wiki/Clipper_(programming_language)" rel="noopener noreferrer" target="_blank">https://en.wikipedia.org/wiki/Clipper_(programming_language)</a></li><li>Harbour was created in 1999 as an open-source and free replacement of Clipper.<br/>See <a href="https://en.wikipedia.org/wiki/Harbour_(programming_language)" rel="noopener noreferrer" target="_blank">https://en.wikipedia.org/wiki/Harbour_(programming_language)</a></li><li>CGI
+ (Common Gateway Interface) was created in 1993 as a specification to 
+allow command line executable, called by web servers, to renter web 
+pages.</li><li>FastCGI was introduced in 1996 as a protocol to help 
+interface applications with web servers. Its main focus was performance 
+and support to many computer languages.<br/>See <a href="https://fastcgi-archives.github.io/FastCGI_Developers_Kit_FastCGI.html" rel="noopener noreferrer" target="_blank">https://fastcgi-archives.github.io/FastCGI_Developers_Kit_FastCGI.html</a></li></ul><div><strong>Web technologies:</strong></div><div><br/></div><div>All
+ web apps are simply programs that listen on an IP and Port for a 
+request, usually made by a web browser, and return mainly web pages, 
+which are simply text formatted as HTML. Some major enhancements were 
+made since the inception of the web, for example, supporting multimedia 
+output, enhancements of web pages with JavaScript + CSS and Rest APIs. 
+With the introduction of web sockets the concept of request/response 
+became bidirectional. But this will not be covered in this article.</div><div><br/></div><div>First
+ we need to understand that there is a difference between waiting and 
+responding to a request, versus actually processing a request. I 
+purposely use the term "Request" to cover requests for web pages, images
+ and other multimedia files, and REST API requests. Some programs will 
+do both the waiting/responding and processing. For example: Node.js (All
+ in JavaScript) and hbhttpd (a contrib of harbour).</div><div><br/></div><div>But
+ most web apps rely on a web server to do the waiting for a request, and
+ relay that request to a web app to process and create a response, which
+ is then forwarded back to the user.</div><div><br/></div><div>Having a web server separate from a processing web app provides some of the following advantages:</div><ul><li>Static pages or image files can be returned by the web server directly, without needed to call a web app</li><li>Requests can be queued and sent to multiple processing (web) apps</li><li>Encryption (SSL) is processed by the web server directly.</li><li>Web servers have less of a chance to crash, since they are rarely updated (in comparison to a web app).</li></ul><div>Web servers have a few disadvantages:</div><ul><li>Complex to configure</li><li>Extra latency since they have to communicate with an actual web app</li></ul><div>Node.js
+ is one of the most popular webserver/framework to create web apps 
+because it requires very little configuration, and it is very fast to 
+respond since your programs run inside the web server.  But you 
+need to code your entire program in JavaScript, and basically distribute
+ source code that is fragmented in many files and relyies on many 
+external dependencies (packages).  </div><div><br/></div><div>hbhttpd,
+ one of the original solutions to create web apps in Harbour, will not 
+scale well for high traffic, and if it crashes, the entire server is 
+down. But the biggest problem is that very few developers are using it. 
+It relies on the multithreading support of Harbour, which can be hard 
+for programmers to deal with.</div><div><br/></div><div>Let's now look at
+ solutions that relies on web servers. In this article, I will mainly 
+talk about Apache web servers and IIS servers (the Microsoft Windows web
+ server).</div><div><br/></div><div>The first issue to think about is: 
+where will your program run? Will it run in the process (executable) of 
+the web server, or as an external executable?</div><div><br/></div><div>Apache
+ (Windows, Unix ...) has something called modules, also known as mod. 
+There is an implementation of harbour web apps called mod_harbour.so. 
+ Under windows, this is a dll that runs in the Apache main exe 
+(httpd.exe). The main advantage could have been speed, but the main 
+problem is that if your module crashes, it can bring down the entire web
+ server. The other problem is that the harbour main lib/vm has to be 
+restarted at every page request, and there are problems with heavy loads
+ dues to failures in handling threads. In IIS, mod_harbour is an ISAPI 
+Extension, which is also a dll, and has the same issues as in Harbour.</div><div><br/></div><div>To
+ protect the web server from crashing, the easiest solution was to 
+create CGI apps, which are single threaded Harbour exes that will read 
+the standard input for the request, and send to the standard output a 
+response. But again the problem is that every page request forces the 
+web server to start an entire new sub-process, load the entire Harbour 
+vm (virtual machine), and open your tables or setup SQL connections. 
+This solution is relatively slow. On most high-end computers, for a 
+simple "hello world" page, you would be able to handle 10 to 20 requests
+ per seconds per CPU.</div><div><br/></div><div>So one of the best 
+solutions was to make CGI faster ... hence FastCGI. We keep the concept 
+of an external EXE to protect the web server from crashing, but instead 
+of starting / closing the program at every request, your EXE has a main 
+loop that waits for requests. Once it receives a request, it builds the 
+response (web page) and restarts the loop to wait. The other advantage 
+is that you can keep your table and SQL connections open between 
+requests.  </div><div><br/></div><div>As developers we know that not
+ everything is perfect, like having memory leaks and crashes. However, 
+the FastCGI protocol, we can specify how many requests your EXE should 
+handle before it is shutdown and then restarted (by the web server), or 
+if you could handle that auto shutdown yourself. The starting / 
+restarting of your FastCGI programs is all handled by the web server, 
+and the number of waiting FastCGI EXEs can also be configured.  </div><div><br/></div><div>What
+ made it challenging to bring FastCGI to Harbour was that the libraries 
+to handle the communication between the web servers and your FastCGI 
+EXEs was only developed for the most popular languages. If you check the
+ list of computer languages at <a href="https://en.wikipedia.org/wiki/FastCGI" rel="noopener noreferrer" target="_blank">https://en.wikipedia.org/wiki/FastCGI</a>
+ you will not see Harbour. Luckily, C was the first supported language, 
+and Harbour is coded in C as well and compiles down to C. </div><div><br/></div><div>Therefore,
+ I believe creating FastCGI apps in Harbour is one of the most powerful 
+methods for creating web apps: we develop using a 4GL language, Harbour,
+ that was designed to handle data as its core principle, and it all gets
+ generated to C, the fastest language used by virtually all operating 
+systems, which can then be packaged into a single EXE with no 
+dependencies, if you choose so.</div><div><br/></div><div>As for speed? 
+On the same machine I tested the "Hello World" CGI app before, we now 
+can process between 300 to 400 requests per seconds per CPU.</div><div><br/></div><div>For more information about FastCGI, see the following web site:  <a href="http://www.citycat.ru/doc/FastCGI/fcdk/doc/fastcgi-prog-guide/ch1intro.htm" rel="noopener noreferrer" target="_blank">http://www.citycat.ru/doc/FastCGI/fcdk/doc/fastcgi-prog-guide/ch1intro.htm</a></div><div><br/></div></div>
+
+      <h2 id="current-implementation-status">Current Implementation Status</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>The project can be downloaded / cloned / forked from <a href="https://github.com/EricLendvai/harbour_FastCGI" rel="noopener noreferrer" target="_blank">https://github.com/EricLendvai/harbour_FastCGI</a> </div><div><br/></div><div>If you like this project, please press the Star to let other users on GitHub know to you value this repo.</div><div><br/></div><div><br/></div><div>Currently
+ the code is only compatible with Microsoft Windows and Apache 2.4 Do 
+not use IIS for now, since there are crashes for any FastCGI exe if a 
+web page is called via a POST request. At least this was an issue I 
+could replicate under Windows 10 Pro.</div><div><br/></div><div>All 
+documentation in this article will be for development under Microsoft 
+Windows, Apache web servers, and MSCV (Visual Studio 2019) C compiler. 
+Also, this article will be later updated for support to Unix, Mingw, and
+ other platforms and compilers.</div></div>
+
+      <h2 id="installing-msvc-compiler">Installing MSVC Compiler</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Currently
+ under Microsoft Windows, the FastCGI developers kit has to be compiled 
+under MSVC, which can only be installed with Visual Studio. Since the 
+FastCGI support library will be made using that compiler, your FastCGI 
+EXEs will also have to be compiled by Visual Studio. Microsoft no longer
+ makes it possible to install their C compiler outside of Visual Studio.
+ Luckily, they have a free edition if you are not part of a 
+small-to-large corporate commercial developer team.</div><div><br/></div><div>There is not a separate C compiler; it is part of their C++ one. Mingw is also distributed as a C and C++ compiler.</div><div><br/></div><div>Go to <a href="https://visualstudio.microsoft.com/downloads/" rel="noopener noreferrer" target="_blank">https://visualstudio.microsoft.com/downloads/</a> to download any version of Visual Studio 2019. </div><div><br/></div><div>You will first download a small exe which will then let you decide which component to install.</div><div><br/></div><div>At
+ some point, to continue using Visual Studio, you will need to create a 
+Microsoft account, which must be linked to a valid email address. </div><div><br/></div><div>At first the small install loader will display a dialog like this:</div><div><img alt="" class="img-fluid" src="images/index_021.png" style="width: 360px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 210px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div>Once that first step is completed, you will see the following dialog box. Select "Desktop development in C++". </div><div>If you are worried about your internet connection, you may also select "Download all, then install".</div><div><img alt="" class="img-fluid" src="images/index_022.png" style="width: 1072px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 572px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div>Get ready for a 1.8 Gb download ....</div><div><img alt="" class="img-fluid" src="images/index.png" style="width: 720px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 319px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div>Initially you don't need a Microsoft Account, but you will be required to make one later on.</div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_010.png" style="width: 416px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 512px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_015.png" style="width: 357px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 439px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_020.png" style="width: 717px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 476px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div>At
+ this point, you may close Visual Studio. Most of the time you will be 
+using hbmk2 (a Harbour make program) to compile and invoke the Microsoft
+ C compiler.</div><div><br/></div></div>
+
+      <h2 id="compiling-habour-in-64-bit-mode-with-msvc">Compiling Habour in 64-bit mode with MSVC</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Create the following batch file, and place it in your C:\HarbourTools\ folder. Please see the article <a href="https://harbour.wiki/index.asp?page=PublicArticles&amp;mode=show&amp;id=190129210053&amp;sig=7790451073" rel="noopener noreferrer" target="_blank">https://harbour.wiki/index.asp?page=PublicArticles&amp;mode=show&amp;id=190129210053&amp;sig=7790451073</a> .</div><div>A
+ single copy of Harbour, c:\Harbour, can be compiled with multiple C 
+compilers. For example, on my computer, I can now use Mingw 32-bit and 
+64-bit, and now, MSVC 64-bit.</div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_018.png" style="width: 293px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 161px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div>Ensure you change the line 3 in the new batch file to point to the folder where your copy of Visual Studio is installed.</div><div><br/></div><div>The best is to run your new CompileHarbourMSVC64.bat from an administrator command prompt.</div><div>You will probably see some errors. Those are usually related to contribs (packages) that are not compatible with Windows.</div><div><br/></div><div>Executing this batch file is needed the first time plus every time you update your copy of Harbour or Visual Studio.</div><div><br/></div><div>Please remember that "Visual Studio" is not the same as "Visual Studio Code". </div><div>The first one is the tool-set Microsoft created and sells to compile C,C++,.Net programs...</div><div>And
+ "Visual Studio Code", also known as VSCODE, is an open source editor 
+that was created at first by Microsoft, but now has more than 800 
+contributors.</div></div>
+
+      <table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td><span>File: </span><span>CompileHarbourMSVC64.bat</span></td></tr></tbody></table>
+
+      <pre class="ELS1"><span class="ELS2">@echo off</span><span class="ELS2"></span><span class="ELS2">call "%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat" x86_amd64   <span aria-label="Adjust the path for vcvarall.bat to match the version and location of your copy of Visual Studio" class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Adjust the path for vcvarall.bat to match the version and location of your copy of Visual Studio"></span> <nobr></nobr></span><span class="ELS2"></span><span class="ELS2">set HB_COMPILER=msvc64   <span aria-label="This is targeting the 64-bit Microsoft C compiler. You could use the 32-bit instead if you wanted so." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="This is targeting the 64-bit Microsoft C compiler. You could use the 32-bit instead if you wanted so."></span><nobr></nobr></span><span class="ELS2"></span><span class="ELS2"></span><span class="ELS2"><span>:: set HB_BUILD_MODE=c   <span aria-label="These settings are comment out for now but could be enabled if needed later on." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="These settings are comment out for now but could be enabled if needed later on."></span><nobr></nobr></span></span><span class="ELS2"><span>:: set HB_BUILD_CONTRIBS=yes</span></span><span class="ELS2"><span>:: set HB_WITH_OPENSSL=c:\OpenSSL-Win32\include</span></span><span class="ELS2"><span>:: set HB_WITH_CURL=c:\curl\include</span></span><span class="ELS2"></span><span class="ELS2">c:</span><span class="ELS2">cd c:\Harbour</span><span class="ELS2">"C:\WINDOWS\system32\cmd.exe" /k win-make</span><span class="ELS2"></span></pre>
+
+      <h2 id="installing-harbour-fastcgi">Installing harbour_FastCGI</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>All the source code you need to create your first FastCGI Harbour app can be downloaded from <a href="https://github.com/EricLendvai/harbour_FastCGI" rel="noopener noreferrer" target="_blank">https://github.com/EricLendvai/harbour_FastCGI</a></div><div><br/></div><div>If you are familiar with Git commands, create a local folder, and use the "git clone" command.</div><div>If you are not familiar with Git, you can download a zip file of the entire repo and place it in a local folder.</div><div><br/></div><div>The
+ advantage of using the Git tool is that you can easily update your 
+local copy in the future, without having to re-download the entire 
+content as a zip. Once you are familiar with the project, you could 
+submit changes, such as pull requests, to the repo.</div><div><br/></div><div>Forthis
+ article, I will install the repo in a folder R:\Harbour_FastCGI\, and 
+later, I will create a folder R:\Harbour_websites\. Please adjust the 
+drive letter and path to your system.</div></div>
+
+      <h2 id="installing-apache">Installing Apache</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>The following instructions are applicable to Windows and Apache 2.4 web server, also known as httpd.</div><div><br/></div><div>In
+ theory, you should be able to download the source of Apache web server 
+and the mod_fcgid module and recompile them with Visual Studio, but I 
+was unsuccessful in doing so. I was able to recompile mod_fcgid and 
+Visual Studio 2019 with the help of hbmk2, but I still had to ignore a 
+few compilation errors.</div><div><br/></div><div>Luckily, developing 
+FastCGI programs do not require the recompilation of Apache or its 
+modules, since we are going to build plain console EXEs.</div><div><br/></div><div>The main web site for the Apache web server is at: <a href="https://httpd.apache.org/" rel="noopener noreferrer" target="_blank">https://httpd.apache.org/</a></div><div><br/></div><div>I recommend you to download the Windows binaries from <a href="https://www.apachelounge.com/download/" rel="noopener noreferrer" target="_blank">https://www.apachelounge.com/download/</a></div><div><br/></div><div>There are 3 files you will need to download and install:</div><ol><li>httpd-2.4.41-win64-VS16.zip  (or newer)<br/>Unzip in a folder such as C:\Apache24-64\<br/><br/></li><li>vc_redist_x64 (it is a link close to the top of the web page) and run the downloaded file.<br/>This will install the C runtime used by httpd (Apache web server)<br/><br/></li><li>mod_fcgid-2.3.10-win64-VS16.zip (or newer)<br/>Unzip and place mod_fcgid.so in C:\Apache24-64\modules\</li></ol><div>I
+ am targeting the 64-bit environment, but you should be able to make 
+this also work in 32-bit. You could event run both 64-bit and 32-bit 
+Apache web server at the same time, so long as you "bind" them to 
+different IPs of ports.</div><div><br/></div><div>Edit the file "C:\Apache24-64\conf\httpd.conf" with notepad, for example, and make the following changes:</div><ul><li>Edit the line that starts with "Define SRVROOT" and point it to "c:/Apache24-64".</li><li>Change the line "#ServerName www.example.com:80" to, for example, "ServerName localhost:8164".<br/>The
+ "#" sign is the method used to mark a line as comment. localhost:8164 
+is to specify a host name and port. Every machine has a "localhost", and
+ to not conflict with IIS or any other web servers, I chose 8164. But 
+use any port you prefer, of course.</li><li>Change the line "Listen 80" to  "Listen 8164".</li></ul><div>There
+ are two ways to run the Apache web server: as a Windows Service or 
+starting the c:\Apache24-64\bin\httpd.exe (from command prompt or a 
+shortcut). If you use a command prompt, once in the bin folder, use 
+".\httpd" instead for "httpd".</div><div><br/></div><div><span class="fas fa-exclamation-square" style="color:#FF0000;font-size: 120%;"></span>
+ When debugging FastCGI EXEs, httpd.exe must be started interactively, 
+and not as a service, since we must have a visible application window.</div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_009.png" style="width: 332px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 124px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div>To test if the web server works, open your browser and go to <a href="http://127.0.0.1:8164/" rel="noopener noreferrer" target="_blank">http://127.0.0.1:8164/</a></div><div>You should see the words "It works!"</div><div><br/></div><div><span class="fas fa-exclamation-square" style="color:#FF0000;font-size: 120%;"></span> To stop the web server, focus on the httpd program, then press CTRL+C. You may have to do this more than once.</div><div><br/></div><div>The
+ following is a list of commands you can run from the C:\Apache24-64\bin
+ folder to install, start, stop and uninstall, httpd as a Windows 
+service.</div><ul><li>Install = httpd.exe -k install -n "Apache24-64"</li><li>Start = httpd.exe -k start -n "Apache24-64"</li><li>Stop = httpd.exe -k stop -n "Apache24-64"</li><li>Uninstall = httpd.exe -k uninstall -n "Apache24-64"</li></ul><div>Remember
+ that if you want to run the httpd interactively (for debugging 
+purposes, for example), you will need to stop the "Apache24-64" service.</div></div>
+
+      <h2 id="configuring-apache-for-harbour-fastcgi">Configuring Apache For harbour_FastCGI</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>All
+ configurations in Apache can be done using the text file "httpd.conf" ,
+ located in the "conf" sub-folder. In this article, since we placed 
+Apache in the folder  "C:\Apache24-64\", the configuration file is 
+"C:\Apache24-64\conf\httpd.conf".</div><div><br/></div><div>The 
+configuration file is read (used) only when Apache starts, so either 
+when "httpd.exe" is run, or the Apache service is started. Any changes 
+you do to the config file will force a restart, which will bring down 
+every hosted websites.</div><div><br/></div><div>Fortunately, there is a 
+way to have some of the configuration settings reloaded at every page 
+request. By placing a text file named ".htaccess" in the directory of 
+the published virtual folder, meaning the /website/ sub-folder of your 
+website, and using a security setting in "httpd.conf" to allow 
+processing of the ".htaccess" file, you will be able to minimize the 
+need to restart the Apache web server.</div><div><br/></div><div>In this 
+article, we are going to review two FastCGI applications: an "Echo" 
+application and an emulator/in-place replacement of the FiveTechSoft / 
+mod_harbour project (<a href="https://github.com/FiveTechSoft/mod_harbour" rel="noopener noreferrer" target="_blank">https://github.com/FiveTechSoft/mod_harbour</a>).</div><div><br/></div><div>For
+ the "Echo" application, we are going to use an ".htaccess" to 
+demonstrate how to change, on the fly, versions of the FastCGI EXE.</div><div>The
+ "Echo" application will demonstrate how GET and POST requests can be 
+processed. It can handle input fields and uploaded files. We will be 
+using Postman (<a href="https://www.getpostman.com/" rel="noopener noreferrer" target="_blank">https://www.getpostman.com</a>) to demonstrate POST requests.</div><div><br/></div><div>The
+ "mod_harbour" application will not feature such a dynamic version 
+switching system, since it is more of a provider to service plain PRG 
+files. This will create an environment that matches the behavior of PHP,
+ where source code can be changed on the fly. The main reason of having a
+ mod_harbour FastCGI EXE is for increased performance and to be able to 
+handle large number of concurrent web page requests.</div><div><br/></div><div><strong>A few key concepts about the httpd.conf file:</strong></div><ul><li>Apache
+ modules provide extra features to the server. We are only loading the 
+minimum set, to make the server as fast as possible.</li><li>Under Windows Apache, modules are simply ".dll" files renamed with the extention ".so".</li><li>In addition to some of the default modules Apache comes with, we need to load "rewrite_module" and "fcgid_module" modules.</li><li>The "&lt;IfModule&gt;" regions will ensure only settings will be applied if the referred to module is loaded.</li><li>The "&lt;Files&gt;" regions will encapsulate setting only to a certain set of files. Case sensitive!</li><li>The
+ "&lt;FilesMatch&gt;" regions behaves similarly to "&lt;Files&gt;" 
+except regular-expressions can be used. So you could make it 
+case-insensitive.</li><li>The "&lt;VirtualHost&gt;" regions encapsulate settings of a Virtual Folder or entire domain (web site).</li><li>The "&lt;Directory&gt;" regions could be used at the top level, but is best used inside a "&lt;VirtualHost&gt;" region.</li></ul><div>Please backup / rename the httpd.conf file that you already have, and use the file below as your starting point.</div><div><br/></div><div>To
+ conserve space, all the Apache original comment lines are not in the 
+following file. So please keep the original file on hand so you can 
+refer to it, and bring in any extra modules and settings you may need 
+later on. The following conf file has inbedded comments to help you 
+understand most settings.</div></div>
+
+      <table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td><span>File: </span><span>httpd.conf</span></td></tr></tbody></table>
+
+      <pre class="ELS1"><span class="ELS2"><span># Specify the location of the Apache server itself.</span></span><span class="ELS2">Define SRVROOT "C:/Apache24-64"</span><span class="ELS2"></span><span class="ELS2">ServerRoot "${SRVROOT}"</span><span class="ELS2"></span><span class="ELS2"><span># This will in Apache to bind (listen) to port 127.0.0.1 aka localhost, and port 8164</span></span><span class="ELS2">Listen 127.0.0.1:8164</span><span class="ELS2"></span><span class="ELS2">LoadModule alias_module modules/mod_alias.so</span><span class="ELS2">LoadModule authz_core_module modules/mod_authz_core.so</span><span class="ELS2">LoadModule dir_module modules/mod_dir.so</span><span class="ELS2">LoadModule env_module modules/mod_env.so</span><span class="ELS2">LoadModule include_module modules/mod_include.so</span><span class="ELS2">LoadModule mime_module modules/mod_mime.so</span><span class="ELS2">LoadModule setenvif_module modules/mod_setenvif.so</span><span class="ELS2"></span><span class="ELS2"><span># To change page/file extensions</span></span><span class="ELS2">LoadModule rewrite_module modules/mod_rewrite.so</span><span class="ELS2"></span><span class="ELS2"><span># This is the FastCGI Apache module that will manage single threaded Harbour FastCGI EXEs</span></span><span class="ELS2">LoadModule fcgid_module modules/mod_fcgid.so</span><span class="ELS2"></span><span class="ELS2">&lt;IfModule unixd_module&gt;</span><span class="ELS2">    User daemon</span><span class="ELS2">    Group daemon</span><span class="ELS2">&lt;/IfModule&gt;</span><span class="ELS2"></span><span class="ELS2"><span># Configuration for any FastCGI executable.</span></span><span class="ELS2">&lt;IfModule mod_fcgid.c&gt;</span><span class="ELS2"></span><span class="ELS2"><span># Should set at least as many Processes as there are FastCGI apps,</span></span><span class="ELS2"><span># meaning number for Virtual folders with fcgi handlers.</span></span><span class="ELS2">    FcgidMaxProcesses 10</span><span class="ELS2"></span><span class="ELS2"><span># Make the following value big enough so to have the debugger stay open long enough if needed.</span></span><span class="ELS2"><span># 1800 means 30 minutes.</span></span><span class="ELS2">    FcgidIOTimeout 1800</span><span class="ELS2"></span><span class="ELS2"><span># Use smaller value in case of memory leaks</span></span><span class="ELS2"><span># This setting would do a forceful shutdown of FastCGI EXEs.</span></span><span class="ELS2"><span># See Harbour_FastCGI for a soft shutdown settings instead.</span></span><span class="ELS2">    FcgidMaxRequestsPerProcess 1000000</span><span class="ELS2"></span><span class="ELS2"><span>#Example of setting up some Environment Variables</span></span><span class="ELS2">    FcgidInitialEnv HB_ACCOUNT_ID       UserName</span><span class="ELS2">    FcgidInitialEnv HB_ACCOUNT_PASSWORD Password</span><span class="ELS2"></span><span class="ELS2">&lt;/IfModule&gt;</span><span class="ELS2"></span><span class="ELS2"><span># 'Main' server configuration</span></span><span class="ELS2"></span><span class="ELS2">ServerAdmin me@mydomain.com</span><span class="ELS2"></span><span class="ELS2">ServerName localhost-apache-64:8164</span><span class="ELS2"></span><span class="ELS2"><span># By default we will forbid the use of .htaccess and turn off all access rights from all IPs</span></span><span class="ELS2">&lt;Directory /&gt;</span><span class="ELS2">    AllowOverride none</span><span class="ELS2">    Require all denied</span><span class="ELS2">&lt;/Directory&gt;</span><span class="ELS2"></span><span class="ELS2"><span>#===============================================================================================================</span></span><span class="ELS2"></span><span class="ELS2"><span># The following lines prevent .htaccess and .htpasswd files from being viewed by Web clients.</span></span><span class="ELS2"><span># This is an extra setting in case the global access right was allowed.</span></span><span class="ELS2"><span># ensure the .ht files are store with lower case file names.</span></span><span class="ELS2"><span># Apache is case sensitive on non Windows OS.</span></span><span class="ELS2">&lt;Files ".ht*"&gt;</span><span class="ELS2">    Require all denied</span><span class="ELS2">&lt;/Files&gt;</span><span class="ELS2"></span><span class="ELS2"><span># See default httpd.conf for more explanation about the following settings</span></span><span class="ELS2">&lt;IfModule headers_module&gt;</span><span class="ELS2">    RequestHeader unset Proxy early</span><span class="ELS2">&lt;/IfModule&gt;</span><span class="ELS2"></span><span class="ELS2">&lt;IfModule mime_module&gt;</span><span class="ELS2">    TypesConfig conf/mime.types</span><span class="ELS2">    AddType application/x-compress .Z</span><span class="ELS2">    AddType application/x-gzip .gz .tgz</span><span class="ELS2">&lt;/IfModule&gt;</span><span class="ELS2"></span><span class="ELS2"><span># Configure mod_proxy_html to understand HTML4/XHTML1</span></span><span class="ELS2">&lt;IfModule proxy_html_module&gt;</span><span class="ELS2">    Include conf/extra/proxy-html.conf</span><span class="ELS2">&lt;/IfModule&gt;</span><span class="ELS2"></span><span class="ELS2"><span># Secure (SSL/TLS) connections</span></span><span class="ELS2">&lt;IfModule ssl_module&gt;</span><span class="ELS2">    SSLRandomSeed startup builtin</span><span class="ELS2">    SSLRandomSeed connect builtin</span><span class="ELS2">&lt;/IfModule&gt;</span><span class="ELS2"></span><span class="ELS2"><span>#===============================================================================================================</span></span><span class="ELS2"></span><span class="ELS2"><span># Using a VirtualHost section to configure which domain to process.</span></span><span class="ELS2"><span># Multiple similar sections could be configures to host multiple domains.</span></span><span class="ELS2">&lt;VirtualHost *:8164&gt;</span><span class="ELS2"></span><span class="ELS2"><span># localhost is 127.0.0.1, which is the IP the server is "Listen"ing on</span></span><span class="ELS2">    ServerName localhost</span><span class="ELS2"></span><span class="ELS2"><span># Folder to use for "/" requests. The "Directory" section below is used to setup behavior in the root URL.</span></span><span class="ELS2">    DocumentRoot "C:/Apache64Root/"</span><span class="ELS2"></span><span class="ELS2"><span># Setting two virtual folders, to different FastCGI apps.</span></span><span class="ELS2">    Alias /fcgi_echo/         "C:/Harbour_websites/fcgi_echo/website/"</span><span class="ELS2">    Alias /fcgi_localsandbox/ "C:/Harbour_websites/fcgi_LocalSandbox/website/"</span><span class="ELS2"></span><span class="ELS2"><span>#----------------------------------------------------------------------------------</span></span><span class="ELS2"></span><span class="ELS2">&lt;Directory "C:/Apache64Root/"&gt;</span><span class="ELS2">    Require all granted</span><span class="ELS2">    RewriteEngine On</span><span class="ELS2"></span><span class="ELS2">    &lt;IfModule dir_module&gt;</span><span class="ELS2"><span># Method to tell which file to serve if not page name is provided. Similar to IIS's "default document" setting.</span></span><span class="ELS2">        DirectoryIndex welcome.html</span><span class="ELS2"><span># Specifies it the above redirect is visible of not. Using "off" for not visible.</span></span><span class="ELS2">        DirectoryIndexRedirect off</span><span class="ELS2">    &lt;/IfModule&gt;</span><span class="ELS2"></span><span class="ELS2"></span><span class="ELS2"><span># The following is an example to change a request to a static web page (.html), where the extension (.html) was not included.</span></span><span class="ELS2"><span># For example if you have a web page readme.html, you could call http://localhost:8164/readme</span></span><span class="ELS2"><span># Following Works by doing URL Redirect !!!</span></span><span class="ELS2">    &lt;IfModule mod_rewrite.c&gt;</span><span class="ELS2">        RewriteCond %{REQUEST_FILENAME} !-f</span><span class="ELS2">        RewriteCond %{REQUEST_FILENAME} !-d</span><span class="ELS2">        RewriteCond %{REQUEST_FILENAME}\.html -f</span><span class="ELS2">        RewriteRule ^(.+)$ %{REQUEST_URI}.html [R=301,L]</span><span class="ELS2">    &lt;/IfModule&gt;</span><span class="ELS2"></span><span class="ELS2">&lt;/Directory&gt;</span><span class="ELS2"></span><span class="ELS2"><span>#----------------------------------------------------------------------------------</span></span><span class="ELS2"></span><span class="ELS2"><span># The following are the settings for the echo FastCGI app.</span></span><span class="ELS2"><span># The default page can be called with: http://localhost:8164/fcgi_echo/</span></span><span class="ELS2"></span><span class="ELS2">    &lt;Directory "C:/Harbour_websites/fcgi_echo/website/"&gt;</span><span class="ELS2"><span># You will need to at least enabled FollowSymLinks and ExecCGI</span></span><span class="ELS2">        Options -Indexes -Includes +FollowSymLinks -MultiViews +ExecCGI</span><span class="ELS2"></span><span class="ELS2"><span># Had to do this, since we are using the mod_rewrite to remap the file to access.  The Require happens before rewrites, which is a major problem.</span></span><span class="ELS2"><span># The access right to files is going to be handled by the mod_rewrite instructions</span></span><span class="ELS2">        Require all granted</span><span class="ELS2"></span><span class="ELS2"><span># This means all files ending with lower case ".exe" will be processed as FastCGI EXEs.</span></span><span class="ELS2"><span># This will ensure other files extensions will not be processed as FastCGI.</span></span><span class="ELS2">        &lt;FilesMatch "\.fcgiexe"&gt;</span><span class="ELS2">            SetHandler fcgid-script</span><span class="ELS2">        &lt;/FilesMatch&gt;</span><span class="ELS2"></span><span class="ELS2"><span># To allow settings in .htaccess to do mod_rewrite, IndexOptions (See  https://httpd.apache.org/docs/2.4/mod/core.html#allowoverride)</span></span><span class="ELS2">        AllowOverride Indexes FileInfo</span><span class="ELS2"></span><span class="ELS2"><span># See   https://httpd.apache.org/docs/trunk/rewrite/intro.html   for Documentation on mod_rewrite</span></span><span class="ELS2"><span># See   https://perldoc.perl.org/perlrequick.html                for Regular Expressions used with mod_rewrite</span></span><span class="ELS2"></span><span class="ELS2">        RewriteEngine On</span><span class="ELS2"></span><span class="ELS2">    &lt;/Directory&gt;</span><span class="ELS2"></span><span class="ELS2"><span>#----------------------------------------------------------------------------------</span></span><span class="ELS2"></span><span class="ELS2"><span># The following virtual folder is user for the LocalSandbox.exe FastCGI app.</span></span><span class="ELS2"></span><span class="ELS2"><span># It could be called using: http://localhost:8164/fcgi_localsandbox/</span></span><span class="ELS2"></span><span class="ELS2">    &lt;Directory "C:/Harbour_websites/fcgi_localsandbox/website/"&gt;</span><span class="ELS2">        Options -Indexes -Includes +FollowSymLinks -MultiViews +ExecCGI</span><span class="ELS2">        Require all granted</span><span class="ELS2"></span><span class="ELS2">        &lt;FilesMatch "\.fcgiexe"&gt;</span><span class="ELS2">            SetHandler fcgid-script</span><span class="ELS2">        &lt;/FilesMatch&gt;</span><span class="ELS2"></span><span class="ELS2">        AllowOverride Indexes FileInfo</span><span class="ELS2">        RewriteEngine On</span><span class="ELS2"></span><span class="ELS2">    &lt;/Directory&gt;</span><span class="ELS2"></span><span class="ELS2"><span>#----------------------------------------------------------------------------------</span></span><span class="ELS2"></span><span class="ELS2">&lt;/VirtualHost&gt;</span><span class="ELS2"></span><span class="ELS2"><span>#===============================================================================================================</span></span><span class="ELS2"></span></pre>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>For the Echo FastCGI app, you will need to create a ".htaccess" file in the "R:\Harbour_websites\fcgi_echo\website\" folder.</div><div><br/></div><div>You
+ can use the FCGITaskManager program, described further in this article,
+ to automate its creation, or you could created it manually.</div><div><br/></div><div>Under
+ Windows, it's unlikely you can create the file from within "File 
+Explorer". It does not allow you to create a file with no filename and 
+just an extension.</div><div><br/></div><div>The solution to creating a 
+".htaccess" file is to open a Command prompt, go to the 
+"R:\Harbour_websites\fcgi_echo\website\" folder, for example, and run 
+the following command:</div><div>R:\Harbour_websites\fcgi_echo\website&gt;<strong>echo #&gt;.htaccess</strong></div><div><br/></div><div>Next, edit the file with, for example, notepad. Run the following command:</div><div>R:\Harbour_websites\fcgi_echo\website&gt;<strong>notepad .htaccess</strong></div></div>
+
+      <table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td><span>File: </span><span>.htaccess</span></td></tr></tbody></table>
+
+      <pre class="ELS1"><span class="ELS2"><span># The content of this file was generated by FCGITaskManager.</span></span><span class="ELS2"></span><span class="ELS2"><span># Work around for request to root folder.</span></span><span class="ELS2">DirectoryIndex default.html</span><span class="ELS2">RewriteCond %{REQUEST_FILENAME} default\.html$</span><span class="ELS2">RewriteRule "^" "AnyFile.fcgiexe" [END]</span><span class="ELS2"></span><span class="ELS2"><span># Non present files becides a FastCGI exe will be redirected to the FastCGI current version.</span></span><span class="ELS2">RewriteCond %{REQUEST_FILENAME} !-f</span><span class="ELS2">RewriteCond %{REQUEST_FILENAME} !-d</span><span class="ELS2">RewriteCond %{REQUEST_FILENAME} !\.fcgiexe</span><span class="ELS2">RewriteRule "^" "AnyFile.fcgiexe" [END]</span><span class="ELS2"></span><span class="ELS2"><span># Prevent from downloading security files.</span></span><span class="ELS2">RewriteCond %{REQUEST_URI} \.(htaccess|htpasswd)$</span><span class="ELS2">RewriteRule "^" "AnyFile.fcgiexe" [END]</span><span class="ELS2">FcgidWrapper "R:/Harbour_websites/fcgi_echo/backend/FCGIecho.exe" .fcgiexe virtual</span><span class="ELS2"></span></pre>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div><span>Environment Variables</span></div><div>Using
+ the GetEnv() or hb_GetEnv() from within your FastCGI app WILL NOT 
+retrieve custom (user set) Environment Variables. Some like PATH will be
+ available. The issue of getting Environment  Variables is related 
+to the fact that it is the Apache web server that is spanning a thread 
+for your EXE, under the user account of Apache itself.</div><div>To work
+ around this and to allow you to use Environment Variables you can 
+create them as part of the mod_fcgid module configurations.</div><div>Under
+ MS Windows, all of those variables are global to the entire server, 
+unless configured at the level or a "VirtualHost". They can not be setup
+ at a level of a &lt;directory&gt;.</div><div>Under Linux, each "sites-available", having its own ".conf" file can have different sets of Environment Variable settings.</div></div>
+
+      <pre class="ELS1"><span class="ELS2">&lt;IfModule fcgid_module&gt;</span><span class="ELS2">    FcgidInitialEnv HB_ACCOUNT_ID       UserName</span><span class="ELS2">    FcgidInitialEnv HB_ACCOUNT_PASSWORD Password</span><span class="ELS2">&lt;/IfModule&gt;</span><span class="ELS2"></span></pre>
+
+      <h2 id="your-first-fastcgi-web-site">Your First FastCGI Web Site</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>As our first FastCGI web site, we will implement the Echo application. This will simply display whatever was sent to the server.</div><div><br/></div><div>If
+ you are using the previously defined "httpd.conf", you will notice I 
+make reference to a "R:\Harbour_websites\" folder. Please change that 
+reference to whatever location you intend to host your actual web sites.</div><div><br/></div><div>Create
+ a "fcgi_echo" sub-folder. Place into it the ".htaccess" file, and copy 
+the "libfcgid.dll" file from the following location: <a href="https://github.com/EricLendvai/Harbour_FastCGI/tree/master/fcgi-2.4.1/libfcgi/Release" rel="noopener noreferrer" target="_blank"></a></div><div><a href="https://github.com/EricLendvai/Harbour_FastCGI/tree/master/fcgi-2.4.1/libfcgi/Release" rel="noopener noreferrer" target="_blank">https://github.com/EricLendvai/Harbour_FastCGI/tree/master/fcgi-2.4.1/libfcgi/Release</a></div><div><br/></div><div>The repo also has the full Visual Studio Solution, and you could rebuild it yourself using Visual Studio 2019, for example.</div><div><br/></div><div>Under the \Harbour_websites\fcgi_echo\ folder you need to create at least two sub-folder: "backend" and "website"</div><div>The "website" folder will have files published by Apache, and the .htaccess file.</div><div>The "backend" folder will have the actual FastCGI exe, a support dll and a "config.txt" file</div><div><br/></div><div>The "config.txt" is a text file and is optional, but you could create it and place the following two lines:</div><ul><li>ReloadConfigAtEveryRequest=true       //"true" or "false"</li><li>MaxRequestPerFCGIProcess=0            //0 for Unlimited</li></ul><div>The
+ "MaxRequestPerFCGIProcess" setting will allow you to bring down on a 
+regular basis your FastCGI EXE. This is a safer method than the one 
+provided by the fcgid module of Apache.</div><div><br/></div><div>The 
+"down.html" file is a static page to display when the web app is down. 
+Users will know they used a correct URL, and should try later.</div><div><br/></div><div>The "default.html" files be used as a mechanism to handle calls to the root folder, meaning with no page name in the URL.</div><div><br/></div><div>Both "down.html" and "default.html" will be created by the FastCGITaskManager program, described further.</div><div><br/></div><div>The "FCGIecho.exe" will be created automatically from within VSCODE (Visual Studio Code), by a task I will describe later.</div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_004.png" style="width: 341px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 173px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_008.png" style="width: 341px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 172px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div>The
+ following is an example of a "down.html" file you can create to let the
+ user know when your website is under maintenance. This should happen 
+very rarely, since our framework will make it very easy to switch 
+versions. You may want to mark the website as "down" when changing 
+database schemas.</div><div><br/></div></div>
+
+      <table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td><span>File: </span><span>down.html</span></td></tr></tbody></table>
+
+      <pre class="ELS1"><span class="ELS2">&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;</span><span class="ELS2">&lt;title&gt;Website Under Maintenance&lt;/title&gt;</span><span class="ELS2">&lt;/head&gt;&lt;body&gt;</span><span class="ELS2">&lt;h1&gt;Website is not available at this time. Try Later.&lt;/h1&gt;</span><span class="ELS2">&lt;/body&gt;&lt;/html&gt;</span><span class="ELS2"></span></pre>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Next step is to start VSCODE using the fcgi-echo (Workspace) located in R:\Harbour_FastCGI\Examples\echo</div><div><br/></div><div>If you installed the repo files in different locations, you may want to use notepad or notepad++ and adjust the following files:</div><ul><li>\Examples\echo\fcgi-echo.code-workspace<br/>Several lines will need to be modified.<br/><br/></li><li>\Examples\echo\.vscode\launch.json<br/>Please see the "program" line.<br/><br/></li><li>\Examples\echo\.vscode\tasks.json<br/>Please see the "WebsiteDrive" and "WebsiteFolder" lines.</li></ul><div>I added some keyboard shortcuts in my user settings in VSCODE. These settings will apply to all workspaces.</div><div>To be effective in following these instructions, you must be familiar with the VSCODE Prerequisite (see other article).</div><ul><li>"CTRL+1" will call the VSCODE task to compile the current project in debug mode.</li><li>"CTRL+2" will call the VSCODE task to compile the current project in release mode.</li></ul></div>
+
+      <table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td><span>File: </span><span>keybindings.json</span></td></tr></tbody></table>
+
+      <pre class="ELS1"><span class="ELS2">{</span><span class="ELS2">    "key": "ctrl+1",</span><span class="ELS2">    "command": "workbench.action.tasks.runTask",</span><span class="ELS2">    "args":"CompileDebug"</span><span class="ELS2">},</span><span class="ELS2">{</span><span class="ELS2">    "key": "ctrl+2",</span><span class="ELS2">    "command": "workbench.action.tasks.runTask",</span><span class="ELS2">    "args":"CompileRelease"</span><span class="ELS2">},</span><span class="ELS2"></span></pre>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Open the "fcgi-echo.code-workspace" file located in the "\Examples\echo\" folder with VSCODE.</div><div><br/></div><div>Here is what your VSCODE workspace can look like once you open the "echo.prg" file:</div><div><img alt="" class="img-fluid" src="images/index_011.png" style="width: 1209px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 774px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div>In
+ that VSCODE project, I also included the entire "libfcgi" and the 
+Apache "conf" folders. These are not required for any other FastCGI 
+projects you intend to create.</div><div><br/></div><div>After you press 
+"CTRL+2", or start the task "CompileRelease", the "echo.exe" file will 
+be created and copied / renamed to FCGIecho.exe in your web site folder.</div><div>I
+ purposely added the prefix "FCGI" to the executables, in case you need 
+to taskill those programs and don't want to mistakenly shutdown any 
+other exe also called echo.</div><div><br/></div><div>If you need to 
+debug the program, press instead "CTRL+1", or start the task 
+"CompileDebug", and similar behavior to "CTRL+2" will happen. There will
+ be more on "how to debug" later in this article.</div><div><br/></div><div>Start the Apache server ("httpd"), and using your browser, go to <a href="http://localhost:8164/fcgi_echo/" rel="noopener noreferrer" target="_blank">http://localhost:8164/fcgi_echo/</a> .</div><div>The "httpd.conf" and ".htaccess" (Apache Configuration files) will redirect any call to FCGIecho.exe</div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_019.png" style="width: 489px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 302px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div>The
+ VSCODE build tasks (debug and release) will update the ".htaccess" file
+ and compile and place a FCGIecho.exe file in the folder used by Apache.</div><div><br/></div><div>Let's take a look at the VSCODE "task.json" file, located in the "\Examples\echo\.vscode\" folder.</div><div><br/></div></div>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>We have 4 VSCODE tasks defined in the "tasks.json" file:</div><ul><li>"CompileRelease",
+ as the name implies, is used to build the "FCGIecho.exe". It will also 
+place a copy in the folder published by the Apache server, in addition 
+to updating the ".htacces" file.</li><li>"CompileDebug", as the name 
+implies, is used to build the "FCGIecho.exe" in debug mode. It will do 
+the same tasks as "CompileRelease"</li><li>"KillFcgiExe" is not needed, 
+but left as an example of how to stop FastCGI apps. This is not the 
+recommended way, since the cleanup code would not be executed.</li><li>"SoftKillFcgiExe"
+ is called by "CompileRelease" and "CompileDebug". It is used to trigger
+ a controlled shutdown (kill) of the FastCGI EXE to be replaced.</li></ul></div>
+
+      <table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td><span>File: </span><span>tasks.json</span></td></tr></tbody></table>
+
+      <pre class="ELS1"><span class="ELS2">{</span><span class="ELS2">    <span>// See https://go.microsoft.com/fwlink/?LinkId=733558</span><span class="ELS2">    <span>// for the documentation about the tasks.json format</span><span class="ELS2">    "version": "2.0.0",</span><span class="ELS2">    "tasks": [</span><span class="ELS2">        {</span><span class="ELS2">            "label": "CompileRelease",</span><span class="ELS2">            "type": "shell",</span><span class="ELS2">            "command": "${workspaceFolder}\\..\\..\\hb_fcgi\\BuildEXE.bat",</span><span class="ELS2">            "options": {</span><span class="ELS2">                "cwd": "${workspaceFolder}",</span><span class="ELS2">                "env": {   <span aria-label="Environment Variables used by BuildEXE.bat" class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Environment Variables used by BuildEXE.bat"></span><nobr></nobr></span><span class="ELS2">                    "EXEName":"echo",</span><span class="ELS2">                    "BuildMode":"release",</span><span class="ELS2">                    "HB_COMPILER":"msvc64",</span><span class="ELS2">                    "WebsiteDrive":"R:",</span><span class="ELS2">                    "WebsiteFolder":"\\Harbour_websites\\fcgi_echo\\"</span><span class="ELS2">                }</span><span class="ELS2">            },</span><span class="ELS2">            "dependsOrder": "sequence",   <span aria-label="No really needed since there is only one 'dependsOn' task." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="No really needed since there is only one 'dependsOn' task."></span><nobr></nobr></span><span class="ELS2">            "dependsOn":["SoftKillFcgiExe"],</span><span class="ELS2">            "presentation": {</span><span class="ELS2">                "echo": true,</span><span class="ELS2">                "reveal": "always",</span><span class="ELS2">                "focus": true,</span><span class="ELS2">                "panel": "shared",</span><span class="ELS2">                "showReuseMessage": false,</span><span class="ELS2">                "clear": true</span><span class="ELS2">            }</span><span class="ELS2">        },</span><span class="ELS2">        {</span><span class="ELS2">            "label": "CompileDebug",</span><span class="ELS2">            "type": "shell",</span><span class="ELS2">            "command": "${workspaceFolder}\\..\\..\\hb_fcgi\\BuildEXE.bat",</span><span class="ELS2">            "options": {</span><span class="ELS2">                "cwd": "${workspaceFolder}",</span><span class="ELS2">                "env": {</span><span class="ELS2">                    "EXEName":"echo",</span><span class="ELS2">                    "BuildMode":"debug",</span><span class="ELS2">                    "HB_COMPILER":"msvc64",</span><span class="ELS2">                    "WebsiteDrive":"R:",</span><span class="ELS2">                    "WebsiteFolder":"\\Harbour_websites\\fcgi_echo\\"</span><span class="ELS2">                }</span><span class="ELS2">            },</span><span class="ELS2">            "dependsOrder": "sequence",</span><span class="ELS2">            "dependsOn":["SoftKillFcgiExe"],</span><span class="ELS2">            "presentation": {</span><span class="ELS2">                "echo": true,</span><span class="ELS2">                "reveal": "always",</span><span class="ELS2">                "focus": true,</span><span class="ELS2">                "panel": "shared",</span><span class="ELS2">                "showReuseMessage": false,</span><span class="ELS2">                "clear": true</span><span class="ELS2">            }</span><span class="ELS2">        },</span><span class="ELS2">        {</span><span class="ELS2">            "label":"KillFcgiExe",</span><span class="ELS2">            "type": "shell",</span><span class="ELS2">            "command":"taskkill",</span><span class="ELS2">            "args": ["/IM","FCGIecho.exe","/f","/t"]</span><span class="ELS2">        },</span><span class="ELS2">        {</span><span class="ELS2">            "label":"SoftKillFcgiExe",</span><span class="ELS2">            "type": "shell",</span><span class="ELS2">            "command":"${workspaceFolder}\\..\\..\\FCGITaskManager\\msvc64\\release\\FCGITaskManager.exe",   <span aria-label="Will make a controlled kill/down" class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Will make a controlled kill/down"></span><nobr></nobr></span><span class="ELS2">            "args": ["kill","http","localhost","8164","/fcgi_echo/","R:/Harbour_websites/fcgi_echo/","FCGIecho",""]</span><span class="ELS2">        }</span><span class="ELS2">    ]</span><span class="ELS2">}</span><span class="ELS2"></span></span></span></pre>
+
+      <h2 id="using-postman">Using Postman</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>If
+ you want to see the "echo" FastCGI working with POST requests, meaning 
+submitting a form and / or uploading files, the easiest is to use the 
+Postman app.</div><div>Postman is one of the most used tools for testing
+ Rest API services. You can use the Harbour_FastCGI to create a Rest API
+ of your own.</div><div><br/></div><div>Postman is a commercial program but is free for "Individuals &amp; Small Teams". </div><div>Millions of web developers are using this tool. Download it from: <a href="https://www.getpostman.com/" rel="noopener noreferrer" target="_blank">https://www.getpostman.com/</a></div><div>You
+ will be asked to create an account, with an email address. A nice 
+feature is that all your settings are stored on the Postman Inc. 
+servers. But remember not to use any confidential data!</div><div><br/></div><div>Here
+ is a sample configuration you can use to test the Echo program. If you 
+want to store uploaded files, please edit the "echo.prg" file to specify
+ the location to store uploaded files.</div><div><br/></div><div>Notes:</div><ol><li>Switch between GET and POST request types</li><li>Enter a full URL</li><li>Toggle to "Body" and enter field (html) names and values. Switch to "form-data" if you also want to upload files</li><li>Enter any fields name (key) and values. Currently Harbour_FastCGI only supports "form-data" and "x-www-form-urlencoded"</li><li>In the Key column you can mark it to select a file, instead of a field name/value </li><li>You can switch between different display modes of the response, after you press "Send"</li></ol><div><br/></div><div><img alt="" class="img-fluid" src="images/index_012.png" style="width: 889px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 720px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div></div>
+
+      <h2 id="fcgitaskmanager-program">FCGITaskManager program</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>On the Harbour_FastCGI repo, you can also review and use the FCGITaskManager program. </div><div><br/></div><div>Before I explain what FCGITaskManager does, let's look at how FastCGI apps are actually loaded in memory.</div><div>In the following image, we see 2 web apps, FCGIecho and FCGImod_harbour.</div><div><br/></div><div>We have 2 instances of FCGIecho.exe and 3 other different versions, FCGIecho1.exe, FCGIecho2.exe and FCGIecho3.exe.</div><div>We also have a single version / instance of FCGImod_harbour.exe</div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_017.png" style="width: 377px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 226px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div>In the Harbour_FastCGI framework, the "echo" app will have an executable formatted as "FCGI"+"echo"+"version text".exe</div><div>So here we have 2 instances with no version info: "FCGIecho.exe"</div><div>A version "1" as the file "FCGIecho1.exe" and so on for "2" and "3"</div><div><br/></div><div>The
+ reason we had 2 instances of "FCGIecho.exe", is that on this computer I
+ purposely ran some "website stress loader" program to have the Apache 
+server start a second instance.</div><div><br/></div><div>The method to redirect requests to a particular version of your app is by updating the ".htaccess" file accordingly.</div><div>We should, simultaneously and properly, terminate all other versions.</div><div>As a result, we normally would, in the picture above, only have a single version of "echo" and "mod_harbour" apps.</div><div><br/></div><div>And
+ this where the will use the "FCGITaskManager.exe" program. It is a 
+console app (Windows only for now) that will help you with the following
+ tasks:</div><ul><li>"kill" - stops all instances of a particular 
+version of your app. It will not terminate other versions and will set 
+the specified version as the "current version".</li><li>"activate" - makes the specified version the "current version". It will terminate all other running versions.</li><li>"down" - tops all instances of all versions of your app. It redirects all web page requests to a "down.html" page.</li></ul><div>In
+ production, usually the "down" and "activate" tasks would be used, 
+while in development the "kill" should be called before your app is 
+recompiled/published.</div><div><br/></div><div>The concept of "stopping"
+ refers to signalling the app to do a proper shutdown. This is achieved 
+by creating a "marker file" with the same name as the executable, but 
+with the extension ".kill", then calling that executable via web page 
+request. The main request loop in the FastCGI app will detect the 
+".kill" file and execute the shutdown process and terminate. The 
+shutdown process will call the "OnShutdown" method of the FastCGI main 
+class, which you probably sub-classed to add your own code.</div><div><br/></div><div>The following is a list of parameters the FCGITaskManager program is expecting:</div><ol><li>Action to take. "kill", "activate" or "down"</li><li>Protocol. "http" or "https"</li><li>Host+Domain. For example "localhost",  "www.mydomainname.com"</li><li>Port. For example "80" or "443"</li><li>Website Folder. For example "/", "/fcgi_echo/"</li><li>Fcgi Folder. Path where the FastCGI app is located. For example: "R:\Harbour_websites\fcgi_echo\"</li><li>Fcgi App Name. The app name, without the "FCGI" prefix. For example: "echo"</li><li>Fcgi App Version. Blank for no version (while developing), any text with no blanks when deploying on live server.</li></ol><div>For example, in the "echo" application, there is a "fcgi-echo.code-workspace" VSCODE workspace definition file.</div><div>Using the VSCODE extension "<span>VsCode Action Buttons", I added 3 buttons on the bottom on the VSCODE editor to manage the fcgi-echo web site.</span></div><div><img alt="" class="img-fluid" src="images/index_016.png" style="width: 759px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 448px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div> </div><div>The following is the entire command for the "&lt;Down&gt;" button (Had to use double "\" due to using a JSON file):</div><div><span>"R:\\Harbour_FastCGI\\FCGITaskManager\\msvc64\\release\\FCGITaskManager.exe
+ down http localhost 8164 /fcgi_echo/ R:/Harbour_websites/fcgi_echo/ 
+echo"</span></div><div><br/></div><div>The following is an example of the ".htaccess" file when the website is marked as "down":</div><div><span>   RewriteRule "^" "/fcgi_echo/down.html" [END]</span></div><div><br/></div><div>The following is an example of the ".htaccess" file when the website has the "no version specific" "echo" app activated:</div><div><span>   FallbackResource /fcgi_echo/FCGIecho.exe<br/>   FcgidWrapper "R:/Harbour_websites/fcgi_echo/FCGIecho.exe" .mainexe virtual</span></div><div><br/></div></div>
+
+      <h2 id="debugging-with-vscode">Debugging with VSCODE</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Let's review how to debug the "echo" app:</div><div><br/></div><div>In VSCODE, we first have to setup a "launch.json" file. </div><div>Like all the other files, it is already in the repo.</div><div>The
+ main difference with the most traditional way of debugging is that 
+here, we need to "attach" to an already running program, instead of 
+having the debugger start the exe to be debugged. Luckily the Harbour 
+VSCODE extension by Antonino Perricone supports the "attach" method.</div><div><img alt="" class="img-fluid" src="images/index_006.png" style="width: 424px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 53px; position: relative; max-width: 100%; cursor: pointer;"/></div></div>
+
+      <table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td><span>File: </span><span>launch.json</span></td></tr></tbody></table>
+
+      <pre class="ELS1"><span class="ELS2">{</span><span class="ELS2">    <span>// Use IntelliSense to learn about possible attributes.</span><span class="ELS2">    <span>// Hover to view descriptions of existing attributes.</span><span class="ELS2">    <span>// For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387</span><span class="ELS2">    "version": "0.2.0",</span><span class="ELS2">    "configurations": [</span><span class="ELS2"></span><span class="ELS2">        {</span><span class="ELS2">            "type": "harbour-dbg",</span><span class="ELS2">            "request": "attach",</span><span class="ELS2">            "name": "Attach Program echo.exe",</span><span class="ELS2">            "program": "R:\\Harbour_websites\\fcgi_echo\\backend\\FCGIecho.exe",   <span aria-label="Use the location where the website is being published" class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Use the location where the website is being published"></span><nobr></nobr></span><span class="ELS2">            "sourcePaths": [</span><span class="ELS2">                "${workspaceFolder}"  <span aria-label="This is how the debugger will know from where to display the source code when pausing execution" class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="This is how the debugger will know from where to display the source code when pausing execution"></span><nobr></nobr></span><span class="ELS2">            ]</span><span class="ELS2">        }</span><span class="ELS2">    ]</span><span class="ELS2">}</span><span class="ELS2"></span></span></span></span></pre>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>For
+ debugging to work, the program also needs to be compiled by Harbour 
+with the "-B" flag. This will add line number references, among other 
+things, inside the executable.</div><div>Also any "Altd()" function call
+ will then pause the program and open that PRG file in VSCODE at the 
+line following the "Altd()" call.</div><div><img alt="" class="img-fluid" src="images/index_013.png" style="width: 768px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 425px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div>Because
+ the debugger is used in "attach" mode, if you forget to start the 
+debugger before you request a web page, which then would call your code,
+ the program will not "hang" waiting for the debugger. This is a major 
+advantage of the "attach" mode.</div><div>Also, if you have a run time 
+error, unless you have an error handling process, the debugger will also
+ pause in the correct file and line number.</div><div><br/></div><div>To 
+make it easy to compile and deploy your programs, I created the VSCODE 
+tasks. Please refer to the section above, "Your First FastCGI Web Site" 
+for the description of the "tasks.json" file.</div><div><br/></div><div>Before you start the debugger (F5), run the "CompileDebug" task (CTRL+1) to rebuild your program in debug mode.</div><div>If no compilation occurred, you should see the following:</div><div><img alt="" class="img-fluid" src="images/index_007.png" style="width: 771px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 136px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div>Note that the "BuildMode" is "debug".</div><div><br/></div><div>Once the debugger is running, simply go to <a href="http://localhost:8164/fcgi_echo/" rel="noopener noreferrer" target="_blank">http://localhost:8164/fcgi_echo/</a> for example.</div><div><br/></div><div>If
+ you are updating the version of the Harbour Extension, please re-export
+ its debugger to "...\hb_fcgi\vscode_debugger.prg". All the instructions
+ about how use the debugger and how to export the prg is in the 
+"Developing and Debugging Harbour Programs with VSCODE (Visual Studio 
+Code)" article.</div></div>
+
+      <h2 id="extra-debugging-options-under-windows">Extra Debugging Options under Windows</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Under Windows, there is a way to display messages in a "Tracing" Window, called DebugView. </div><div><br/></div><div>Please download the DebugView program from <a href="https://docs.microsoft.com/en-us/sysinternals/downloads/debugview" rel="noopener noreferrer" target="_blank">https://docs.microsoft.com/en-us/sysinternals/downloads/debugview</a></div><div><br/></div><div>From within your Harbour source code, simply call the function, SendToDebugView(cText,[xValue])</div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_005.png" style="width: 767px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 248px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div>To
+ ensure only your messages are displayed, and not all debug messages 
+from Windows or any other applications, use the following settings:</div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_014.png" style="width: 370px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 219px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div>Here are the options I recommend using:</div><div><img alt="" class="img-fluid" src="images/index_003.png" style="width: 179px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 190px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div>Examples of calls:</div><div><br/></div><div>SendToDebugView("Request Counter",oFcgi:RequestCount)</div><div>SendToDebugView("Called from method OnShutdown")</div></div>
+
+      <h2 id="anatomy-of-the-echo-app">Anatomy of the echo app</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>The purpose of this section is to only review the "echo.prg", not the internals of the hb_Fcgi class.</div><div><br/></div><div>The entire concept of FastCGI is around its main request loop which starts at line 17 and ends at line 45.</div><div><br/></div><div>All the APIs and functionality of the FastCGI interface is wrapped into a single class <em>hb_Fcgi</em>, and a single public variable <em>oFcgi</em> will have an object of that class or sub-class.</div><div>On line 14, we have an example of creating an object directly from the <em>hb_Fcgi</em>
+ class. But since I wanted to demonstrate how to add your own code 
+called at the first request and on shutdown, we needed to create a 
+sub-class (line 53) and create the <em>oFcgi</em> from that sub-class (line <em>15</em>). Lets call the sub-class <em>MyFcgi.</em></div><div><br/></div><div>The first major step the program does is call <em>oFcgi:Wait() (line 17), </em>and it waits until a web page request is received or a shutdown is requested.</div><div>Then all the code, until we reach the <em>enddo</em> (line 45), will be the actual code to create a response.</div><div><br/></div><div>Calls to <em>oFcgi:Print()</em>  is used to send html content out. In the <em>hb_fcgi.ch</em> file, I defined the "?" operator to behave as oFcgi:Print(). But for readability I continued to use the Print() method.</div><div><br/></div><div>Lines 58 and 62 are examples of how to add code to the hooks of the sub-class.</div><div><br/></div><div>See the <span class="fas fa-comment-alt-dots" style="color:blue;font-size: 120%;"></span>  for additional explanations.</div></div>
+
+      <table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td><span>File: </span><span>echo.prg</span></td></tr></tbody></table>
+
+      <pre class="ELS1"><span class="ELS2"><span>#include "hb_fcgi.ch"   <nobr></nobr></span></span><span class="ELS2"></span><span class="ELS2"><span>//=================================================================================================================</span><span class="ELS2"></span><span class="ELS2">Function Main()</span><span class="ELS2"></span><span class="ELS2">local iInputLength  := 0</span><span class="ELS2">local cInput        := ""</span><span class="ELS2">local cQUERY_STRING := ""</span><span class="ELS2">local cVar</span><span class="ELS2"></span><span class="ELS2">SendToDebugView("Starting echo")</span><span class="ELS2"></span><span class="ELS2"><span>// oFcgi := hb_Fcgi():New()   <nobr></nobr></span><span class="ELS2">oFcgi := MyFcgi():New()    <span>// Used a subclass of hb_Fcgi   <nobr></nobr></span><span class="ELS2"></span><span class="ELS2">do while oFcgi:Wait()   <nobr></nobr></span><span class="ELS2">    SendToDebugView("Request Counter",oFcgi:RequestCount)</span><span class="ELS2"></span><span class="ELS2">    oFcgi:Print("&lt;h1&gt;FastCGI echo&lt;/h1&gt;")</span><span class="ELS2">    <span>//altd() <span aria-label="Remove the comment marker if you want to pause the debugger." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Remove the comment marker if you want to pause the debugger."></span><nobr></nobr></span><span class="ELS2">    oFcgi:Print("&lt;p&gt;FastCGI EXE   = "+oFcgi:FastCGIExeFullPath+"&lt;/p&gt;")</span><span class="ELS2">    oFcgi:Print("&lt;p&gt;SCRIPT_NAME   = "+oFcgi:GetEnvironment("SCRIPT_NAME")+"&lt;/p&gt;")</span><span class="ELS2">    oFcgi:Print("&lt;p&gt;REQUEST_URI   = "+oFcgi:GetEnvironment("REQUEST_URI")+"&lt;/p&gt;")</span><span class="ELS2">    oFcgi:Print("&lt;p&gt;REDIRECT_URL  = "+oFcgi:GetEnvironment("REDIRECT_URL")+"&lt;/p&gt;")</span><span class="ELS2">    oFcgi:Print("&lt;p&gt;QUERY_STRING  = "+oFcgi:GetEnvironment("QUERY_STRING")+"&lt;/p&gt;")</span><span class="ELS2">    oFcgi:Print("&lt;p&gt;Request Count = "+Trans( oFcgi:RequestCount )+"&lt;/p&gt;")</span><span class="ELS2">    oFcgi:Print("&lt;p&gt;Input Length  = "+Trans( oFcgi:GetInputLength() )+"&lt;/p&gt;")</span><span class="ELS2"></span><span class="ELS2">    oFcgi:Print("&lt;p&gt;Request Environment:&lt;/p&gt;")</span><span class="ELS2">    oFcgi:Print(oFcgi:ListEnvironment())</span><span class="ELS2"></span><span class="ELS2">    oFcgi:Print([&lt;p&gt;Input Field "FirstName" = ]+oFcgi:GetInputValue("FirstName")+[&lt;/p&gt;])   <span aria-label="Following lines will only have content if the web page is called with Postman for example." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Following lines will only have content if the web page is called with Postman for example."></span><nobr></nobr></span><span class="ELS2">    oFcgi:Print([&lt;p&gt;Input Field "LastName" = ]+oFcgi:GetInputValue("LastName")+[&lt;/p&gt;])</span><span class="ELS2">    oFcgi:Print([&lt;p&gt;Input Field "NotExistingValue" = ]+oFcgi:GetInputValue("Bogus")+[&lt;/p&gt;])</span><span class="ELS2"></span><span class="ELS2">    oFcgi:Print([&lt;p&gt;Uploaded File Name "File1" = ]+oFcgi:GetInputFileName("File1")+[&lt;/p&gt;])   <span aria-label="Get the name of the first uploaded file." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Get the name of the first uploaded file."></span><nobr></nobr></span><span class="ELS2">    oFcgi:Print([&lt;p&gt;Uploaded File Content Type "File1" = ]+oFcgi:GetInputFileContentType("File1")+[&lt;/p&gt;]) <span aria-label="Get the content type of the first uploaded file." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Get the content type of the first uploaded file."></span><nobr></nobr></span><span class="ELS2"></span><span class="ELS2">    <span>// oFcgi:SaveInputFileContent("File1","d:\MyFolder\"+oFcgi:GetInputFileName("File1"))   <span aria-label="Update the path to a location to store the submitted files and of course uncomment the lines." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Update the path to a location to store the submitted files and of course uncomment the lines."></span><nobr></nobr></span><span class="ELS2">    <span>// oFcgi:SaveInputFileContent("File2","d:\MyFolder\"+oFcgi:GetInputFileName("File2"))</span><span class="ELS2">    <span>// oFcgi:SaveInputFileContent("File3","d:\MyFolder\"+oFcgi:GetInputFileName("File3"))</span><span class="ELS2">    <span>// oFcgi:SaveInputFileContent("File4","d:\MyFolder\"+oFcgi:GetInputFileName("File4"))</span><span class="ELS2"></span><span class="ELS2">enddo   <nobr></nobr></span><span class="ELS2"></span><span class="ELS2">SendToDebugView("Done")</span><span class="ELS2"></span><span class="ELS2">return nil</span><span class="ELS2"></span><span class="ELS2"><span>//=================================================================================================================</span><span class="ELS2"></span><span class="ELS2">class MyFcgi from hb_Fcgi   <nobr></nobr></span><span class="ELS2">    method OnFirstRequest()</span><span class="ELS2">    method OnShutdown()</span><span class="ELS2">endclass</span><span class="ELS2"></span><span class="ELS2">method OnFirstRequest class MyFcgi  <nobr></nobr></span><span class="ELS2">    SendToDebugView("Called from method OnFirstRequest")   <span aria-label="Will be called only on first request. Could be used to open SQL connections or tables." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Will be called only on first request. Could be used to open SQL connections or tables."></span><nobr></nobr></span><span class="ELS2">return nil</span><span class="ELS2"></span><span class="ELS2">method OnShutdown class MyFcgi  <nobr></nobr></span><span class="ELS2">    SendToDebugView("Called from method OnShutdown")   <span aria-label="Will only happen on clean shutdown (.kill file marker)." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Will only happen on clean shutdown (.kill file marker)."></span><nobr></nobr></span><span class="ELS2">return nil</span><span class="ELS2"></span><span class="ELS2"><span>//=================================================================================================================</span><span class="ELS2"></span></span></span></span></span></span></span></span></span></span></span></pre>
+
+      <h2 id="conclusion">Conclusion</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Web development is not for the faint of heart; this FastCGI project is only the foundation for future web frameworks.</div><div><br/></div><div>I
+ hope you find this useful for converting your CGI app to FastCGI apps, 
+or you at minimum use this information as a gateway to port your desktop
+ applications to the web.</div></div>
+
+      <div class="hw-close-fallback" data-close-fallback hidden>
+        The browser did not close this tab. It may have been opened directly instead of from the Articles list. Use <a href="/articles/">Back to Articles</a>.
+      </div>
+    </article>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/assets/js/article-page.js"></script>
+  <script src="/assets/js/article-copy-code.js"></script>
+  <script src="/assets/js/article-tooltips.js"></script>
+</body>
+</html>

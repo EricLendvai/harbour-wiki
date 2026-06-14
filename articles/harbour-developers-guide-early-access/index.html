@@ -1,0 +1,560 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Harbour Developer&#x27;s Guide - Early Access | Harbour Wiki</title>
+  <meta name="description" content="Harbour Developer&#x27;s Guide - Early Access. Original Harbour.wiki article converted to a static article page.">
+  <link rel="icon" type="image/svg+xml" href="/images/harbour.svg">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="/scripts/FontAwesome_5_3_1/css/all.min.css" rel="stylesheet">
+  <link href="/assets/css/site.css" rel="stylesheet">
+  <link href="/assets/css/articles.css" rel="stylesheet">
+  <link href="/assets/css/article-migration.css" rel="stylesheet">
+</head>
+<body class="hw-article-page">
+  <header class="hw-article-tab-header">
+    <a class="hw-article-tab-brand" href="/" aria-label="Harbour Wiki home">
+      <img class="hw-article-tab-logo" src="/images/harbour.svg" alt="" aria-hidden="true">
+      <span class="hw-article-tab-title">
+        <span class="hw-article-tab-site">Harbour Wiki</span>
+        <span class="hw-article-tab-subtitle">Static article</span>
+      </span>
+    </a>
+    <div class="hw-article-tab-actions">
+      <a class="btn btn-light" href="/articles/"><i class="bi bi-arrow-left" aria-hidden="true"></i> Back to Articles</a>
+      <button class="btn btn-outline-light" type="button" data-close-article><i class="bi bi-x-lg" aria-hidden="true"></i> Close</button>
+    </div>
+  </header>
+
+  <main class="hw-article-main">
+    <article class="hw-article-content">
+      <!-- Source: uploaded saved article HTML: 010 Harbour Developer&#x27;s Guide - Early Access.htm -->
+      <!-- Conversion: visible article content converted from original article HTML; saved-page navigation/scripts excluded. -->
+      <h1>Harbour Developer&#x27;s Guide - Early Access</h1>
+
+      
+      <div class="hw-article-author">
+        <img src="images/author.png" alt="Eric Lendvai" class="hw-article-author-photo">
+        <span><strong>Author:</strong> Eric Lendvai</span>
+      </div>
+
+      <h2>Table of Contents</h2>
+      <ul class="hw-article-toc">
+        <li><a href="#early-access">Early Access</a></li>
+        <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#introduction">Introduction</a></li>
+        <li><a href="#hello-world">Hello World</a></li>
+        <li><a href="#code-formatting">Code Formatting</a></li>
+        <li><a href="#comparison-operators">Comparison Operators</a></li>
+        <li><a href="#logical-operators">Logical Operators</a></li>
+        <li><a href="#bitwise-operators">Bitwise Operators</a></li>
+        <li><a href="#identifiers">Identifiers</a></li>
+        <li><a href="#data-types">Data Types</a></li>
+        <li><a href="#assignments">Assignments</a></li>
+        <li><a href="#date-time-datetime-timestamp-and-utc-variables">Date, Time, Datetime (timestamp) and UTC variables</a></li>
+        <li><a href="#conditional-statements">Conditional Statements</a></li>
+        <li><a href="#loops">Loops</a></li>
+        <li><a href="#conditional-loops">Conditional Loops</a></li>
+        <li><a href="#null-nil-and-empty">NULL,NIL and EMPTY</a></li>
+        <li><a href="#variables">Variables</a></li>
+        <li><a href="#workareas-tables-and-indexes">Workareas,Tables and Indexes.</a></li>
+        <li><a href="#utf-and-internationalization">UTF and Internationalization</a></li>
+        <li><a href="#classes">Classes</a></li>
+        <li><a href="#system-capacities">System Capacities</a></li>
+        <li><a href="#list-of-possible-future-sections">List of possible future sections</a></li>
+        <li><a href="#reference">Reference</a></li>
+        <li><a href="#license">License</a></li>
+      </ul>
+
+      <h2 id="early-access">Early Access</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Most of the articles here are released once they are complete.</div><div>Since
+ this is a fairly big initiative, I am making this article visible while
+ it is being composed, with the hope to receive reviews and contribution
+ from any seasoned Harbour developer.</div></div>
+
+      <h2 id="prerequisites">Prerequisites</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Knowledge
+ of any commonly-used programming language, like C / C++, Python, 
+JavaScript, Java. We are not covering the fundamentals of programming.</div></div>
+
+      <h2 id="introduction">Introduction</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Harbour
+ is a computer language that is a superset of the C language, meaning 
+Harbour code gets converted to C first, than compiled by any C compiler.</div><div>The
+ latest version of Harbour is cross platform (wherever C can be 
+compiled), 32-bit and 64-bit, multi-threaded ready, supports UTF content
+ and can even support UTF source code files. Supports the Object 
+Oriented (classes and objects) paradigm, runtime-compilation (evaluate 
+source code at runtime), p-code and native code compilation (p-code are C
+ arrays). Variable types variables (like Python and JavaScript), case 
+insensitive (like any Xbase languages), Namespace support via static 
+definitions (like C), interchangeable database access engine, extremely 
+powerful (featured) pre-compiler.</div><div>Generates extremely fast  applications and components/libraries (Since compiles down to C).</div><div>Can
+ be used to create desktop, web and mobile apps (the later not the most 
+practical), but also can be used to create COM components.</div><div>Even
+ though its roots comes from the Clipper language (1985), its 
+development started in 1999, as a 100% open-source project used around 
+the world, mostly outside the United States.</div><div>No new recent 
+changes were made to its core since it is stable for so long. Most 
+contribution to the language are related to web support and 
+documentation.</div><div>Harbour is a hybrid computer language, with 
+similarities with GO (C compilation), JavaScript (dynamic variables), 
+Java/C#/C++ (Full Object Oriented support), Python (clean syntax), VFP 
+(database support).</div><div><br/></div><div>The goal of this 
+Developer's Guide is to assist developers who use multiple programming 
+languages, or just want to quickly learn the basics of Harbour. We will 
+cover the most used features and syntax of the language with emphasis on
+ good practice. If there are more than one way to accomplish the same 
+task, the easiest to read, most succinct, or most similar to other 
+languages will be presented.</div><div>A reference section is available 
+at the end of this developer's guide, with links to resource material 
+for additional information.</div></div>
+
+      <h2 id="hello-world">Hello World</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>As with any other computer languages, every roads leads to "Hello World".</div><div><br/></div><div>Harbour can be used to create many types of applications:</div><ul><li>Console Applications</li><li>Desktop Applications with UI</li><li>Web Applications</li><li>REST API servers</li><li>Web Socket Servers</li><li>Shared Libraries (DLL or SO)</li><li>Virtually anything that can be created in pure C</li></ul><div>The following is the simplest version of an example console application:</div></div>
+
+      <table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td><span>File: </span><span>HelloWorld.prg</span></td></tr></tbody></table>
+
+      <pre class="ELS1"><span class="ELS2">function main()</span><span class="ELS2">?"Hello World"   <span aria-label="The ? character is standard print equivalent." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="The ? character is standard print equivalent."></span><nobr></nobr></span><span class="ELS2">return nil</span><span class="ELS2"></span></pre>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>To see a complete console application example of how to build a Hello World equivalent, simply use the repo <span><a href="https://github.com/EricLendvai/Harbour_Samples/tree/main/HelloHarbour" rel="noopener noreferrer" target="_blank">https://github.com/EricLendvai/Harbour_Samples/tree/main</a></span>/HelloHarbour , the example "HelloHarbour".</div><div>For a Web Application example use the repo <span><a href="https://github.com/EricLendvai/Harbour_FastCGI/tree/master/Examples/echo" rel="noopener noreferrer" target="_blank">https://github.com/EricLendvai/Harbour_FastCGI/tree/master/Examples/echo</a></span></div></div>
+
+      <h2 id="code-formatting">Code Formatting</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><ul><li>Source code files are created as plain text with the extension <strong>.prg</strong></li><li>.c, .h and .ch files are also supported.  .c and .h are C language files.  *.ch are Harbour specific include files.</li><li>Case <strong>Insensitive </strong>language.
+ Only the content of variables, object properties and pre-compiler 
+identifiers are case sensitive. The entire language syntax and any user 
+created identifiers (variable, function, procedure, class ... names) are
+ case insensitive. All "identifiers"Variable, function, procedure and 
+ class names can a defined and used regardless of their 
+cases. </li><li>All identifiers (symbols) should be <strong>max 63 characters long</strong>.
+ Any characters beyond 63 characters are ignored. Even though string 
+content are UTF8, the language syntax itself is ASCII. Use only the 
+characters a-z, A-Z, 0-9 and "_". Do not use "-". First letter many not 
+be a number.</li><li>There are no end of line characters.</li><li>To continue a line use the ";" character. (This is the opposite of JavaScript)</li><li>Indentations are optional. Blank spaces and tabs are supported.</li><li>Commenting code, 4 methods:<br/><table class="hw-article-data-table"><tbody><tr><td><strong>/*  */</strong><br/></td><td>Like in C. Can overlap multiple lines.<br/></td></tr><tr><td><strong>//</strong><br/></td><td>Like in C. Effective till the end of line.<br/></td></tr><tr><td><strong>*</strong><br/></td><td>Like in VFP. Must be the first character on a line, besides leading blanks and tabs. The entire line will be a comment.<br/></td></tr><tr><td><strong>&amp;&amp;</strong><br/></td><td>Like in VFP. Anywhere in a line and will be effective till the end of line<br/></td></tr></tbody></table></li><li>The
+ Harbour compiler will generate C source code.Therefore it is possible 
+to include pure C code in the .prg files using a pair of<br/>#pragma BEGINDUMP  #pragma ENDDUMP</li><li>Source code may include Unicode text if the <strong>-ku</strong> parameter is used when calling the harbour compiler.</li><li>Variables and parameters may contain Unicode values regardless if compiled with -ku parameter</li></ul></div>
+
+      <h2 id="comparison-operators">Comparison Operators</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><table class="hw-article-data-table"><thead><tr><th>Operator<br/></th><th>Meaning<br/></th><th>Note<br/></th></tr></thead><tbody><tr><td><strong>==</strong><br/></td><td>Equal to<br/></td><td>Can work for all type. For strings this also means an "Exact Match" (content length+value).<br/>The single = sign will also work in most cases.<br/></td></tr><tr><td><strong>!=<br/>&lt;&gt;</strong><br/></td><td>Not equal to<br/></td><td>Both methods can be used<br/></td></tr><tr><td><strong>&lt;</strong><br/></td><td>Less than<br/></td><td>Should only be used for numeric, date and timestamp values.<br/>When comparing strings, the comparison seems to be done in the ASCII value of each bytes from left to right.<br/></td></tr><tr><td><strong>&gt;</strong><br/></td><td>Greater than<br/></td><td>See note above.<br/></td></tr><tr><td><strong>&lt;=</strong><br/></td><td>Less than or Equal to<br/></td><td>See note above.<br/></td></tr><tr><td><strong>&gt;=</strong><br/></td><td>Greater than or Equal to<br/></td><td>See note above.<br/></td></tr><tr><td>$<br/></td><td>String Belongs to<br/></td><td>Can only be used between 2 strings. Case sensitive test if first string is anywhere in a second string.<br/></td></tr></tbody></table><div><br/></div><div>Important Note:</div><div>The operator <strong>=</strong>
+ (single equal sign) can also be used, but could get confused with 
+assignment operator. Harbour, like VFP has the concept of exact match or
+ non exact string matches.</div><div>If exact is OFF, using the SET 
+EXACT OFF command, comparing two strings of different length will be 
+done only on the minumum length of the two variables.</div><div>For that reason it is always better to use == since this is always an exact match (same length and content).<br/>To make case insensitive string compares use for example the expression lower(cString1) == lower(cString2)</div></div>
+
+      <h2 id="logical-operators">Logical Operators</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><table class="hw-article-data-table"><thead><tr><th>Operator<br/></th><th>Meaning<br/></th><th>Note<br/></th></tr></thead><tbody><tr><td><strong>.and.</strong><br/></td><td>Logical and<br/></td><td>The . (dot) are required.<br/></td></tr><tr><td><strong>.or.</strong><br/></td><td>Logical or<br/></td><td>The . (dot) are required.<br/></td></tr><tr><td><strong>.not.<br/>!</strong><br/></td><td>Logical not<br/></td><td>Both operators are valid.<br/></td></tr></tbody></table></div>
+
+      <h2 id="bitwise-operators">Bitwise Operators</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>All Bitwise operators are actually extended functions that operate on numeric values. Here is the list of all the functions <span><a href="https://harbour.wiki/index.asp?page=PublicHarbourAPIExplorer&amp;categories=5" rel="noopener noreferrer" target="_blank">click here</a></span>.</div><div>For example: hb_BitShift(2,3) will return 16</div></div>
+
+      <h2 id="identifiers">Identifiers</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>"Identifiers" are user-defined name of a program element.</div><div>For example: variable, function, procedure, class, class property and method names are all identifiers.</div><div>Only the following characters can be used to create an identifier: <strong>0</strong> through <strong>9</strong>, <strong>a</strong> through <strong>z</strong>, <strong>A</strong> through <strong>Z</strong> and <strong>_</strong> (underscore).</div><div>Identifiers may not start with the characters 0 through 9.</div><div>Identifiers are <strong>case insensitive</strong>. For example the variable ObjectColor  can also be refered as OBJECTCOLOR, objectcolor, or any other casing.</div><div>Only the first 63 characters of an identifier are used to map to a runtime element. </div><div>For
+ example, creating two or more variables that are longer than 63 
+characters but have the same first 63 characters in a case insensitive 
+manner will generate compilation errors.</div><div><strong>Preprocessor </strong>identifier (#define) are <strong>case sensitive</strong> and can be longer than 63 characters! When using Mingw64 C compiler I confirmed then can be longer than 1000 characters.</div></div>
+
+      <h2 id="data-types">Data Types</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>This section is not about table fields (columns) data types, but instead about variables and object properties value types.</div><div>The non existence of content, and therefore of data type is represented by <strong>nil</strong><strong>. </strong></div><div>In Habour <strong>null</strong><strong>, also known as empty() </strong>means a zero length content (string, array, hash array). <strong>But in databases NULL means NIL.</strong></div><div><br/></div><div>The following is the list of supported data types, with formatting description or examples.</div><div><br/></div><table class="hw-article-data-table"><thead><tr><th>Data Type</th><th>Format</th><th>Notes</th><th>ValType()</th></tr></thead><tbody><tr><td><div>String</div></td><td>'text'<br/>"text"<br/>[text]<br/>e"\"Student\" in French "élève\""</td><td>Unlimited size. Only limited by available memory. Running on 64-bit is preferable.<br/>Content can be UTF8 or ANSI. Use hb_StrIsUTF8() to test if the string is UTF8.<br/>For UTF8 support view functions <span><a href="https://harbour.wiki/index.asp?page=PublicHarbourAPIExplorer&amp;categories=24" rel="noopener noreferrer" target="_blank">here</a></span>.<br/>String value can be entered using the following delimiters: single quotes, double quotes or square brackets.<br/>C style strings can also be used. Supported escape characters: \a \b \f \n \r \t \v \\ \' \" \? \x22 \042 .<br/>See <span><a href="https://en.wikipedia.org/wiki/Escape_sequences_in_C" rel="noopener noreferrer" target="_blank">"Table of escape sequences"</a></span> for definitions, except for \x (Hex) and \0 (Octal).</td><td>C</td></tr><tr><td><div>Numeric</div></td><td>1<br/>3.1428<br/>−12462<br/>0XFFFF, 0xff</td><td>Numeric are internally processed as double-precision floats, like in JavaScript and many other languages.<br/>If
+ the numeric is an integer this would mean the value must be between 
+-9007199254740992 and 9007199254740992, otherwise precision will be 
+lost.<br/>Value can be entered in base 10 (regular numbers) or base 16 (hexadecimals).</td><td>N</td></tr><tr><td><div>Logical</div></td><td>.f. .t. .F. .T.</td><td>Only true (.t. or .T.) and false (.f. or .F.) are allowed, besides NIL.</td><td>L</td></tr><tr><td><div>Date</div></td><td>{^ 2022-03-20}<br/>0d20220320</td><td><code><span>Template: {^ YYYY-MM-DD}</span></code><span><br/></span><code><span>Template: 0dYYYYMMDD</span></code></td><td>D</td></tr><tr><td><div>Timestamp</div></td><td>{^ 2022-03-20 10:24:30 pm}<br/>t"2022-03-20 22:24:30.500"</td><td>Also known as Datetime type.<br/><code><span>Template: </span></code>{^ [ YYYY-MM-DD [,] ] [ HH[:MM[:SS][.FFF]] [AM|PM] ] }<br/><code><span>Template: </span></code>t"YYYY-MM-DD [H[H][:M[M][:S[S][.f[f[f[f]]]]]]] [PM|AM]"<br/><code><span>Template: </span></code>t"YYYY-MM-DDT[H[H][:M[M][:S[S][.f[f[f[f]]]]]]] [PM|AM]"<br/>If used, lower case am|pm is also allowed.<br/>Incrementing are done by number of days. The difference of two Timestamps is a number of days with fraction.<br/>A blank date is allowed to just store time values.<br/>A complete section about Date/Timestamp/Datetime/Time is in this guide.<br/></td><td>T</td></tr><tr><td><div>Array</div></td><td>aArray1:={1,2,3}<br/>aArray2:={{1,2,3},{1,2,3}}<br/>aArray3:={1,2,3,"hello","a",2}}<br/>aArray1[1]<br/>aArray2[2,1] or aArray2[2][1]</td><td>Arrays
+ are list of values. Each array element can be of any type, including 
+arrays. All elements do not have to be of the same type.<br/>To refer to an array element use the [ ] (square brackets). Unlike most languages, the first element of an array is element <strong>1</strong>. Unlike Python, you may not use -1 to refer to the last element.<br/>For
+ multi dimension arrays, meaning arrays inside of arrays you can refer 
+to an element use ArrayName[nPos1][nPos2][nPos3] or 
+ArrayName[nPos1,nPos2,nPos3].<br/>To manipulate Arrays view functions <span><a href="https://harbour.wiki/index.asp?page=PublicHarbourAPIExplorer&amp;categories=1" rel="noopener noreferrer" target="_blank">here</a></span>.
+ Some of the functions are newer and their names start with "hb_A", like
+ for example AIns() versus hb_AIns(). The hb_A functions have more 
+options.<br/>Arrays are <strong>always passed by reference</strong> when used as parameters for functions, procedures, methods and codeblocks.<br/>Assigning an array to any other variable or property, only assigns its reference.<br/>Making a copy or partial copy can be done via the <strong>ACopy()</strong> function, but that is only for the <strong>first dimension</strong>! When copying element of type array or object, only a reference is created!<br/>To make a full deep copy, use <strong>AClone()</strong>. All sub-arrays will also be copied, but not elements of type object.<br/><span class="fas fa-smile-wink" style="color:#003aff;font-size: 120%;"></span>
+ use the function hb_jsonEncode(aArray) to print out an entire array. 
+BUT if can not be used as its definition, since the delimiters are [ ] 
+instead of { }.<br/>A complete section about Arrays will be available further in this guide.</td><td><br/></td></tr><tr><td><div>Hash Array</div></td><td>{=&gt;}<br/>{"FirstName" =&gt; "Eric",<br/>"LastName" =&gt; "Lendvai",<br/>1241 =&gt; "Seattle",<br/>{^ 2022-03-20} =&gt; .t.<br/>}</td><td>A
+ Hash Array is an array where the position of the element is not its 1 
+based index, but a "key" that can be of type String, Numeric, Date or 
+Timestamp. Harbour Hash Arrays are kind of similar to Python 
+Dictionaries.<br/>It is allowed to mix Hash Array key types. For example a
+ Hash Array hHash could have values associated to keys like: 3, "First 
+Name", {^ 2022-03-20}.<br/>Since a Hash Array key can be of numeric type,
+ it is important to initialize the Hash Array first, using {=&gt;} or 
+hb_Hash(...).<br/>To manipulate Hash Arrays view functions <span><a href="https://harbour.wiki/index.asp?page=PublicHarbourAPIExplorer&amp;categories=2" rel="noopener noreferrer" target="_blank">here</a></span>.<br/>Assigning
+ a value to a Hash Array element will automatically create it if it is 
+missing, meaning the dimension of the Hash Array will automatically 
+increase if needed. Making a reference to a non existing key will 
+generate an out of bound error. To avoid those errors, the easiest is to
+ use the hb_HGetDef() function which can return a default value, 
+including nil.<br/>A complete section about Hash Arrays will be available further in this guide.</td><td><br/></td></tr><tr><td><div>Object</div></td><td>oObject := ClassName()<br/>oObject:property1<br/>oObject:method1(par1,par2)</td><td>As
+ in all other object oriented languages (except for JavaScript where an 
+object can exist without a class), a Harbour object is created using a 
+class definition. Objects may have properties (also referred to as 
+"data") and methods.  <br/><span class="fas fa-exclamation-square" style="color:#FF0000;font-size: 120%;"></span> Creating an object using the class name as a function, does not call automatically a constructor (init) method.<br/>It is advised to also create object constructor functions to call a method of a class to initialize properties.<br/>Example of an object constructor function for a class hb_orm_SQLConnect:<br/><span>function hb_SQLConnect(par_BackendType,par_Driver,par_Server,par_Port,par_User,par_Password,par_Database,par_Schema)<br/>return
+ 
+hb_orm_SQLConnect():SetAllSettings(par_BackendType,par_Driver,par_Server,par_Port,par_User,par_Password,par_Database,par_Schema)</span><br/>A complete section about Classes and Objects will be available further in this guide.<br/><span class="fas fa-exclamation-square" style="color:#FF0000;font-size: 120%;"></span> You muse use the following to enable support to classes: <span>#include "hbclass.ch"</span></td><td><br/></td></tr><tr><td><div>CodeBlock</div></td><td>{|a,b| a+b }<br/>{|a,b| DoThing(a,b),2*a+b }<br/><br/>{|a,b|<br/>local nMulti := 2<br/>DoThing(a,b)<br/>return nMulti *a+b<br/>}</td><td>CodeBlocks
+ are equivalent to Lambdas in many other languages. They are essentially
+ pre-compiled code that can be used in many Harbour functions, like for 
+example while searching arrays or called by events.<br/>There are 2 methods for defining them.<ul><li>A
+ single text using {|| } syntax, where you can list parameters between 
+the || signs and returning a single expression. Multiple expression can 
+be listed separated by , (comas), but the last expression is the one the
+ value is returned.</li><li>As an Extended CodeBlock, created on 
+multiple lines that can support all syntax used in standard functions, 
+like variable definitions and any flow controls. A return statement is 
+required.</li></ul><div>To use CodeBlocks view functions <span><a href="https://harbour.wiki/index.asp?page=PublicHarbourAPIExplorer&amp;categories=9" rel="noopener noreferrer" target="_blank">here</a></span>.</div><div>A complete section about CodeBlocks will be available further in this guide.</div></td><td><br/></td></tr><tr><td><div>Symbol</div></td><td>sFunction := @Myfunction()<br/>sFunction:name()<br/>sFunction:exec(parameters...)<br/></td><td>Symbols are references to functions, procedures or methods.<br/>Procedures and Methods are internally converted to functions.<br/>These are not the same as the symbol tables the Harbour VM is using internally.<br/><div>A complete section about Symbols will be available further in this guide.</div></td><td><br/></td></tr><tr><td><div>Pointer</div></td><td>//The following will return a memory address that can be stored in a pointer Harbour variable.<br/><span>HB_FUNC( GET_MY_FUNCTION_AS_POINTER )<br/>{<br/>void (*ptr)() = &amp;my_function;<br/>hb_retptr( ptr );<br/>}</span><br/></td><td>Pointers
+ are created by at a C layers. For example if we call a C routine and 
+would like to have callbacks inside a C routine from within a PRG, the 
+pointer can store the memory address of a C function or structure.<br/><br/></td><td><br/></td></tr></tbody></table><div><br/></div><div><br/></div></div>
+
+      <h2 id="assignments">Assignments</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Assigning a value to a variable, object property and an alias field (defined later) should be done using the <strong>:=</strong> operator (column equal).</div><div>Even though a single = operator can work sometimes, best practice is to <strong>always use</strong> <strong>:= .</strong><br/>Single <strong>=</strong>
+ will function during assignments of variables but not during the 
+definition of a variable (local) or inside a comparison expression.</div><div>Harbour also allows you to assign the value of a  variable during a comparison using the <strong>:=</strong> operator. But for readability it is not recommended to do so.</div><div><br/></div><div>Since Harbour is influenced by the C language, many of the following assignment operators are also available.</div><div><br/></div><table class="hw-article-data-table"><thead><tr><th>Operator<br/></th><th>Meaning<br/></th><th>Note<br/></th><th>Example<br/></th></tr></thead><tbody><tr><td>:=<br/><br/></td><td>Standard Assignment<br/></td><td>See note above<br/></td><td>nNumber := 5<br/></td></tr><tr><td>+=<br/></td><td>Add content<br/></td><td>Harbour is extremely fast for string concatenation!<br/>Can be use to increment and decrement numbers, dates and date times (aka timestamps) content.<br/></td><td>nNumber += 3<br/>// nNumber will now contain 8.<br/></td></tr><tr><td>-=<br/></td><td>Decrement<br/></td><td>Should only be used for numeric, date and timestamp values. On strings it will behave as the +=.<br/><br/></td><td>nNumber -= 6<br/>// nNumber will now contain 2.<br/></td></tr><tr><td>*=<br/></td><td>Multiply<br/></td><td>Will multiple the content of the variable specified on the left side of the operator with the value on the right side.<br/>Should only be used for numeric values.<br/></td><td>nNumber *= 3<br/>// nNumber will now contain 6.<br/></td></tr><tr><td>**=<br/>^=<br/></td><td>Power (Math)<br/></td><td>Will apply the mathematical expression of power by the exponent value to the right of the operator<br/></td><td>nNumber **= 2<br/>// nNumber will now contain 36.<br/></td></tr><tr><td>/=<br/></td><td>Divide<br/></td><td>Will devide the content of the variable specified on the left side of the operator with the value on the right side.<br/>Should only be used for numeric values.<br/></td><td>nNumber /= 2<br/>// nNumber will now contain 18.<br/></td></tr><tr><td>%=<br/></td><td>Modulo<br/></td><td>Will assign the modulo of the variable specified on the left side of the operator with the division on the right side.<br/>Should only be used for numeric values.<br/></td><td>nNumber %= 5<br/>// nNumber will now contain 3.<br/></td></tr><tr><td>++<br/></td><td>Increment by 1<br/></td><td>Should be used for numeric, date and timestamp values.<br/>if the ++ operator is to the left of a variable it will be applied before the line is executed.<br/>if the ++ operator is to the right of a variable it will be applied after the line is executed.<br/></td><td>? nNumber ++ // still prints 3<br/>? nNumber // prints 4<br/></td></tr><tr><td>--<br/></td><td>Decrement by 1<br/></td><td>Should be used for numeric, date and timestamp values.<br/>if the -- operator is to the left of a variable it will be applied before the line is executed.<br/>if the -- operator is to the right of a variable it will be applied after the line is executed.<br/></td><td>? --nNumber //  prints 3<br/>? nNumber // prints 3 again<br/></td></tr></tbody></table></div>
+
+      <table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td><span>File: </span><span>SampleAssignments.prg</span></td></tr></tbody></table>
+
+      <pre class="ELS1"><span class="ELS2"><span>#include "hbclass.ch"</span></span><span class="ELS2"></span><span class="ELS2">function main()</span><span class="ELS2"></span><span class="ELS2">local cString1 := "Hello"</span><span class="ELS2">local cString2</span><span class="ELS2"></span><span class="ELS2">local oLocation1 := Location()</span><span class="ELS2">local oLocation2</span><span class="ELS2"></span><span class="ELS2">local aList1 := {1,2,3,4,{"a","b","c"}}</span><span class="ELS2">local aList2</span><span class="ELS2">local aList3</span><span class="ELS2"></span><span class="ELS2">local nNumber1 := 1</span><span class="ELS2"></span><span class="ELS2">local dDate1 := 0d20220319</span><span class="ELS2">local dDate2 := {^ 2022-02-01}</span><span class="ELS2"></span><span class="ELS2">local tTime1 := {^ 2022-03-05 10:22:30 }</span><span class="ELS2">local tTime2 := t"2022-04-06 20:44:45.437"</span><span class="ELS2"></span><span class="ELS2">set century on   <span>// Will direct the ? operator (print) to display 4 digits for year component of dates.</span><span class="ELS2"></span><span class="ELS2">cString1 += " World"</span><span class="ELS2">?((cString2 := cString1) == "Hello") <span>// -&gt; .F.</span><span class="ELS2">?cString1                            <span>// -&gt; "Hello World"</span><span class="ELS2">?cString2                            <span>// -&gt; "Hello World"</span><span class="ELS2"></span><span class="ELS2">oLocation2 := oLocation1</span><span class="ELS2">oLocation1:cCity := "Tacoma"</span><span class="ELS2"></span><span class="ELS2">?oLocation1:cCountry+", "+oLocation1:cState+", "+oLocation1:cCity  <span>// -&gt; United States of America, Washington, Tacoma</span><span class="ELS2">?oLocation2:cCountry+", "+oLocation2:cState+", "+oLocation2:cCity  <span>// -&gt; United States of America, Washington, Tacoma</span><span class="ELS2"></span><span class="ELS2">aList2 := aList1</span><span class="ELS2">aList3 := AClone(aList1)</span><span class="ELS2">aList2[1] := "a"</span><span class="ELS2">?hb_jsonEncode(aList1)  <span>// -&gt; ["a",2,3,4,["a","b","c"]]</span><span class="ELS2">?hb_jsonEncode(aList2)  <span>// -&gt; ["a",2,3,4,["a","b","c"]]</span><span class="ELS2">?hb_jsonEncode(aList3)  <span>// -&gt; [1,2,3,4,["a","b","c"]]</span><span class="ELS2">?"Are the objects 1 and 2 the same ",oLocation1 == oLocation2  <span>// -&gt; .T.</span><span class="ELS2">?"Are the arrays 1 and 2 the same ",aList1 == aList2           <span>// -&gt; .T.</span><span class="ELS2">?"Are the arrays 1 and 3 the same ",aList1 == aList3           <span>// -&gt; .F.</span><span class="ELS2"></span><span class="ELS2">nNumber1 += 5     <span>// Increment by 5</span><span class="ELS2">nNumber1 -= 2     <span>// Decrement by 2</span><span class="ELS2">?nNumber1         <span>// -&gt; 4</span><span class="ELS2"></span><span class="ELS2">dDate2 += 1       <span>// Increment by 1 day</span><span class="ELS2">dDate2 -= 2       <span>// Decrement by 2 days</span><span class="ELS2">dDate1 -= dDate2</span><span class="ELS2">?dDate1    <span>// -&gt; 47           (meaining there are 45 days between the 2 dates)</span><span class="ELS2">?dDate2    <span>// -&gt; 01/31/2022   (Added a day to the date. The display will depend of localisation.)</span><span class="ELS2"></span><span class="ELS2">?tTime1 += 1       <span>// -&gt;  03/06/2022 10:22:30.000    (Incrementation are by days not seconds)</span><span class="ELS2">?tTime2 - tTime1   <span>// -&gt;  31.432123                  (Number of days. The fractions represents the hours and seconds.)</span><span class="ELS2"></span><span class="ELS2">return nil</span><span class="ELS2">class Location</span><span class="ELS2">    <span>//Extra Line after class to work around bug definition</span><span class="ELS2">    DATA cState   init "Washington"</span><span class="ELS2">    DATA cCity    init "Seattle"</span><span class="ELS2">    DATA cCountry init "United States of America"</span><span class="ELS2">endclass</span><span class="ELS2"></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></pre>
+
+      <h2 id="date-time-datetime-timestamp-and-utc-variables">Date, Time, Datetime (timestamp) and UTC variables</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Harbour support Date, Time, Datetime values natively. </div><div>When a Date and Time are combined together, it is referred to as Datetime or Timestamp interchangeably.</div><ul><li>When
+ using the ValType() function to find out the type of a variable (or 
+field in a workspace),  Dates are "D", and Datetime or time are 
+"T".</li><li>Datetime values can also have fractions of seconds, up to milliseconds. </li><li>Empty
+ Dates are allowed in variables and in DBF tables (Non SQL tables used 
+in xBase languages like VFP, Clipper, Harbour ....). This is not the 
+same as Nil. The empty() function will return true.</li><li>To only store a Time values, a Datetime with an empty date is used. This is not supported in VFP.</li><li>Making a subtraction of 2 Dates will return a numeric, number of days</li><li>Making
+ a subtraction of 2 Datetimes will return a numeric, number of days WITH
+ a fraction of a day (NOT number of seconds!!!). Since there are 86400 
+seconds in a day, multiplying the fraction by 86400, will return a 
+number of seconds.</li><li>Adding two Dates or Datetimes together does not make sense, since it creates a date thousands of years in the future.</li><li>Adding a Date with a Datetime which has a blank date component, will return a Datetime combining the date and time together.</li><li>To see a list of functions to handle Date/Time/Datetime go to <a href="https://harbour.wiki/index.asp?page=PublicHarbourAPIExplorer&amp;categories=10" rel="noopener noreferrer" target="_blank">https://harbour.wiki/index.asp?page=PublicHarbourAPIExplorer&amp;categories=10</a></li></ul><div><br/></div><div>The following is an example for manipulating Date/Time/Datetime values and dealing with timezones:</div></div>
+
+      <pre class="ELS1"><span class="ELS2">function main()</span><span class="ELS2">local l_tNow := hb_datetime()  <span>// To get the current date time.</span><span class="ELS2">local l_dDate</span><span class="ELS2">local l_cTime24    <span>// Will receive the current time of the day in 24 hours mode as text.</span><span class="ELS2">local l_cTimeAmPm  <span>// Will receive the current time of the day in 12 hours mode as text.</span><span class="ELS2">local l_nSeconds   <span>// will receive the current time of the day in seconds with fractions.</span><span class="ELS2"></span><span class="ELS2">local l_tMoonLoadingGMT := hb_CtoT("08/20/1969 4:17 pm GMT")</span><span class="ELS2">local l_tMoonLoadingPST</span><span class="ELS2"></span><span class="ELS2">set century on  <span>//To display the years with 4 digits instead of 2.</span><span class="ELS2"></span><span class="ELS2">l_dDate := hb_TtoD(l_tNow,@l_cTime24,"hh:mm:ss")</span><span class="ELS2">hb_TtoD(l_tNow,@l_cTimeAmPm,"hh:mm:ss am")</span><span class="ELS2">hb_TtoD(l_tNow,@l_nSeconds)</span><span class="ELS2">l_tTime := hb_SecToT(l_nSeconds)   <span>// To create a Datetime with only the time component.</span><span class="ELS2"></span><span class="ELS2">?"l_tNow",l_tNow</span><span class="ELS2">?"Now with no milliseconds",hb_SecToT(round(hb_TToSec(l_tNow),0))</span><span class="ELS2">?"l_dDate",l_dDate</span><span class="ELS2">?"l_cTime24",l_cTime24</span><span class="ELS2">?"l_cTimeAmPm",l_cTimeAmPm</span><span class="ELS2">?"l_nSeconds",l_nSeconds</span><span class="ELS2">?"l_tTime",l_tTime</span><span class="ELS2"><span>// Two methods to recombine the date and time values.</span><span class="ELS2">?"Method 1)",l_dDate+l_tTime</span><span class="ELS2">?"Method 2)",hb_DtoT(l_dDate)+(l_nSeconds/(24*60*60))</span><span class="ELS2">?</span><span class="ELS2"><span>// to display the time as of UTC</span><span class="ELS2">?"hb_TSToUTC(l_tNow)",hb_TSToUTC(l_tNow)</span><span class="ELS2"><span>// To find out what the UTC shift is in seconds.</span><span class="ELS2"><span>// The parameter is used to determine as of when we want to know the UTC shift.</span><span class="ELS2"><span>// In the USA there is a concept of daylight savings time which will affect the result.</span><span class="ELS2">?"hb_UTCOffset(l_tNow)",hb_UTCOffset(l_tNow)</span><span class="ELS2">?"hb_UTCOffset(l_tNow) in hours",hb_UTCOffset(l_tNow)/3600</span><span class="ELS2">?</span><span class="ELS2">?"Moon Landing time in GMT",l_tMoonLoadingGMT</span><span class="ELS2">l_tMoonLoadingPST := l_tMoonLoadingGMT+(hb_UTCOffset(l_tMoonLoadingGMT)/86400)</span><span class="ELS2">?"Moon Landing time in Seattle",l_tMoonLoadingPST</span><span class="ELS2">?"Moon Landing time in GMT knowing Seattle time",hb_TSToUTC(l_tMoonLoadingPST)</span><span class="ELS2">?</span><span class="ELS2">?"An empty date",ctod(""),empty(ctod(""))</span><span class="ELS2"></span><span class="ELS2">return nil</span><span class="ELS2"></span></span></span></span></span></span></span></span></span></span></span></span></pre>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Executing the code returns the following:</div><div><img alt="" class="img-fluid" src="images/index_005.png" style="width: 571px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 525px; position: relative; max-width: 100%; cursor: pointer;"/></div></div>
+
+      <h2 id="conditional-statements">Conditional Statements</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Harbour
+ has three types of conditional statements. Type 1. and 2. are 
+interchangeable in functionality. For code clarity and to match other 
+xBase language, it is recommended to use type 2. instead of type 1. when
+ the ELSEIF is needed.</div><div>Remember the language is case insensitive. </div><div>Type 1. and 2. can have multiple expressions. Type 3. has a single expression with multiple possible values.</div><ol><li>IF - ELSEIF - ELSE - END/ENDIF</li><li>DO CASE - CASE - OTHERWISE - <s>END</s>/ENDCASE</li><li>SWITCH - CASE + EXIT - OTHERWISE - <s>END</s>/ENDSWITCH</li></ol><table class="hw-article-data-table"><thead><tr><th>Type 1.</th><th>Type 2.</th><th><br/></th></tr></thead><tbody><tr><td>IF expression1</td><td>DO CASE<br/>CASE expression1</td><td><div>All</div><div>expressions</div><div>must</div><div>return</div><div>logical</div><div>type value</div><br/></td></tr><tr><td>[ELSEIF expression2]</td><td>[CASE expression2]</td></tr><tr><td>[ELSEIF expression9999]    <br/></td><td>[CASE expression9999]    <br/></td></tr><tr><td>[ELSE]</td><td>[OTHERWISE]</td></tr><tr><td><s>END</s>/ENDIF</td><td><s>END</s>/ENDCASE</td></tr></tbody></table><div><br/></div><div>Type 3. is similar in behavior and syntax as the one use in the C language.</div><div><br/></div><table class="hw-article-data-table"><thead><tr><th>Type 3.<br/></th><th><br/></th></tr></thead><tbody><tr><td>SWITCH expression  <br/>CASE value1<br/>[CASE value2]<br/>[EXIT]<br/></td><td>All the values must be of the<br/>same type as the expression.<br/><br/>The expression can simply<br/>be a variable.<br/><br/>The EXIT statement<br/>is required to stop<br/>evaluating CASE<br/>statements.<br/></td></tr><tr><td>CASE value9999<br/>EXIT<br/></td></tr><tr><td>[OTHERWISE]<br/></td></tr><tr><td><s>END</s>/ENDSWITCH<br/></td></tr></tbody></table><div><br/></div><div>The END statement is allowed, but for code clarity use instead ENDIF, ENDCASE and ENDSWITCH statements.</div><div><br/></div><div>Example of the three types of Conditional Statement.</div></div>
+
+      <pre class="ELS1"><span class="ELS2">if dow(date()) == 2    <span>// dow() returns the Day Of the Week number</span><span class="ELS2">    ?"Monday"</span><span class="ELS2">elseif dow(date()) == 1 .or. dow(date()) == 7</span><span class="ELS2">    ?"Weekend"</span><span class="ELS2">else</span><span class="ELS2">    ?"Tuesday to Friday"</span><span class="ELS2">endif</span><span class="ELS2"></span><span class="ELS2">do case</span><span class="ELS2">case dow(date()) == 2</span><span class="ELS2">    ?"Monday"</span><span class="ELS2">case dow(date()) == 1 .or. dow(date()) == 7</span><span class="ELS2">    ?"Weekend"</span><span class="ELS2">otherwise</span><span class="ELS2">    ?"Tuesday to Friday"</span><span class="ELS2">endcase</span><span class="ELS2"></span><span class="ELS2">switch dow(date())</span><span class="ELS2">case 2</span><span class="ELS2">    ?"Monday"</span><span class="ELS2">case 1</span><span class="ELS2">case 7</span><span class="ELS2">    ?"Weekend"</span><span class="ELS2">    EXIT</span><span class="ELS2">otherwise</span><span class="ELS2">    ?"Tuesday to Friday"</span><span class="ELS2">endswitch</span><span class="ELS2"></span></span></pre>
+
+      <h2 id="loops">Loops</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Harbour has the following loop structures:</div><div><br/></div><table class="hw-article-data-table"><thead><tr><th>FOR loop<br/></th><th><br/></th></tr></thead><tbody><tr><td>FOR xVar := InitialExpression TO EndExpression [STEP nStepExpression]<br/></td><td>xVar is a variable of type numeric, date or timestamp (datetime).<br/>InitialExpression and EndExpression are expressions (can also be variables or fixed values) that should match the type of xVar.<br/>Default value of nStepExpression is 1. nStepExpression must be a numeric, can be negative or a fraction.<br/>if
+ xVar is of type date or timestamp nStepExpression is a number of days. 
+For timestamps, nStepExpression can be a fraction. For example: 1/24 
+would represent 1 hour.<br/></td></tr><tr><td>[LOOP]<br/></td><td>Will jump back to the FOR statement<br/></td></tr><tr><td>[EXIT]<br/></td><td>Will terminate the FOR loop<br/></td></tr><tr><td><s>NEXT</s>/<s>END</s>/ENDFOR<br/></td><td>For code readability use ENDFOR<br/></td></tr></tbody></table><div><br/></div><div>When
+ the FOR loop ends xVar it will have the value when an EXIT occurred, or
+ the value beyond the EndExpression depending of the nStepExpression.</div><div>So
+ the FOR loop will alter the xVar content. FYI the FOR EACH (presented 
+later) does not alter its variables (more than one allowed).</div></div>
+
+      <pre class="ELS1"><span class="ELS2">local nLoop</span><span class="ELS2">local dLoop</span><span class="ELS2">local tLoop</span><span class="ELS2"></span><span class="ELS2">set century on</span><span class="ELS2"></span><span class="ELS2">for nLoop = 1 to 10 step 2</span><span class="ELS2">    ?"Regular Numeric Loop ",nLoop</span><span class="ELS2">    if nLoop &gt; 6</span><span class="ELS2">        exit</span><span class="ELS2">    endif</span><span class="ELS2">    loop</span><span class="ELS2">    ?"extra"</span><span class="ELS2">endfor</span><span class="ELS2">?nLoop</span><span class="ELS2">?</span><span class="ELS2"></span><span class="ELS2">for dLoop = date() to date()+2 step 1</span><span class="ELS2">    ?"Regular Date Loop ",dLoop</span><span class="ELS2">endfor</span><span class="ELS2">?dLoop</span><span class="ELS2">?</span><span class="ELS2"></span><span class="ELS2">for tLoop = hb_DateTime() to hb_DateTime()+2 step 6/24</span><span class="ELS2">    ?"Regular Timestamp Loop ",tLoop</span><span class="ELS2">endfor</span><span class="ELS2">?tLoop</span><span class="ELS2"></span></pre>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>The sample will generate the following:</div><div><br/></div><div><span>Regular Numeric Loop 1<br/>Regular Numeric Loop 3<br/>Regular Numeric Loop 5<br/>Regular Numeric Loop 7<br/>7<br/><br/>Regular Date Loop 04/25/2022<br/>Regular Date Loop 04/26/2022<br/>Regular Date Loop 04/27/2022<br/>04/28/2022<br/><br/>Regular Timestamp Loop 04/25/2022 03:13:10.709<br/>Regular Timestamp Loop 04/25/2022 09:13:10.709<br/>Regular Timestamp Loop 04/25/2022 15:13:10.709<br/>Regular Timestamp Loop 04/25/2022 21:13:10.709<br/>Regular Timestamp Loop 04/26/2022 03:13:10.709<br/>Regular Timestamp Loop 04/26/2022 09:13:10.709<br/>Regular Timestamp Loop 04/26/2022 15:13:10.709<br/>Regular Timestamp Loop 04/26/2022 21:13:10.709<br/>Regular Timestamp Loop 04/27/2022 03:13:10.709<br/>04/27/2022 09:13:10.709</span></div><div><br/></div><table class="hw-article-data-table"><thead><tr><th>FOR EACH loop<br/></th><th><br/></th></tr></thead><tbody><tr><td>FOR EACH xVar1 [,xVar255] IN expression1 [,expression255] [DESCEND]<br/></td><td>xVar variable(s) can be of type regular arrays, hash arrays or strings (NOT UTF AWARE).<br/>There should be the same number of xVar variables as there are numbers of expressions.<br/>Each xVar get assigned the next value at the time of the loop from its matching expression.<br/>The shortest list of values in expressions limits the number of loops.<br/>If DESCEND is used the iteration of values in expressions starts at the end.<br/>If a string is used as the expression, the loop will cycle each bytes, not character (NOT UTF AWARE).<br/></td></tr><tr><td>... xVar:__enumindex<br/></td><td>Will
+ return the index position, a numeric value. For arrays and string this 
+represents the position in the array or string (bytes). For hash arrays 
+this would be the internal index position, hb_HPos().<br/></td></tr><tr><td>... xVar:__enumvalue<br/></td><td>Same as xVar. Meaning this is not really useful.<br/></td></tr><tr><td>... xVar:__enumkey<br/></td><td>Will return NIL for arrays and strings. For hash arrays this would be the hash array key.<br/></td></tr><tr><td>... xVar:__enumbase<br/></td><td>Will
+ always return the entire expression, meaning constant across loops. For
+ hash arrays you could use hb_jsonEncode(xVar:__enumbase) to print the 
+entire hash array.<br/></td></tr><tr><td>[LOOP]<br/></td><td>Will jump back to the FOR statement<br/></td></tr><tr><td>[EXIT]<br/></td><td>Will terminate the FOR loop<br/></td></tr><tr><td><s>NEXT</s>/<s>END</s>/ENDFOR<br/></td><td>For code readability use ENDFOR<br/></td></tr></tbody></table><div><br/></div><div>When the FOR loop ends xVar variables will be the same as before the loop.</div><div>For
+ strings if the expression is specified as a @&lt;VariableName&gt;, 
+assigning a character to the matching xVar will actually replace the 
+byte in the source (expression) string.</div></div>
+
+      <pre class="ELS1"><span class="ELS2">local nLoopVal1 := -1</span><span class="ELS2">local nLoopVal2 := -2</span><span class="ELS2">local cChar1    := "?"</span><span class="ELS2">local cChar2</span><span class="ELS2">local hItem     := {=&gt;}</span><span class="ELS2">local cStringUTF8</span><span class="ELS2">local cString1 := "hello world"</span><span class="ELS2">local hArray := {=&gt;}</span><span class="ELS2"></span><span class="ELS2">set century on</span><span class="ELS2"></span><span class="ELS2">for each nLoopVal1,nLoopVal2 in {1,3,5,7},{2,4,6,8,10,12,14} DESCEND</span><span class="ELS2">    ?"For each val1: ",nLoopVal1," (",nLoopVal1:__enumindex,") val2: ",nLoopVal2," (",nLoopVal2:__enumindex,")"</span><span class="ELS2">endfor</span><span class="ELS2">?"nLoopVal1 = ",nLoopVal1,"  nLoopVal2 = ",nLoopVal2</span><span class="ELS2">?</span><span class="ELS2"></span><span class="ELS2">cStringUTF8 := "Hello élève"  <span>// This loop will prove bytes are extracted, not characters.</span><span class="ELS2">?cStringUTF8," Byte Length=",len(cStringUTF8)," UTF Length=",hb_utf8Len(cStringUTF8)</span><span class="ELS2">for each cChar1,cChar2 in cStringUTF8,@cString1</span><span class="ELS2">    ?cChar1:__enumindex," ",cChar1</span><span class="ELS2">    if empty(mod(cChar2:__enumindex,2))</span><span class="ELS2">        cChar2 := upper(cChar2)</span><span class="ELS2">    endif</span><span class="ELS2">endfor</span><span class="ELS2">?"cChar1 = ",cChar1</span><span class="ELS2">?"cString1 = ",cString1</span><span class="ELS2"></span><span class="ELS2">hb_HKeepOrder(hArray,.t.)</span><span class="ELS2">hb_HCaseMatch(hArray,.f.)</span><span class="ELS2">hArray["City"]    := "Seattle"</span><span class="ELS2">hArray["State"]   := "WA"</span><span class="ELS2">hArray["Country"] := "USA"</span><span class="ELS2">for each hItem in hArray DESCEND</span><span class="ELS2">    ?"HPosition = ",hb_HPos(hArray,hItem:__enumkey)," enumindex = ",hItem:__enumindex," Key = ",hItem:__enumkey," Value = ",hItem:__enumvalue</span><span class="ELS2">endfor</span><span class="ELS2"></span></span></pre>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>The sample will generate the following: </div><div><br/></div><div><span>For each val1: 7 ( 4 ) val2: 14 ( 7 )<br/>For each val1: 5 ( 3 ) val2: 12 ( 6 )<br/>For each val1: 3 ( 2 ) val2: 10 ( 5 )<br/>For each val1: 1 ( 1 ) val2: 8 ( 4 )<br/>nLoopVal1 = -1 nLoopVal2 = -2<br/><br/>Hello élève Byte Length= 13 UTF Length= 11<br/>1 H<br/>2 e<br/>3 l<br/>4 l<br/>5 o<br/>6<br/>7 �<br/>8 �<br/>9 l<br/>10 �<br/>11 �<br/>cChar1 = ?<br/>cString1 = hElLo wOrLd<br/>HPosition = 3 enumindex = 3 Key = Country Value = USA<br/>HPosition = 2 enumindex = 2 Key = State Value = WA<br/>HPosition = 1 enumindex = 1 Key = City  Value =  Seattle </span></div></div>
+
+      <h2 id="conditional-loops">Conditional Loops</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Harbour has the following conditional loop structures:</div><div><br/></div><table class="hw-article-data-table"><thead><tr><th>FOR loop<br/></th><th><br/></th></tr></thead><tbody><tr><td>DO WHILE / <s>WHILE</s> expression<br/></td><td>For backward compatibility and to match an ENDDO, use DO WHILE<br/>the expression must return .t. or .f. (true/false)<br/></td></tr><tr><td>[LOOP]<br/></td><td>Will jump back to the DO WHILE statement<br/></td></tr><tr><td>[EXIT]<br/></td><td>Will terminate the DO WHILE loop<br/></td></tr><tr><td><s>END</s>/ENDDO<br/></td><td>For code readability use ENDDO<br/></td></tr></tbody></table><div><br/></div><div>Like any other loops, the variables cannot be defined as local to the loop code block.</div><div><br/></div><div>The following example program will display 4 lines with the values: 6 4  2  0</div></div>
+
+      <pre class="ELS1"><span class="ELS2">function main()</span><span class="ELS2">local nCondi := 7</span><span class="ELS2">do while nCondi-- &gt; 0</span><span class="ELS2">    ?nCondi</span><span class="ELS2">    nCondi -= 1</span><span class="ELS2">enddo</span><span class="ELS2">return nil</span><span class="ELS2"></span></pre>
+
+      <h2 id="null-nil-and-empty">NULL,NIL and EMPTY</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Since
+ Harbour is based on the old language Clipper, created in 1984, before 
+the common use of NULL in databases and SQL, the concept of NULL was not
+ used as "Not Defined" but instead as "Empty" ( Len() == 0 ). </div><div>And NIL had the concept of Unknown variable type (valtype() == "U").</div><div>By default Harbour DOES NOT SUPPORT NULL in DBF Tables, and therefore in generic methods to get backend data.</div><div>But with the use of the <span><a href="https://github.com/EricLendvai/Harbour_ORM" rel="noopener noreferrer" target="_blank">Harbour_ORM</a></span> and <span><a href="https://github.com/EricLendvai/Harbour_EL" rel="noopener noreferrer" target="_blank">Harbour_EL</a></span> repos all these issues <strong>can be resolved</strong>.
+ Other contributions and repos might also provide a solution, but as the
+ creator of those particular ones, this is what I am covering in the 
+guide.</div><div><br/></div><div>To be real clear, the native functions 
+for supporting null and nil in Harbour are only for variables, not 
+table-&gt;columns. We will discuss later in this guide the support for 
+database/tables/columns....</div><div>If you are not using the Harbour_EL repo to extend your Harbour program use <span class="fas fa-exclamation-square" style="color:#FF0000;font-size: 120%;"></span>
+  hb_IsNil(&lt;xExp&gt;), where &lt;xExp&gt; can be a variable or 
+any expression to test if the value is what any other language would 
+consider NULL.</div><div><br/></div><div>The following is a list of functions that can be used for dealing with NIL variables (NULL in other languages): </div><div><br/></div><table class="hw-article-data-table"><thead><tr><th>From<br/></th><th>Function or Value<br/></th><th>Description<br/></th></tr></thead><tbody><tr><td>Harbour Runtime<br/></td><td>hb_IsNull(&lt;xExp&gt;) ➔ &lt;lResult&gt;<br/></td><td>Determines if the length of &lt;xExp&gt;, when is a string, an array or a hash, is zero ( Len() == 0 ).<br/><span class="fas fa-exclamation-square" style="color:#FF0000;font-size: 120%;"></span> A runtime error will happen if &lt;xExp&gt; is not a string, array or hash array.<br/></td></tr><tr><td>Harbour Runtime<br/></td><td>hb_IsNIL(&lt;xExp&gt;) ➔ &lt;lResult&gt;<br/></td><td>Determines if &lt;xExp&gt; evaluates to NIL (valtype() == "U").<br/></td></tr><tr><td>Harbour Runtime<br/></td><td>hb_Default(&lt;@xVar&gt;,[&lt;xValue&gt;]) ➔ NIL<br/></td><td>Sets the value of variable &lt;xVar&gt; to &lt;xValue&gt; <strong>when either</strong>
+ the current &lt;xVar&gt; value is NIL or its type is different than 
+&lt;xValue&gt;. If no &lt;xValue&gt; specified then, evidently, the 
+&lt;xVar&gt; becomes NIL. If &lt;xVar&gt; has already a value of same 
+type with &lt;xValue&gt;, <strong>no change</strong> is done! Note: &lt;xVar&gt; must be passed by reference and be an <strong>existing</strong> variable (if not exists a runtime error occurs).<br/>Unlike the VFP NVL() function the type of the second parameter matters.<br/></td></tr><tr><td>Harbour Runtime<br/></td><td>hb_DefaultValue(&lt;xValue&gt;,&lt;xDefaultValue&gt;) ➔ &lt;xReturn&gt;<br/></td><td><div>Returns
+ &lt;xDefaultValue&gt; if &lt;xValue&gt; is NIL or different type of 
+&lt;xDefaultValue&gt;, otherwise returns &lt;xValue&gt;. It's similar to
+ hb_Default() but <strong>not</strong> modifying the variable.</div>Unlike the VFP NVL() function the type of the second parameter matters.<br/></td></tr><tr><td>Harbour Runtime<br/></td><td>NIL<br/></td><td><span class="fas fa-exclamation-square" style="color:#FF0000;font-size: 120%;"></span> Remember NULL does not exists as part of the core Harbour language.<br/></td></tr><tr><td>Harbour Runtime<br/></td><td>empty(&lt;xExp&gt;)<br/></td><td>Unlike
+ hb_IsNull &lt;xExp&gt; can be of any type. Additionally if it is a 
+string, for empty() to return .f. (false) the string must include a 
+character different than "space","tab", "line feed" and "carriage 
+return", meaning not ascii character 9,10,13 or 32. This is the exact 
+same behavior as in VFP.<br/></td></tr><tr><td>Harbour_EL</td><td>IsNull(&lt;x&gt;)<br/></td><td>Is simply a preprocessor equivalent to hb_IsNIL().<br/>#xtranslate ISNULL(&lt;x&gt;) =&gt; hb_isnil(&lt;x&gt;)<br/></td></tr><tr><td>Harbour_EL</td><td>NVL(xExp1,xExp2)<br/></td><td>Will return xExp2 if xExp1 is NIL.<br/>#xtranslate NVL(&lt;v1&gt;,&lt;v2&gt;) =&gt; vfp_nvl(&lt;v1&gt;,&lt;v2&gt;)<br/></td></tr><tr><td>Harbour_EL</td><td>.null.<br/>NULL<br/></td><td>Is simply a preprocessor equivalent to NIL.<br/>#xtranslate .null. =&gt; NIL<br/>#xtranslate NULL =&gt; NIL<br/></td></tr><tr><td>Harbour_ORM<br/></td><td>hb_orm_isnull(&lt;cAliasName&gt;,&lt;cFieldName&gt;)<br/></td><td>Will
+ return .t. (true) if the field &lt;cFieldName&gt; in the current record
+ of the alias &lt;xAliasName&gt; is NULL (NIL in Harbour).<br/>The function is definied at <a href="https://github.com/EricLendvai/Harbour_ORM/blob/master/hb_orm_core.prg" rel="noopener noreferrer" target="_blank">https://github.com/EricLendvai/Harbour_ORM/blob/master/hb_orm_core.prg</a><br/>The hb_IsNIL(cAliasName-&gt;cFieldName) may not work depending of the RDD implementation.<br/></td></tr><tr><td>Harbour_ORM<br/></td><td>hb_orm_SQLData.Field(par_cName,par_Value)<br/></td><td>When querying SQL backends in Harbour by default it is not possible to assign NULL (database NULL).<br/>With the Harbour_ORM, it is possible to assign NULL to columns (fields) that are nullable.<br/></td></tr></tbody></table><div><br/></div><div>The program below will return the following matrix:</div><div><img alt="" class="img-fluid" src="images/index_004.png" style="width: 300px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 399px; position: relative; max-width: 100%; cursor: pointer;"/></div></div>
+
+      <pre class="ELS1"><span class="ELS2">function main()</span><span class="ELS2">local cValues := {"NIL","0","1",[""],[" "],[chr(9)+chr(10)+chr(13)],[0d20220320],[ctod("")],[{}],[{=&gt;}],[{1}],[{"key"=&gt;"value"}],[.f.],[.t.]}</span><span class="ELS2">local nLoop</span><span class="ELS2">local xValue</span><span class="ELS2"></span><span class="ELS2">? [&lt;table border="1" pading="2"&gt;]</span><span class="ELS2">?? [&lt;tr&gt;]</span><span class="ELS2">?? [&lt;td style="padding: 5px;"&gt;Value&lt;/td&gt;]</span><span class="ELS2">?? [&lt;td style="padding: 5px;"&gt;hb_IsNil()&lt;/td&gt;]</span><span class="ELS2">?? [&lt;td style="padding: 5px;"&gt;hb_IsNull()&lt;/td&gt;]</span><span class="ELS2">?? [&lt;td style="padding: 5px;"&gt;empty()&lt;/td&gt;]</span><span class="ELS2">?? [&lt;/tr&gt;]</span><span class="ELS2"></span><span class="ELS2">For nLoop := 1 to Len(cValues)</span><span class="ELS2">    xValue := Eval(hb_macroBlock(cValues[nLoop]))   <span>// Will convert the text of a value to the actual value.</span><span class="ELS2">    ?? [&lt;tr&gt;]</span><span class="ELS2">    ?? [&lt;td style="padding: 5px;"&gt;],cValues[nLoop],[&lt;/td&gt;]</span><span class="ELS2">    ?? [&lt;td style="padding: 5px;text-align: center;"&gt;],hb_IsNil(xValue),[&lt;/td&gt;]</span><span class="ELS2">    ?? [&lt;td style="padding: 5px;text-align: center;"&gt;],iif(valtype(xValue)$"CAH",hb_IsNull(xValue),"NA"),[&lt;/td&gt;]</span><span class="ELS2">    ?? [&lt;td style="padding: 5px;text-align: center;"&gt;],empty(xValue),[&lt;/td&gt;]</span><span class="ELS2">    ?? [&lt;/tr&gt;]</span><span class="ELS2">endfor</span><span class="ELS2"></span><span class="ELS2">return nil</span><span class="ELS2"></span></span></pre>
+
+      <h2 id="variables">Variables</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>There are 4 types for runtime variables and also pre-processor variables. </div><div><br/></div><div>Pre-processor variables are case sensitive and are only text type.</div><div><br/></div><div>Runtime variables are case insensitive and not statically typed, meaning you can store any type of values at any time.</div><div><br/></div><div>Amongst the runtime variables we have 2 main types: dynamically created during program execution or created at compilation time.</div><div><br/></div><div>The
+ dynamically created variables (public and private) have entries in the 
+dynamic symbol table, which we will review later on. They can be created
+ anytime during program execution. These behave more like variable in 
+languages like Python and JavaScript.</div><div><br/></div><div>The 
+variables created at Harbour compilation time (local and static) must be
+ declared before any statements, meaning right after the 
+"function"/"procedure"/"method" declaration and before any other 
+statement. Static variables can also be declared outside of "functions",
+ "procedures" and "methods" and will be considered global to the prg 
+files they were declared in. Since these variables have no runtime 
+symbols, it is not possible to test for their existence, but they are a 
+lot faster to use during runtime.</div><div><br/></div><table class="hw-article-data-table"><thead><tr><th>Features<br/></th><th>public<br/></th><th>private<br/></th><th>local<br/></th><th>static<br/></th></tr></thead><tbody><tr><td>Created at<br/></td><td>runtime<br/></td><td>runtime<br/></td><td>compilation<br/></td><td>compilation<br/></td></tr><tr><td>Name defined in Symbol Table<br/></td><td>yes<br/></td><td>yes<br/></td><td>no<br/></td><td>no<br/></td></tr><tr><td>Name can be displayed on errors<br/></td><td>yes<br/></td><td>yes<br/></td><td>no<br/></td><td>no<br/></td></tr><tr><td>Access performance<br/></td><td>slow<br/></td><td>slow<br/></td><td>fast<br/></td><td>fast<br/></td></tr><tr><td>Can be used across prg files<br/></td><td>yes<br/></td><td>yes<br/></td><td>no<br/></td><td>no<br/></td></tr><tr><td>Can be scoped to a prg<br/></td><td>no<br/></td><td>no<br/></td><td>no<br/></td><td>yes<br/></td></tr><tr><td>Value will be saved between routine calls<br/></td><td>no<br/></td><td>no<br/></td><td>no<br/></td><td>yes<br/></td></tr><tr><td>scope<br/></td><td>From
+ the time it is declared, everywhere, even when going up the program 
+stack. Will be not accessible if redefined with the same name (even is 
+defined as local).<br/></td><td>From
+ the routine it is defined, to any called routines, unless 
+re-declared/define with the same name. Will be out or scope once out of 
+routine that defined it.<br/>Any private variable define in the top routine, "main", will behave as public variables.<br/></td><td>Routine where defined.<br/></td><td>Routine where defined when declare inside a routine.<br/>All routine in a PRG when define before any routines in a PRG.<br/></td></tr></tbody></table><div><br/></div><div>String concatenation performance is especially critical for web application or when creating reports.</div><div>You
+ should always use local variable instead of public or private one if 
+possible. Performance degradation is exponential when using 
+private/public variable.</div><div>For example when concatenating 
+100,000 times 15 character, using a private variable will take almost 19
+ seconds. Using a local variable will only take 18 milliseconds, meaning
+ 0.018 seconds. If we try 1 million time loop, the private variable 
+method will take so long that FastCGI (web) apps will timeout, while 
+using local variable will only increase the execution time to 92 
+milliseconds.</div><div><br/></div><div><span class="fas fa-smile-wink" style="color:#003aff;font-size: 120%;"></span> Conclusion: Use local variable as much as possible!</div></div>
+
+      <table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td><span>File: </span><span>ConcatenationSpeedTest.prg</span></td></tr></tbody></table>
+
+      <pre class="ELS1"><span class="ELS2">function main()</span><span class="ELS2">local nloop</span><span class="ELS2">local cBuffer := ""</span><span class="ELS2">local cSource := replicate("X",15)</span><span class="ELS2"></span><span class="ELS2">for nloop = 1 to 100000</span><span class="ELS2">    cBuffer += cSource</span><span class="ELS2">endfor</span><span class="ELS2"></span><span class="ELS2">?str(len(cBuffer)) <span>//Should be 1,500,000 (1.5 Mb)</span><span class="ELS2"></span><span class="ELS2">return nil</span><span class="ELS2"></span></span></pre>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div><span class="fas fa-smile-wink" style="color:#003aff;font-size: 120%;"></span>
+ Scope hack: If a variable, even a local one, is passed by reference in a
+ sub routine, its value can be altered in the sub routine.</div><div><br/></div><div>The following are interesting Harbour compilation flags.</div><ul><li>-w3
+   = warn for variable declarations. Great to ensure missing 
+variable declaration will not default to creating private variables.</li><li>-es2  = process warning as errors.</li></ul><div>For
+ public or private variables used across multiple PRG files, at the top 
+of PRG files, a memvar statement should be used to avoid compiler 
+warnings. </div><div>Sometimes at runtime, Harbour can be confused 
+between a public and private variable name or a field name in the 
+current work area. In this case you can use the prefix "M-&gt;" in front
+ of the variable name. The use of memvar basically tells Harbour that we
+ are talking about a variable and not a field name. By the way, the 
+prefix "FIELD-&gt;" can be used to specify the opposite.</div><div><br/></div><div>The following code will demonstrate many aspects of variables in Harbour.</div><div>Output generated when using the code below, by the Harbour FastCGI sandbox application.</div><div><img alt="" class="img-fluid" src="images/index_002.png" style="width: 236px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 535px; position: relative; max-width: 100%; cursor: pointer;"/></div></div>
+
+      <table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td><span>File: </span><span>TestVariableScope.prg</span></td></tr></tbody></table>
+
+      <pre class="ELS1"><span class="ELS2"><span>#include "hbmemvar.ch"   <span aria-label="Needed for the use if HB_MV_* pre-processor variables" class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Needed for the use if HB_MV_* pre-processor variables"></span><nobr></nobr></span></span><span class="ELS2">static nPRGCounter := 0   <span aria-label="Will be in scope of the entire PRG file" class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Will be in scope of the entire PRG file"></span><nobr></nobr></span><span class="ELS2">memvar nDefineUp   <span aria-label="Can be used to notify the compiled of public or private variables used in different routines." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Can be used to notify the compiled of public or private variables used in different routines."></span><nobr></nobr></span><span class="ELS2"></span><span class="ELS2">function main()</span><span class="ELS2">local nMainCounter := 0</span><span class="ELS2"></span><span class="ELS2">private cVar1 := "InMain"</span><span class="ELS2">private cVar2 := "InMain"</span><span class="ELS2"></span><span class="ELS2">if hb_isFunction("__DebugItem")   <span aria-label="Trick to notify if application was compiled in debug mode" class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Trick to notify if application was compiled in debug mode"></span><nobr></nobr></span><span class="ELS2">    ?"Program was compiled in Debug Mode"</span><span class="ELS2">endif</span><span class="ELS2"></span><span class="ELS2">?"main - cVar1 = ",cVar1</span><span class="ELS2">?"main - cVar2 = ",cVar2</span><span class="ELS2">Routine1(@nMainCounter)</span><span class="ELS2">Routine2(@nMainCounter)</span><span class="ELS2">Routine3(@nMainCounter)</span><span class="ELS2">Routine3(@nMainCounter)</span><span class="ELS2">Routine3(nMainCounter)</span><span class="ELS2">?"cVar1 = ",cVar1</span><span class="ELS2">?"cVar2 = ",cVar2</span><span class="ELS2">?"nPRGCounter = ",nPRGCounter</span><span class="ELS2">?"main - valtype(nDefineUp) = ",valtype(nDefineUp)</span><span class="ELS2">?"nMainCounter = ",nMainCounter</span><span class="ELS2">PrintVariable()</span><span class="ELS2">?</span><span class="ELS2">?"__mvExist cVar1 = ",__mvExist("cVar1")</span><span class="ELS2">?"__mvExist cVarx = ",__mvExist("cVarx")</span><span class="ELS2">?"__mvExist Routine1 = ",__mvExist("Routine1")</span><span class="ELS2">?"__mvScope('cVar1')  ",__mvScope("cVar1")   <span aria-label="see the file hbmemvar.ch to view possible values." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="see the file hbmemvar.ch to view possible values."></span><nobr></nobr></span><span class="ELS2">?"__mvScope('nDefineUp')  ",__mvScope("nDefineUp")</span><span class="ELS2"></span><span class="ELS2">return nil</span><span class="ELS2"><span>//---------------------------------------------------------------------------</span><span class="ELS2">function Routine1()</span><span class="ELS2">cVar1 := "InRoutine1"</span><span class="ELS2">?"Routine1 - cVar1 = ",cVar1</span><span class="ELS2">nPRGCounter++</span><span class="ELS2">return nil</span><span class="ELS2"><span>//---------------------------------------------------------------------------</span><span class="ELS2">function Routine2()</span><span class="ELS2">local nPRGCounter := 0   <span>// Will hide the PRG level static nPRGCounter</span><span class="ELS2">local cVar2</span><span class="ELS2">cVar2 := "InRoutine2"</span><span class="ELS2">?"Routine2 - cVar2 = ",cVar2</span><span class="ELS2">nPRGCounter++</span><span class="ELS2">return nil</span><span class="ELS2"><span>//---------------------------------------------------------------------------</span><span class="ELS2">function Routine3(par_variableInMain)</span><span class="ELS2">static nCount := 0</span><span class="ELS2">?"Routine3 - nCount = ",++nCount</span><span class="ELS2">nPRGCounter++</span><span class="ELS2">public nDefineUp := 1</span><span class="ELS2">par_variableInMain++</span><span class="ELS2">return nil</span><span class="ELS2"><span>//---------------------------------------------------------------------------</span><span class="ELS2">function PrintVariable()</span><span class="ELS2">local aVariableType</span><span class="ELS2">local nscope</span><span class="ELS2">local nCount</span><span class="ELS2">local nLoop</span><span class="ELS2">local xValue</span><span class="ELS2">local cName := " "</span><span class="ELS2">for each aVariableType in { {HB_MV_PUBLIC,"Public"}, {HB_MV_PRIVATE,"Private"}}</span><span class="ELS2">    nScope := aVariableType[1]</span><span class="ELS2">    nCount := __mvDbgInfo( nScope )</span><span class="ELS2">    for nLoop := 1 TO nCount</span><span class="ELS2">        xValue := __mvDbgInfo( nScope, nLoop, @cName )</span><span class="ELS2">        if ValType( xValue ) $ "CNDTL"</span><span class="ELS2">            ? aVariableType[2],"  ",cName + " TYPE " + ValType( xValue ) + " " + hb_CStr( xValue )</span><span class="ELS2">        endif</span><span class="ELS2">    endfor</span><span class="ELS2">endfor</span><span class="ELS2">return nil</span><span class="ELS2"><span>//---------------------------------------------------------------------------</span><span class="ELS2"></span></span></span></span></span></span></span></pre>
+
+      <h2 id="workareas-tables-and-indexes">Workareas,Tables and Indexes.</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Harbour is classified as a xBase language, the generic term for all programming languages that derive from the original <span><a href="https://en.wikipedia.org/wiki/DBASE" rel="noopener noreferrer" target="_blank">dBASE</a> </span><span>(Ashton-Tate) programming language and database formats, as per </span><span><a href="https://en.wikipedia.org/wiki/XBase" rel="noopener noreferrer" target="_blank">https://en.wikipedia.org/wiki/XBase</a></span><span>.</span></div><div>The dBase system (language and IDE), created in 1979, included a core database engine using flat files with the extension dbf.<br/>From
+ dBase, several other languages were created, including Clipper, in 
+1984. This was the first compiler type of language in the xBase family.<span> Most
+ xBase languages were not open source and at the mercy of their owning 
+companies. Harbour was the open-source recreation of the Clipper 
+language. The Harbour project started in 1999. Since then the language 
+expended so much in features, capacity and use that it would not be 
+recognized as the old Clipper language. But the concept of "databases", 
+which at that time meant "tables", still exists in Harbour. Another 
+xBase language, Visual FoxPro, actually recreated the concept of 
+databases, as a collection of tables. But Harbour never created a true 
+"database" concept, but left it for developers to manage tables together
+ as a database.</span></div><div><span>All 
+these xBase languages existed before SQL became popular. To my knowledge
+ only VFP (Visual FoxPro) and Xbase++ added the support for SQL syntax 
+to access the dbf flat file/tables.</span></div><div><br/></div><div>All 
+tables are a series of columns aka fields, and rows aka records. The 
+clipper original dbf tables had a certain list of field types it 
+supported, like characters, numeric, date and memo (blob). Newer 
+versions expended to additional field types, and even more options are 
+available now due to the use of RDDs (<strong>R</strong>eplaceable <strong>D</strong>atabase <strong>D</strong>river). In Harbour we can now open (use) even VFP versions of dbf tables.</div><div>Think
+ of RDDs as the MySQL database support for multiple database engines. 
+The RDD concept allow you to use different type of tables 
+implementations, while still use the same functions / commands to 
+navigate through tables. The original Clipper dbf did not support nulls 
+in fields, while the latest version of VFP tables supports nulls, 
+integers, auto-increment fields and more. </div><div>With the use 
+of certain open-source and commercial RDDs it is even possible to access
+ backend SQL tables and make them appear as flat files. But I will not 
+recommend doing so, since I will introduce you to an ORM that makes a 
+bridge between the SQL server world and flat file (tables).</div><div><br/></div><div>Tables,
+ .dbf, will also have companion files, dbt or fpt (VFP),  to store 
+the content of variable length fields like memo/blobs. Indexes can also 
+be created on column expressions. Some dbf versions had one .ndx or .idx
+ file per index, others had a single .cdx (VFP) to store multiple 
+indexes, here called tags (confusing name). But the reason I am 
+mentioning this, is simply to highlight the concept of indexes in non 
+SQL backend server.</div><div><br/></div><div>All of these tables, memos,
+ indexes, tags are stored on drives that your Harbour app need to have 
+access to. This is basically the same as SQLite, except without the SQL 
+syntax, and having every table and index in their own file.</div><div><br/></div><div><span class="fas fa-smile-wink" style="color:#003aff;font-size: 120%;"></span> To have access to records and fields of a table, it has to be "opened" in a "work area". </div><div>Each
+ work area also have the concept of current record number, aka recno. It
+ is possible to place ourselves on a certain record, move through them 
+in any directions, or even skip around. </div><div>We can also use 
+an index in the work area to specify how we scan/list the records, 
+meaning not to use the physical order of records.</div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_003.png" style="width: 729px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 534px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div>For
+ local or mapped drives, table are opened via the USE command, which in 
+turn is the dbUseArea(...) function. The Harbour compiler will generate 
+.ppo from .prg files. Those .ppo files a the result of the Harbour 
+pre-processor, where amongst many things, command are converted to 
+functions. Those .ppo files are by default not keeps. They are only a 
+step from transforming .prg Harbour files, to .c C files.</div><div>For 
+the Harbour_ORM, a SQL command is executed on the backend server and an 
+in-memory table is opened (placed) in a work area with the result of the
+ query.</div><div>It is also possible to create a table on the fly and have it opened in a "work area".</div><div><br/></div><div>Harbour can have virtually an unlimited number of work areas. Each work area has a number and an alias (usually the table name).</div><div><br/></div><div><span class="fas fa-exclamation-square" style="color:#FF0000;font-size: 120%;"></span> Unlike variables, work areas are in scope for the entire program.</div><div><br/></div><div>To see how to create and update tables with indexes go to the following repo: <span><a href="https://github.com/EricLendvai/Harbour_Samples/tree/main/LocalTables" rel="noopener noreferrer" target="_blank">https://github.com/EricLendvai/Harbour_Samples/tree/main/LocalTables</a></span></div><div><br/></div><div><span><span class="fas fa-smile-wink" style="color:#003aff;font-size: 120%;"></span> Today these type of table access are also referred to Indexed Sequential Access Method (<strong>ISAM</strong>) </span></div><div><br/></div><div><span class="fas fa-exclamation-square" style="color:#FF0000;font-size: 120%;"></span>
+ I would highly recommend not to use dbf tables, or any other local 
+tables, but instead use SQL servers like PostgreSQL, MariaDB, MySQL, or 
+even some commercial solutions like MS SQL. A previously popular dbf 
+files/SQL server was/is the Advantage Database Server (ADS), now owned 
+by SAP. This is a commercial non-free, non-open source product that 
+provided a bridge between ISAM and SQL systems. But as more a more open 
+source solutions like PostgreSQL and Harbour ORM became available, fewer
+ developers seem to choose creating new applications using ADS.</div><div><br/></div><div>The
+ Harbour ORM project was created to make it easier to handle your data 
+on real SQL servers, making the bridge between SQL and ISAM + local 
+in-memory tables.</div><div><br/></div><div>Using PostgreSQL or other SQL
+ databases, will ensure you will not have to worry about file size 
+limitations, reduce the chance of data corruptions, scalability and 
+allow you to use SQL syntax, directly or via the ORM.</div><div><br/></div><div>The
+ Harbour ORM will still use work areas to give you access to all the 
+result sets from querying your database, but all are in-memory 
+tables! </div><div>You could then create local indexes, use the seek function or simply scan all the records (ISAM behavior).</div><div><br/></div><div><span><span class="fas fa-smile-wink" style="color:#003aff;font-size: 120%;"></span> </span>By
+ the way the same Table can be opened more than once in different work 
+areas. Each will have a difference "alias" name, its own recno (record 
+position), active order (index), and optional filter.</div><div><br/></div><div>The following is a list of the most useful commands and functions to deal with work areas:</div><table class="hw-article-data-table"><thead><tr><th>Command or function<br/></th><th>Used for<br/></th><th>Example<br/></th></tr></thead><tbody><tr><td>select &lt;cAliasName&gt;<br/>dbSelectArea(&lt;cAliasNameExpression&gt;)<br/></td><td>Change the current work area to &lt;cAliasName&gt;<br/>If using the dbSelectArea() function you can use an expression that returns an alias name, case insensitive.<br/></td><td><br/></td></tr><tr><td>alias()<br/></td><td>Returns the current work area alias name all upper case.<br/></td><td><br/></td></tr><tr><td>vfp_dbf([&lt;cAliasName&gt;])<br/></td><td>Get the path and name of the physical table. Will be empty for in-memory tables.<br/>Is
+ actually a translation of the following: #xtranslate 
+vfp_dbf(&lt;xAlias&gt;) =&gt; 
+(&lt;xAlias&gt;)-&gt;(DBINFO(DBI_FULLPATH))<br/></td><td><br/></td></tr><tr><td>reccount()<br/></td><td>Returns
+ the total number or records (rows) that exists in the table used in the
+ current work area. 0 if no records exists. This is not impacted by 
+orders and filters.<br/>To get the record count in an other work area use the following syntax:<br/>(cAliasName)-&gt;(reccount())<br/></td><td><br/></td></tr><tr><td>recno()<br/></td><td>Returns the current record number as an integer.<br/>At eof(), recno() will be reccount()+1.<br/>At bof(), if not also eof(), recno() will be 1<br/>It reccount() = 0, recno() will return 1.<br/></td><td><br/></td></tr><tr><td>goto top<br/>dbGoTop()<br/></td><td>Move
+ the current record position to the top of the table. If an index is 
+used it will be based on the first entry in the index, or last if index 
+is descending. If no index (order) is user the top will be the first 
+record. If no records are present, current record will be at bof() and 
+eof(), meaning "beginning of file" and "end of file".<br/></td><td><br/></td></tr><tr><td>goto bottom<br/>dbGoBottom()<br/></td><td><br/></td><td><br/></td></tr><tr><td><br/></td><td><br/></td><td><br/></td></tr></tbody></table><div><br/></div><div><span>To view all the functions specific to work areas go </span><span><a href="https://harbour.wiki/index.asp?page=PublicHarbourAPIExplorer&amp;categories=58" rel="noopener noreferrer" target="_blank">here</a></span><span>.</span></div></div>
+
+      <h2 id="utf-and-internationalization">UTF and Internationalization</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Harbour fully supports UTF-8 string content at runtime.<br/>The Harbour <strong>language syntax itself is ASCII</strong>, but string literals, variables, database values, and JSON content can safely contain UTF-8 encoded text. </div><div><br/></div><div>Basic support is available via the UTF8 code page, but you should use the UTF8EX code page instead <span class="fas fa-exclamation-square" style="color:#FF0000;font-size: 120%;"></span>.</div><div>UTF8EX
+ will properly handle converting upper case / lower case across most 
+languages. UTF8 should only be used in case of low memory requirements.</div><div>In
+ the PRG that includes your main() function add "REQUEST 
+HB_CODEPAGE_UTF8EX" at the top of the file and as early as possible in 
+your main function call hb_cdpSelect("UTF8EX") .</div><div><br/></div><div><br/></div><div><br/></div></div>
+
+      <pre class="ELS1"><span class="ELS2">request HB_CODEPAGE_UTF8EX</span><span class="ELS2"></span><span class="ELS2">function main()</span><span class="ELS2"></span><span class="ELS2">local cUString1 := "UTF String őöüóéáűÉÁŰŐÚçèéù"</span><span class="ELS2">local cUString2 := "ASCII Hello World"</span><span class="ELS2">local lUString1UTFLength</span><span class="ELS2">local l_nLoop</span><span class="ELS2"></span><span class="ELS2">hb_cdpselect("UTF8EX")</span><span class="ELS2"></span><span class="ELS2">?"Student in French élève"</span><span class="ELS2">?</span><span class="ELS2">? cUString1," ",hb_StrIsUTF8(cUString1)," ",hb_utf8Len(cUString1)," ",len(cUString1)</span><span class="ELS2">?"  Upper: ",upper(cUString1)</span><span class="ELS2">?"  Lower: ",lower(cUString1)</span><span class="ELS2">?</span><span class="ELS2">? cUString2 , hb_StrIsUTF8(cUString2) , hb_utf8Len(cUString2) , len(cUString2)</span><span class="ELS2"></span><span class="ELS2"><span>//hb_utf8Poke( @cUString1,13,hb_utf8Asc("ç"))</span><span class="ELS2"></span><span class="ELS2">for l_nLoop := 1 to (lUString1UTFLength := hb_utf8Len(cUString1))</span><span class="ELS2">    ? l_nLoop , hb_utf8Chr(hb_utf8Peek( cUString1, l_nLoop )),hb_NumToHex(hb_utf8Peek( cUString1, l_nLoop ))</span><span class="ELS2">next</span><span class="ELS2"></span><span class="ELS2">?</span><span class="ELS2">?hb_utf8Asc(cUString1)</span><span class="ELS2"></span><span class="ELS2">return nil</span><span class="ELS2"></span></span></pre>
+
+      <h2 id="classes">Classes</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><p>This
+ guide covers Harbour's object-oriented class syntax and behavior, 
+focusing on verified, modern Harbour features — not legacy Clipper 
+behavior.</p><div><span>Class Declaration Syntax</span></div><pre><code><span>[CREATE] CLASS ClassName [ABSTRACT] [FRIENDLY] [MODULE] [FROM SuperClass]</span></code></pre><ul><li><strong>ABSTRACT</strong>: Prevents instantiation of the class. Used only as a base class.</li><li><strong>FRIENDLY</strong>: Allows protected/private access between classes in the same PRG file.</li><li><strong>MODULE</strong>: Makes the class visible only inside the current .prg file.</li></ul><div><span>Access Modifiers</span></div><ul><li><strong>PUBLIC:</strong> Accessible everywhere.</li><li><strong>PROTECTED:</strong> Accessible from the class and FRIENDLY classes in the same PRG.</li><li><strong>HIDDEN:</strong> Private to the class.</li></ul><div><span>Properties: DATA vs VAR</span><br/><br/></div><table class="hw-article-data-table"><thead><tr><th>Type</th><th>Init</th><th>Access</th><th>Encapsulation</th><th>Notes</th></tr></thead><tbody><tr><td>DATA</td><td><span><code>INIT</code></span></td><td>Auto getter/setter</td><td>Overridable methods</td><td>Legacy-compatible</td></tr><tr><td>VAR</td><td><code><span>INIT</span></code></td><td>Direct</td><td>Stronger scoping</td><td>Modern default</td></tr></tbody></table><div><br/></div><pre><span><code>CREATE CLASS MyClass</code><code>
+   DATA Name INIT "Clipper"    // Creates getter/setter methods
+   VAR ID INIT 100             // Direct field
+ENDCLASS</code></span></pre><div><span>Overriding Getter/Setter for DATA</span></div><pre><code>METHOD Name() CLASS MyClass
+   RETURN ::_Name
+
+METHOD Name(x) CLASS MyClass
+   ::_Name := x
+   RETURN x</code></pre><p>Back the DATA manually with another VAR like <code>::_Name</code> if overriding the getter/setter.</p><div><span>CLASSDATA vs CLASSVAR: Basically similar</span><br/><br/></div><table class="hw-article-data-table"><thead><tr><th>Feature</th><th>CLASSDATA</th><th>CLASSVAR</th></tr></thead><tbody><tr><td>INIT style</td><td><code>INIT</code></td><td><code>INIT</code></td></tr><tr><td>Mutable?</td><td>✅ Yes</td><td>✅ Yes</td></tr><tr><td>Shared across instances</td><td>✅</td><td>✅</td></tr><tr><td>Semantic use</td><td>Symbolic constants</td><td>Shared counters/state</td></tr></tbody></table><div><br/><span>Constructors and Destructors</span></div><ul><li><strong>Constructor:</strong> Use a method called <code>New()</code>. You must call it explicitly: <code>MyClass():New()</code></li><li><strong>Destructor:</strong> Declare as <code>DESTRUCTOR MethodName()</code>. Called when object is garbage collected.</li></ul><pre><code>CREATE CLASS MyClass
+   VAR Name INIT "Harbour"
+   METHOD New()
+   METHOD SayHello()
+   DESTRUCTOR Cleanup()
+ENDCLASS
+
+METHOD New() CLASS MyClass
+   ? "Constructor called"
+   RETURN Self
+
+METHOD SayHello() CLASS MyClass
+   ? "Hello from", ::Name
+   RETURN NIL
+
+METHOD Cleanup() CLASS MyClass
+   ? "Destructor called"
+   RETURN NIL</code></pre><div><span>INLINE Methods</span></div><pre><code>METHOD InlineInfo() INLINE "Harbour Rocks!"</code></pre><p>Used for simple, single-expression methods only.</p><div><span>Method Declaration Tips</span></div><ul><li>If your .prg contains only one class, you can omit <code>CLASS ClassName</code> in method implementations.</li><li>All <strong>method implementations must be in the same .prg</strong> as the class declaration.</li></ul><div><span>Friendly Class Access Example</span></div><pre><code>CREATE CLASS A FRIENDLY MODULE
+   PROTECTED:
+      VAR shared INIT "secret A"
+   METHOD ShowOther( o )
+ENDCLASS
+
+CREATE CLASS B FRIENDLY MODULE
+   PROTECTED:
+      VAR shared INIT "secret B"
+   METHOD ShowOther( o )
+ENDCLASS
+
+METHOD ShowOther( o ) CLASS A
+   ? "Accessing B:", o:shared
+
+METHOD ShowOther( o ) CLASS B
+   ? "Accessing A:", o:shared</code></pre><div><span>Valid Modifier Orders</span></div><p>Modifiers can appear in any order as long as they're between <code>CLASS ClassName</code> and <code>FROM</code>:</p><pre><code>CREATE CLASS MyClass ABSTRACT FRIENDLY MODULE FROM BaseClass
+CREATE CLASS MyClass MODULE FRIENDLY FROM BaseClass</code></pre></div>
+
+      <h2 id="system-capacities">System Capacities</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>As of 2020-03-24 the language can now handle up to 4,294,967,295 symbols (dynamic symbol table at the Harbour VM).</div><div><br/></div><div>Some Capacities also depend if programs and libraries created via Harbour are 32-bit or 64-bit.</div><div>Only the first 63 characters of identifiers (symbols) are used.</div><div><br/></div><div>Since Harbour programs are translated into C code, the C compiler you choose might limit your application.</div><div>Most of the time, only memory resources are the real limits.</div><div><br/></div><div>Here is an extract from <span><a href="https://groups.google.com/g/harbour-users/c/ln9FSpPMtvM/m/lh1OC6XMoS8J" rel="noopener noreferrer" target="_blank">https://groups.google.com/g/harbour-users/c/ln9FSpPMtvM/m/lh1OC6XMoS8J</a></span></div><div><br/></div><div>There
+ is no limit for number of memvars (public and private variables) and 
+fields but please remember about maximum size of global symbol table 
+(4,294,967,295) and number of symbols in single module.<br/>Maximum number of workareas is 65534.<br/>Maximum number of local variables in a single function is 32767.<br/>Maximum number of local parameters in a single function is 32767.<br/>Maximum number of static variables in single module is 65535 (in whole application is unlimited).<br/>The
+ maximum size of literal string defined in PRG code is 16MB (At 
+definition not during assignments, which is limited by memory).<br/>The maximum size of literal array defined in PRG code is 65535 (Same note as above) .<br/>The size of PCODE generated for single function is unlimited (meaning the since of your code).</div><div><br/></div><div>Things
+ like maximum number of open files, maximum file size, etc. are limited 
+only by operating system and used data structures. Harbour does not 
+introduce any new limits here. You may find my messages about limits 
+defined by DBF* structures<br/>or read about them in doc/xhb-diff.txt, section "NATIVE RDDs</div><div><br/></div></div>
+
+      <h2 id="list-of-possible-future-sections">List of possible future sections</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><ul><li>Compilation and build process</li><li>Math Operators</li><li>Core Libraries / functions</li><li>Data Conversions</li><li>Conversions</li><li>Error Handlers including TRY / CATCH (SEQUENCE)</li><li>Arrays (in detail)</li><li>Hash Arrays (in detail)</li><li>Objects including WIDTH / ENDWIDTH</li><li>Classes</li><li>UTF</li><li>Functions</li><li>Procedures</li><li>CodeBlocks</li><li>Debugging</li><li>File Manipulation</li><li>File Access</li><li>String Formatting  / Parsing</li><li>Pre compiler instructions (preprocessor)</li><li>Work areas,Tables and Indexes.</li><li>Data Access</li><li>ORM</li><li>Internationalization<br/>-ku for the compiler</li><li>Multi-threading</li><li>SET Commands like SET FIXED OFF and SET DECIMALS TO 0</li><li>UI Options</li><li>C Extensions</li><li>Development under Windows</li><li>Development with Docker</li></ul></div>
+
+      <h2 id="reference">Reference</h2>
+
+      <h2 id="license">License</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.</div></div>
+
+      <div class="hw-close-fallback" data-close-fallback hidden>
+        The browser did not close this tab. It may have been opened directly instead of from the Articles list. Use <a href="/articles/">Back to Articles</a>.
+      </div>
+    </article>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/assets/js/article-page.js"></script>
+  <script src="/assets/js/article-copy-code.js"></script>
+  <script src="/assets/js/article-tooltips.js"></script>
+</body>
+</html>

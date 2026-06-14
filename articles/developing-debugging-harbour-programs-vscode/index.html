@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Developing and Debugging Harbour Programs with VSCODE (Visual Studio Code) | Harbour Wiki</title>
+  <meta name="description" content="Developing and Debugging Harbour Programs with VSCODE (Visual Studio Code). Original Harbour.wiki article converted to a static article page.">
+  <link rel="icon" type="image/svg+xml" href="/images/harbour.svg">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="/scripts/FontAwesome_5_3_1/css/all.min.css" rel="stylesheet">
+  <link href="/assets/css/site.css" rel="stylesheet">
+  <link href="/assets/css/articles.css" rel="stylesheet">
+  <link href="/assets/css/article-migration.css" rel="stylesheet">
+</head>
+<body class="hw-article-page">
+  <header class="hw-article-tab-header">
+    <a class="hw-article-tab-brand" href="/" aria-label="Harbour Wiki home">
+      <img class="hw-article-tab-logo" src="/images/harbour.svg" alt="" aria-hidden="true">
+      <span class="hw-article-tab-title">
+        <span class="hw-article-tab-site">Harbour Wiki</span>
+        <span class="hw-article-tab-subtitle">Static article</span>
+      </span>
+    </a>
+    <div class="hw-article-tab-actions">
+      <a class="btn btn-light" href="/articles/"><i class="bi bi-arrow-left" aria-hidden="true"></i> Back to Articles</a>
+      <button class="btn btn-outline-light" type="button" data-close-article><i class="bi bi-x-lg" aria-hidden="true"></i> Close</button>
+    </div>
+  </header>
+
+  <main class="hw-article-main">
+    <article class="hw-article-content">
+      <!-- Source: OriginalArticles/Harbour Language Wiki Articles.htm -->
+      <!-- Conversion: visible article content converted from original article HTML; saved-page navigation/scripts excluded. -->
+      <h1>Developing and Debugging Harbour Programs with VSCODE (Visual Studio Code)</h1>
+
+      
+      <div class="hw-article-author">
+        <img src="images/author-eric-lendvai.png" alt="Eric Lendvai" class="hw-article-author-photo">
+        <span><strong>Author:</strong> Eric Lendvai</span>
+      </div>
+
+      <h2>Table of Contents</h2>
+      <ul class="hw-article-toc">
+        <li><a href="#revision-history">Revision History</a></li>
+        <li><a href="#target-audience">Target Audience</a></li>
+        <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#introduction">Introduction</a></li>
+        <li><a href="#installing-vscode">Installing VSCODE</a></li>
+        <li><a href="#main-concepts-of-vscode">Main Concepts of VSCODE</a></li>
+        <li><a href="#installing-extensions">Installing Extensions</a></li>
+        <li><a href="#setting-up-the-harbour-extension">Setting up the Harbour Extension</a></li>
+        <li><a href="#additional-extensions-and-tools">Additional Extensions and Tools</a></li>
+        <li><a href="#setting-up-a-helloharbour-program">Setting up a HelloHarbour Program</a></li>
+        <li><a href="#debugging-helloharbour">Debugging HelloHarbour</a></li>
+        <li><a href="#snippets">Snippets</a></li>
+        <li><a href="#vscode-documentation-and-learning-material">VSCode Documentation and Learning Material</a></li>
+        <li><a href="#conclusion">Conclusion</a></li>
+      </ul>
+
+      <h2 id="revision-history">Revision History</h2>
+
+      <table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td>04/23/2019</td><td></td><td>Added the use of "harbour.extraOptions": "-iC:\\Harbour\\include" in "settings.json".<br/>Documented the new option "terminalType" in the "launch.json" file.</td></tr></tbody></table>
+
+      <h2 id="target-audience">Target Audience</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><ul><li>Harbour developers interested in learning about the most popular, current developer environment tool.</li><li>Any developers interested in advancing their knowledge in configuring and using VSCODE.</li></ul></div>
+
+      <h2 id="prerequisites">Prerequisites</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><ul><li>Set up your development environment, and use all the tools created in the article, <a href="https://harbour.wiki/index.asp?page=PublicArticles&amp;mode=show&amp;id=190129210053&amp;sig=7790451073" rel="noopener noreferrer" target="_blank">How to Install Harbour on Windows.</a></li><li>No pre-existing knowledge of VSCODE (Microsoft Visual Studio Code) is required.</li><li>Basic knowledge of Windows batch files is preferable, since this article is mainly focused on using VSCODE under Windows.</li></ul></div>
+
+      <h2 id="introduction">Introduction</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div><strong>What is <strong><strong>VSCODE</strong></strong> (aka <strong><strong>Visual Studio Code</strong></strong>)?</strong></div><div>According
+ to wikipedia.org, "Visual Studio Code is a source-code editor developed
+ by Microsoft for Windows, Linux and Mac OS. It includes support for 
+debugging, embedded Git control, syntax highlighting, intelligent code 
+completion, snippets, and code refactoring. It is also customizable, so 
+users can change the editor's theme, keyboard shortcuts, and 
+preferences. The source code is free and open source and released under 
+the permissive MIT License. The compiled binaries are freeware and free 
+for private or commercial use. Visual Studio Code is based on Electron, a
+ framework which is used to deploy Node.js applications for the 
+desktop."<br/><br/></div><div>My personal definition: VSCODE is a source 
+code editing tool that can be enhanced to behave as a full IDE 
+(Integrated development environment). It is free and will run on 
+Windows, Linux and Mac OS. </div><div>VSCODE is not related to the 
+Microsoft Visual Studio IDE. Microsoft seems to have chosen the name, 
+Visual Studio Code, for their enterprise clients (some found the name 
+confusing at first, including myself).</div><div><br/></div><div><strong>But there is a catch!</strong> </div><div>If
+ you download and install the precompiled version, it is not under MIT 
+license. That version has extra features that Microsoft added, such as <em>collect telemetry data</em>. Microsoft states the data they collect is there to help improve the product. You can read for yourself at <a href="https://code.visualstudio.com/docs/supporting/FAQ#_gdpr-and-vs-code" rel="noopener noreferrer" target="_blank">https://code.visualstudio.com/docs/supporting/FAQ#_gdpr-and-vs-code</a>
+ . That version also comes with automated installations of extensions 
+and updates. In addition, this telemetry is most likely used to detect 
+the kind of computer language developers are using to help Microsoft 
+better understand the market and its current trends. There is also the 
+Microsoft Azure factor; the precompiled version has a lot of features to
+ make it easier to deploy and debug on Azure.</div><div><br/></div><div>Your
+ other option is to download/clone the entire source code of VSCODE, and
+ compile from the source. This requires multiple steps (it took me a 
+couple of hours to figure out how to compile my own copy of VSCODE). 
+There is a section later in the article demonstrating how to do this. 
+However, Microsoft is most likely expecting 99% of developers to simply 
+download and install the non-MIT license version of VSCODE.</div><div><br/></div><div>The
+ good news is you can turn off the telemetry features. But again, 
+without de-compiling VSCODE, how do you know with certainty what's in 
+the precompiled version?</div><div><br/></div><div>There's also the 
+question as to why it's free. Some people speculate that since the 
+open-source-software movement is already so strong, there's no reason to
+ go against it. Others think this will attract more developers to use 
+and promote Microsoft's Azure, the competition of AWS (Amazon).</div><div><br/></div><div>Regardless of the motives behind the creation of VSCODE, I must admit, <em>VSCODE is amazing! </em></div><div><br/></div><div>I used many IDEs in the past, but VSCODE has many more features and is still extremely fast. Also, if you go to its repo, <a href="https://github.com/Microsoft/vscode" rel="noopener noreferrer" target="_blank">https://github.com/Microsoft/vscode</a>
+ , you'll notice that more than 850 people have contributed (developed) 
+on the core source code, not even counting all of the developers that 
+are creating extensions for VSCODE.</div><div><br/></div><div>Numerous extensions are available to transform the simple text editor into a powerful IDE. Check out its main download site at: <a href="https://marketplace.visualstudio.com/" rel="noopener noreferrer" target="_blank">https://marketplace.visualstudio.com/</a></div><div><br/></div><div><strong>Why for Harbour?</strong></div><div>Even
+ though our community is very small in comparison with Python, Node, 
+Java, .NET and Front-End projects communities, we have a few extremely 
+gifted developers, such as <strong>Antonino Perricone</strong>.
+ He created, and is still enhancing, an extension that adds support to 
+Harbour in VSCODE. One of the most important aspects Antonino added, via
+ the extension, is support for Harbour syntax and a visual debugger.</div><div><br/></div><div><strong>What will this article teach you?</strong></div><div>I will assume you have no knowledge of VSCODE, like how I started:</div><ul><li>I will begin by explaining how to install, extend, and do basic configuration. </li><li>We will add the Harbour extension, and also a few other practical ones.</li><li>Then we will create and debug a simple HelloHarbour program (notice, I did not call it HelloWorld).</li></ul><div><strong>History, features, language support...</strong></div><div>The best is to simply look at the following: <a href="https://en.wikipedia.org/wiki/Visual_Studio_Code" rel="noopener noreferrer" target="_blank">https://en.wikipedia.org/wiki/Visual_Studio_Code.</a></div><div><br/></div><div><strong>What is our goal?</strong></div><div>The
+ goal is for you to be capable of editing Harbour programs, integrating 
+them with HBMK2 (the most popular Make tool for Harbour), and debugging 
+our code directly from VSCODE.</div><div><br/></div><div>The following is an example of what we will accomplish by the end of this article:</div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_015.png" style="width: 922px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 566px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div></div>
+
+      <h2 id="installing-vscode">Installing VSCODE</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>I will highlight below the three different ways of installing VSCODE on Microsoft Windows. </div><div><br/></div><div>Depending
+ on which method you use to install VSCODE, you will probably see a 
+different icon and name to start the program. Here are the three 
+shortcuts/icons you will get depending on which method you use to 
+install VSCODE:</div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_008.png" style="width: 300px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 156px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div>I
+ recommend method 2, as it is probably the fastest method to install, 
+using the MIT license and with no usage/error report "tracking" from 
+Microsoft.</div><div><strong><br/></strong></div><div><strong>Method 1 - Install using the Microsoft Installer for VSCODE, non-MIT license.</strong></div><ul><li>Go to <a href="https://visualstudio.microsoft.com/" rel="noopener noreferrer" target="_blank">https://visualstudio.microsoft.com/</a> and select "Visual Studio Code" / "Download for Windows."</li><li>You
+ will be prompted to download a file like VSCodeUserSetup-*.exe. It 
+could be a 64-bit or 32-bit version, depending on your version of 
+Windows.</li></ul><div><br/></div><div><img alt="" class="img-fluid" src="images/index_040.png" style="width: 431px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 335px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_004.png" style="width: 431px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 335px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_024.png" style="width: 431px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 335px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_020.png" style="width: 431px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 335px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_023.png" style="width: 431px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 335px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_014.png" style="width: 431px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 335px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_016.png" style="width: 431px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 335px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div><strong>Method 2 - Install </strong><span><strong>binary releases of VS Code without MS branding/telemetry/licensing, called VSCodium.</strong></span><a href="https://en.wikipedia.org/wiki/Visual_Studio_Code#cite_note-80" rel="noopener noreferrer" target="_blank"></a></div><ul><li><a href="https://en.wikipedia.org/wiki/Visual_Studio_Code#cite_note-80" rel="noopener noreferrer" target="_blank">See </a><a href="https://en.wikipedia.org/wiki/Visual_Studio_Code#cite_note-80" rel="noopener noreferrer" target="_blank">https://en.wikipedia.org/wiki/Visual_Studio_Code#cite_note-80</a><a href="https://en.wikipedia.org/wiki/Visual_Studio_Code%3Cbr%3Ehttps://chocolatey.org/%3Cbr%3Ehttps://github.com/VSCodium/vscodium%3Cbr%3E%3Cbr%3E" rel="noopener noreferrer" target="_blank"></a></li><li>As per the instructions at <a href="https://chocolatey.org/install," rel="noopener noreferrer" target="_blank">https://chocolatey.org/install</a>:<ol><li>Open a Command Prompt as Administrator.</li><li>Paste
+ and run the following: 
+@"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" 
+-NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "iex 
+((New-Object 
+System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))"
+ &amp;&amp; SET "PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"</li></ol></li></ul><div><br/></div><div><img alt="" class="img-fluid" src="images/index_046.png" style="width: 576px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 292px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_026.png" style="width: 576px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 292px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div>Next, according to <a href="https://github.com/VSCodium/vscodium#install-with-choco" rel="noopener noreferrer" target="_blank">https://github.com/VSCodium/vscodium#install-with-choco</a>, run the following command, "choco install vscodium", in the same Command Prompt:</div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_007.png" style="width: 576px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 292px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div>This will run for a few minutes.</div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_002.png" style="width: 576px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 292px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div>Once completed, the installation is done, and a new Icon (2) is now on your desktop.</div><div><br/></div><div><a href="https://en.wikipedia.org/wiki/Visual_Studio_Code%3Cbr%3Ehttps://chocolatey.org/%3Cbr%3Ehttps://github.com/VSCodium/vscodium%3Cbr%3E%3Cbr%3E" rel="noopener noreferrer" target="_blank"><strong><br/></strong></a></div><div><strong>Method 3 - Install by building VSCODE from its official source code. MIT license.</strong></div><ul><li>I would advise you to create a Windows 8.1 or greater VM (VMware or VirtualBox).</li><li>Then follow all the instructions starting from the following: <a href="https://github.com/Microsoft/vscode/wiki/How-to-Contribute#prerequisites" rel="noopener noreferrer" target="_blank">https://github.com/Microsoft/vscode/wiki/How-to-Contribute#prerequisites</a><ul><li>Note: Use Python 2.7 and add it to your PATH. I use Option 1 to install the C/C++ compiler.</li></ul></li><li>Continue using the instructions from <a href="https://github.com/Microsoft/vscode/wiki/How-to-Contribute#build-and-run" rel="noopener noreferrer" target="_blank">https://github.com/Microsoft/vscode/wiki/How-to-Contribute#build-and-run</a><ul><li>There
+ are too many steps for me to make print screens here; an entire section
+ could be devoted to this method. This is the method I chose to use for 
+my main development machine.</li></ul></li><li>Once all the steps are done, copy the entire folder C:\vscode\.build\electron to your host machine, including subfolders. </li><li>The VSCODE program file is "Code - OSS.exe"</li></ul></div>
+
+      <h2 id="main-concepts-of-vscode">Main Concepts of VSCODE</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>VSCODE
+ was designed to help developers code regardless of the computer 
+language they use. It was intended to be highly customizable: color 
+themes, keyboard/key mapping/bindings and extensions can all be 
+modified.</div><div><br/></div><div>Microsoft is trying to make it very 
+appealing to switch to VSCODE from any of the other major code editors, 
+like Sublime Text, Atom, Eclipse, and Notepad++.</div><div><br/></div><div>In this section, we will review the following VSCODE's main concepts:</div><ul><li>Color Themes</li><li>Folders and Workspaces</li><li>Extensions</li><li>Commands</li><li>Keybindings</li><li>Settings</li><li>Tasks</li><li>Debugger Launch profiles</li></ul><div><br/></div><div><span>Color Themes</span></div><div>When you start VSCODE for the first time, you will notice everything is dark:</div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_025.png" style="width: 681px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 511px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div>You can change that immediately by selecting a different <em>Color Theme</em>.</div><div><br/></div><div>Press
+ Ctrl+Shift+P (when you have VSCODE in focus) to open an entry field 
+where you can enter any commands (Show All Commands), then type "color 
+theme" and select "Preferences: Color Theme." I would advise you to 
+select one of the "light themes." </div><div><br/></div><div>For the
+ purpose of this article, I am choosing "Light (Visual Studio)," but I 
+will demonstrate later how to install other themes.</div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_028.png" style="width: 617px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 165px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_021.png" style="width: 618px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 390px; position: relative; max-width: 100%; cursor: pointer;"/></div><div><br/></div><div>And below is how VSCODE looks with a light theme. See the notes concerning the main layout:</div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_039.png" style="width: 1061px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 619px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div>If you are curious, you can start right away by reading some documentation at: <a href="https://code.visualstudio.com/docs#vscode" rel="noopener noreferrer" target="_blank">https://code.visualstudio.com/docs#vscode</a></div><div><br/></div><div><br/></div><div><span>Folders and Workspaces</span></div><div>There are no <em>Project</em> or <em>Solution </em>files in VSCODE. Those concepts are specific to the language you use.</div><div><br/></div><div>You
+ usually you want to "Open" a folder. This means focusing VSCODE on that
+ folder, so it can list the files and its sub-folders. As soon as you 
+"Open" a folder, VSCODE creates a sub-folder, <em>.vscode</em>, where it will maintain a few configuration files.</div><div><br/></div><div>You may convert an <em>opened </em>folder to a <em>workspace</em>.
+ A workspace is simply a file with the extension ".code-workspace" 
+stored in that folder where workspace-specific settings are kept, and it
+ is a method to link multiple folders in that workspace. Very few people
+ seem to be using workspaces to manage multiple folders. Most of the 
+time, workspaces are used to overwrite default settings. Having 
+sub-folders does not require to set them up in a workspace.</div><div><br/></div><div><br/></div><div><span>Extensions</span></div><div>Extensions can be loaded from the <em>marketplace</em>. In an upcoming section, I will show the two main methods to install extensions.</div><div><br/></div><div>The
+ purpose of extension is to enhance VSCODE, and basically transform it 
+from a plain text editor to full IDE. As of early 2019, there are over 
+10,000 popular extensions. Any developer can create extensions, and as 
+in most packet/module managers, there are reviews and ratings of all 
+these extensions.</div><div><br/></div><div>The following are just a few of the extensions that are available to emulate other editors:</div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_006.png" style="width: 490px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 599px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div><span>Commands</span></div><div>Everything that can be done in VSCODE happens by calling a <em>command</em>. Press Ctrl+Shift+P to search the list of commands.</div><div><br/></div><div>There
+ is no complete documentation of all the commands, but at least you can 
+view them by reviewing the default keybindings listed below (Open 
+Default Keyboard Shortcuts (JSON)).</div><div><br/></div><div><br/></div><div><span>Keybindings</span></div><div>Keybindings are simply keyboard shortcuts. These are user-specific... never folder or workspace specific.</div><div><br/></div><div>A
+ Keybinding has a label (combination of keys to press), a command to 
+execute, and a "when" which specifies under which state the keybinding 
+will work. The same keybinding label (keys sequence) can be defined, as 
+long as the "when" is different.</div><div><br/></div><div>There is a 
+default list of keybindings that comes with VSCODE. To see the list, 
+press Ctrl+Shift+P to search for "Open Default Keyboard Shortcuts 
+(JSON)".</div><div>If you enter "Keyboard Shortcuts" in the command search field (Ctrl+Shift+P), you will see the following 3 options:</div><ul><li><strong>Open Default Keyboard Shortcuts (JSON)</strong><br/>This
+ will display a read-only list of default key bindings, but the list is 
+not completely accurate. If you enable some extensions, it will alter 
+this list of "default" keybindings.<br/>This is a excellent way to see 
+all the possible commands VSCODE has. If you scroll to the bottom of the
+ list, you can also see any unassigned (to keybindings) commands.<br/><img alt="" class="img-fluid" src="images/index_029.png" style="width: 1250px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 442px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></li><li><strong>Open Keyboard Shortcuts</strong><br/>Current list of active keybindings, Default + User. This list can be searched, but not modified, from here.<img alt="" class="img-fluid" src="images/index_048.png" style="width: 1263px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 346px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></li><li><strong>Open Keyboard Shortcuts (JSON)</strong><br/>This will open the <em>keybindings.json</em>
+ file, located in the user-specific folder 
+"C:\Users\&lt;WindowsUsername&gt;\AppData\Roaming\&lt;"Visual Studio 
+Code" or "VSCodium" or "Code - OSS"&gt;\User\keybindings.json"<br/>This method adds, removes, and edits user-specific keybindings.<img alt="" class="img-fluid" src="images/index_017.png" style="width: 1008px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 474px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></li></ul><div><br/></div><div><span>Settings</span></div><div>Settings can be VSCODE-specific or extension-specific.</div><div><br/></div><div>Following
+ the VSCODE documentation, there are only 3 levels of settings: Program 
+Default settings, User settings and Folder settings.</div><div>Yet after doing some additional research, if a workspace is opened, it appears to provide a 4th level of settings.</div><div><br/></div><div>If the same setting exists in multiple levels, VSCODE will use the following rules to decide which level to use:</div><ul><li>Settings entered at the Folder level have precedence over any other levels.</li><li>Settings entered at the Workspace level have precedence over the User level.</li><li>Settings entered at the User level have precedence over the Program Default level.</li></ul><div>All settings are stored as JSON strings.</div><div><br/></div><div><em>User settings </em>are stored in the following location:</div><div>"C:\Users\&lt;WindowsUsername&gt;\AppData\Roaming\&lt;"Visual Studio Code" or "VSCodium" or "Code - OSS"&gt;\User\settings.json</div><div>Substitute &lt;WindowsUsername&gt; with the Windows logged-in user name.</div><div>Substitute
+ &lt;"Visual Studio Code" or "VSCodium" or "Code - OSS"&gt; with the one
+ folder related to the type of install you used.</div><div>You can also access that file by pressing Ctrl+Shift+P and enter "Open Settings (JSON)"</div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_036.png" style="width: 905px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 296px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><ul><li>Lines 2 and 3 are used to turn off telemetry, meaning tracking by Microsoft.</li><li>Line 4 will prevent auto-updates of extensions.</li><li>Line 6 will enable the auto-save of changes as soon as you move away from any editing areas.</li><li>Line 9 will allow you to display the full-path of file in focus, and if any changes are pending to be saved.</li></ul><div><br/></div><div><strong>Workstation settings</strong> are stored inside the .code-workspace file, which is stored in the original workspace folder.</div><div>I
+ could not find a Ctrl+Shift+P way to open the .code-workspace file. The
+ easiest method to configure workstation settings is to navigate to that
+ file, and simply open it.</div><div><img alt="" class="img-fluid" src="images/index_051.png" style="width: 845px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 293px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><ul><li>Workspace settings are stored starting at line 7.</li></ul><div><br/></div><div><br/></div><div><strong>Folder settings</strong> are stored in the settings.json file, which is stored in the .vscode folder, which is inside the current opened folder.</div><div>I could not find a Ctrl+Shift+P way to open the .code-workspace file. The best is to navigate to the file and simply open it.</div><div><img alt="" class="img-fluid" src="images/index_031.png" style="width: 908px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 270px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><ul><li>Line 2 will take precedence over line 8 from the workspace setup file above.</li></ul><div><br/></div><div><br/></div><div><strong>Program Default settings</strong> are stored internally, but are claimed to be in a file "defaultSettings.json", which I was not able to locate.</div><div>Active
+ Extensions can also alter some settings or add their own settings. To 
+see this level of settings, press Ctrl+Shift+P and enter "Open Default 
+Settings (JSON)".</div><div><img alt="" class="img-fluid" src="images/index_010.png" style="width: 910px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 343px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div><br/></div><div>If
+ you press Ctrl+Shift+P and enter "Open User Settings", you will see a 
+user friendly UI that will allow you to edit most settings in different 
+levels:</div><div><img alt="" class="img-fluid" src="images/index_037.png" style="width: 950px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 491px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div><br/></div><div><span>Tasks</span></div><div>Tasks
+ are methods to execute external programs and have them behave as if 
+they are part of your copy of VSCODE. This is basically a way to enhance
+ the editor to become an IDE (Integrated Development Environment). Tasks
+ help fulfill the<em> Integrated</em> part of the IDE acronym. Task have to be defined inside a<em> tasks.json</em> file located inside the sub-folder <em>.vscode</em>.
+ Hence, tasks are defined at the level of Folders, and therefore also 
+Workspaces. For a detail description about how they work, refer to <a href="https://code.visualstudio.com/docs/editor/tasks" rel="noopener noreferrer" target="_blank">https://code.visualstudio.com/docs/editor/tasks</a>.</div><div><br/></div><div>The
+ following is the configuration file for 2 tasks we will use later to 
+automate the debug and build process of Harbour programs.</div><div><img alt="" class="img-fluid" src="images/index_038.png" style="width: 698px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 656px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div>There are 3 ways to start a Task:</div><div><br/></div><div>1. Press Ctrl+Shift+P and enter "Run Task" to select a task to execute.</div><div><br/></div><div>2. Have a keybinding to start a task.</div><div><img alt="" class="img-fluid" src="images/index_034.png" style="width: 616px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 158px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div>Please
+ note that although keybindings are User-specific, you could define the 
+same Task (name) in different Folders or Workspace, and so have the 
+keybinding become Folder aware.</div><div><br/></div><div>3. Have the debugger call the task as specified in the <em>launch.json</em> settings.</div><div><br/></div><div><span>Debugger Launch profiles</span></div><div>VSCODE
+ has a built in debugger. But since VSCODE is language-agnostic, 
+configuration settings are needed to tell the debugger how to run.</div><div>This configuration file is named <em>launch.json</em> and is stored in the .<em>vscode</em> sub-folder.</div><div><img alt="" class="img-fluid" src="images/index_012.png" style="width: 1258px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 579px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><strong><br/></strong></div><div><strong>Additional Information</strong></div><div><br/></div><div>If
+ you add the folder where the VSCODE executable is located in your PATH,
+ from any command prompt prompt, you could call VSCODE with a "." as 
+parameter.</div><div>The VSCODE executable could be one of the 
+following, depending of the method you used to install it: "code.exe", 
+"VSCodium.exe" or "code - OSS.exe".</div><div><br/></div><div>For example, entering the following  C:\Test&gt;code .  would start VSCODE and open the C:\Test folder.</div><div><br/></div><div>Multiple instances of VSCODE can run at the same time.</div><div><br/></div><div>The same file can be edited in more than one panel, which may be very practical for large files.</div><div><img alt="" class="img-fluid" src="images/index_042.png" style="width: 1026px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 554px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div></div>
+
+      <h2 id="installing-extensions">Installing Extensions</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>As I mentioned earlier, there are 2 methods to install extensions. Lets call them <em>Automated</em> and <em>Manual</em> methods.</div><div><br/></div><div>The Automated method can be triggered from 2 places: inside VSCODE or from the marketplace web site, <a href="https://marketplace.visualstudio.com/vscode" rel="noopener noreferrer" target="_blank">https://marketplace.visualstudio.com/vscode</a>.</div><div><br/></div><div>If you installed VSCODE by building from source, you will only be able to use the "Manual" method.</div><div><br/></div><div><span>1.1. "Automated" extension installs from within VSCODE</span></div><div><br/></div><div>Simple select the extension icon in the "Side Bar," search for extension, and install.</div><div><img alt="" class="img-fluid" src="images/index_049.png" style="width: 419px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 462px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div><span>1.2 "Automated" extension installs from the marketplace web site</span>, <a href="https://marketplace.visualstudio.com/vscode" rel="noopener noreferrer" target="_blank">https://marketplace.visualstudio.com/vscode</a>.</div><div><img alt="" class="img-fluid" src="images/index_027.png" style="width: 814px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 282px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_018.png" style="width: 813px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 507px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_005.png" style="width: 731px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 407px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_011.png" style="width: 833px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 339px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div>You may need to reload VSCODE for the extension to be activated. Press Ctrl+Shift+P and enter "reload window".</div><div><br/></div><div>If you don't want VSCODE to auto-update extensions, add "extensions.autoUpdate":false in the User "settings.json" file.</div><div><br/></div><div>You can also change the extension version as follows:</div><div><img alt="" class="img-fluid" src="images/index_045.png" style="width: 603px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 527px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div><br/></div><div><span>2. "Manual" extension installs</span></div><div><br/></div><div>This
+ is the only method to install extensions if you installed VSCODE by 
+building it from source code. Extensions are actually files with the 
+extension ".vsix". You can download them from the marketplace.</div><div><br/></div><div>Use the same method as in step 1.2 above to locate an extension from the marketplace, then download the ".vsix".</div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_032.png" style="width: 1018px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 689px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div>I
+ would advise you to archive any ".vsix" files you download (since they 
+are version-specific), and in case you want to revert to a previous 
+version, this is the best way to ensure that's feasible. The marketplace
+ only provides you the latest version, which could have a flaw.</div><div><br/></div><div>If you are curious to see the content of a ".vsix" file, simply replace the extension to ".zip" and extract it.</div><div><br/></div><div>The next step is to do the actual importing of the extension inside of VSCODE.</div><div><img alt="" class="img-fluid" src="images/index_019.png" style="width: 551px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 542px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div></div>
+
+      <h2 id="setting-up-the-harbour-extension">Setting up the Harbour Extension</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>At
+ minimum, we need to install the Harbour extensions by Antonino 
+Perricone. To do so, choose one of the extension install methods from 
+the previous section. I usually recommend the "Manual" method.</div><div><br/></div><div>Go to <a href="https://marketplace.visualstudio.com/items?itemName=aperricone.harbour" rel="noopener noreferrer" target="_blank">https://marketplace.visualstudio.com/items?itemName=aperricone.harbour</a> to download the extension, then install it.</div><div><br/></div><div>You may need to reload VSCODE by pressing Ctrl+Shift+P and entering "reload window"</div><div><br/></div><div>Afterwards, use the following steps:</div><div><img alt="" class="img-fluid" src="images/index_003.png" style="width: 977px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 944px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div>As
+ per step 3 above, save the Harbour debugger source code to a file. I 
+choose "debugger.prg". That file will need to be included in your 
+Harbour project file.</div><div>You should probably redo these steps after any updates of the Harbour extension.</div><div><br/></div><div>Although
+ we will be using a Task to call HBMK2, we should still let the 
+extension know where your copy of harbour.exe is located.</div><div><br/></div><div>Open the "settings.json" (Ctrl+Shift+P "Open Settings (JSON)"), and add the lines:</div><div>"harbour.compilerExecutable": "C:\\Harbour\\bin\\win\\mingw\\harbour.exe",</div><div>"harbour.extraOptions": "-iC:\\Harbour\\include",</div><div><br/></div><div>This
+ is assuming you have your computer set according to the prerequisite. 
+Please use double back slashes, as opposed to single ones. This is due 
+to a json format restriction.</div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_050.png" style="width: 735px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 230px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/><br/></div><div><span class="fas fa-exclamation-square" style="color:#FF0000;font-size: 240%;"></span>
+ If you are using Acronis Backup, you must disable the Windows service 
+"Acronis Cyber Protection Service". Set the service to start "Manual" 
+and reboot.<br/>That Acronis Windows service will conflict with the Debugger by disabling the use of breakpoints.</div></div>
+
+      <h2 id="additional-extensions-and-tools">Additional Extensions and Tools</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>The
+ following is a list of my favorite extensions. Some are suggestions 
+from Antonino Perricone himself. Others I found via YouTube tutorials 
+and VSCODE extension review web sites.</div><div><br/></div><div><strong>Kai Light Accent</strong></div><div>A couple of nice, light color themes. Very useful, especially when you create some documentation.<br/><a href="https://marketplace.visualstudio.com/items?itemName=alekangelov.alek-kai-theme" rel="noopener noreferrer" target="_blank">https://marketplace.visualstudio.com/items?itemName=alekangelov.alek-kai-theme</a></div><div><strong><br/>"Fira Code" font with ligatures</strong><br/><a href="https://github.com/tonsky/FiraCode" rel="noopener noreferrer" target="_blank">https://github.com/tonsky/FiraCode</a><br/><br/><strong>VSCode Icons</strong></div><div>Has an icon even for Harbour.<br/><a href="https://marketplace.visualstudio.com/items?itemName=vscode-icons-team.vscode-icons" rel="noopener noreferrer" target="_blank">https://marketplace.visualstudio.com/items?itemName=vscode-icons-team.vscode-icons</a><br/><br/><strong>NotePad++ Keybindings</strong></div><div>Useful if you are already accustomed to the NotePad++ keyboard shortcuts.<br/><a href="https://marketplace.visualstudio.com/items?itemName=ms-vscode.notepadplusplus-keybindings" rel="noopener noreferrer" target="_blank">https://marketplace.visualstudio.com/items?itemName=ms-vscode.notepadplusplus-keybindings</a><br/><br/><strong>Bookmarks</strong></div><div>A must have!<br/><a href="https://marketplace.visualstudio.com/items?itemName=alefragnani.Bookmarks" rel="noopener noreferrer" target="_blank">https://marketplace.visualstudio.com/items?itemName=alefragnani.Bookmarks</a></div><div><br/></div><div><strong>Bracket Pair Colorizer 2</strong></div><div>Bracket, parentheses.... Pair colorizer.</div><div><a href="https://marketplace.visualstudio.com/items?itemName=CoenraadS.bracket-pair-colorizer-2" rel="noopener noreferrer" target="_blank">https://marketplace.visualstudio.com/items?itemName=CoenraadS.bracket-pair-colorizer-2</a></div><div><br/></div><div><strong>Local History</strong></div><div>A must have, especially if you have "files.autoSave" set to all but not "off", in "settings.json".<br/><a href="https://marketplace.visualstudio.com/items?itemName=xyz.local-history" rel="noopener noreferrer" target="_blank">https://marketplace.visualstudio.com/items?itemName=xyz.local-history</a></div><div><br/></div><div><strong>Tasks</strong></div><div>This extension loads VSCode tasks into status bar.<br/><a href="https://marketplace.visualstudio.com/items?itemName=actboy168.tasks" rel="noopener noreferrer" target="_blank">https://marketplace.visualstudio.com/items?itemName=actboy168.tasks</a></div></div>
+
+      <h2 id="setting-up-a-helloharbour-program">Setting up a HelloHarbour Program</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Now that VSCODE is Harbour language aware, it's time to create a HelloHarbour (as previously mentioned, not HelloWorld) program.</div><div><br/></div><div>I will show you the steps for the 32-bit compiler, but all is also applicable for the 64-bit one:</div><div><br/></div><div>Create the following folder structure: C:\HarbourTestCode-32\VSCODE\HelloHarbour\</div><div><br/></div><div>Start
+ VSCODE, and use the "File" / "Open Folder ..." menu option and select 
+the folder "C:\HarbourTestCode-32\VSCODE\HelloHarbour" .</div><div>This will create the sub-folder "C:\HarbourTestCode-32\VSCODE\HelloHarbour\.vscode\"</div><div><br/></div><div>Then use the "File" / "Save Workspace As ..." menu option and enter the name "HelloHarbour".</div><div>This will create a file "C:\HarbourTestCode-32\VSCODE\HelloHarbour\HelloHarbour.code-workspace".</div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_033.png" style="width: 670px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 185px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div>Place
+ in the folder "C:\HarbourTestCode-32\VSCODE\HelloHarbour\" the file 
+"Debugger.prg" created from the instructions in the previous section.</div></div>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Create the following file in the "C:\HarbourTestCode-32\VSCODE\HelloHarbour\" folder.</div></div>
+
+      <table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td><span>File: </span><span>HelloHarbour.prg</span></td></tr></tbody></table>
+
+      <pre class="ELS1"><span class="ELS2">Function Main()</span><span class="ELS2">local l_loop</span><span class="ELS2"></span><span class="ELS2">FOR l_loop := 1 to 5</span><span class="ELS2">    ?"Hello Harbour " + alltrim(str(l_loop))</span><span class="ELS2">    IF l_loop == 4</span><span class="ELS2">        AltD()   <span aria-label="This is a code base debugger breakpoint." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="This is a code base debugger breakpoint."></span><nobr></nobr></span><span class="ELS2">        ?"Paused Debugger"</span><span class="ELS2">    ENDIF</span><span class="ELS2">END</span><span class="ELS2"></span><span class="ELS2">RETURN nil</span><span class="ELS2"></span></pre>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Create
+ the following file in the "C:\HarbourTestCode-32\VSCODE\HelloHarbour\" 
+folder. This file is the equivalent of a makefile, but specific to the 
+HBMK2 build tool.</div><div><br/></div><div>To learn more about HBMK2, visit the following: <a href="https://github.com/harbour/core/blob/master/utils/hbmk2/doc/hbmk2.en.md" rel="noopener noreferrer" target="_blank">https://github.com/harbour/core/blob/master/utils/hbmk2/doc/hbmk2.en.md</a></div></div>
+
+      <table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td><span>File: </span><span>HelloHarbour.hbp</span></td></tr></tbody></table>
+
+      <pre class="ELS1"><span class="ELS2">-hbexe   <span aria-label="To instruct HBMK2 to create an exe" class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="To instruct HBMK2 to create an exe"></span><nobr></nobr></span><span class="ELS2">-inc     <span aria-label="To cache already compiled files." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="To cache already compiled files."></span><nobr></nobr></span><span class="ELS2">-trace   <span aria-label="Optional" class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Optional"></span><nobr></nobr></span><span class="ELS2">-gtcgi   <span aria-label="A current fix to ensure the output of the program is visible in the 'debug console'" class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="A current fix to ensure the output of the program is visible in the 'debug console'"></span><nobr></nobr></span><span class="ELS2"></span><span class="ELS2">HelloHarbour.prg</span><span class="ELS2"></span><span class="ELS2">Debugger.prg    <span aria-label="Create from the Harbour extension. Will enable active code debugging." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Create from the Harbour extension. Will enable active code debugging."></span><nobr></nobr></span></pre>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>We
+ also need to add the following file in the same folder. This will be 
+used by some VSCODE task we are going to create to build debug and 
+release versions of HelloHarbour.exe.</div><div><br/></div><div>This 
+batch file requires modification if you installed a different version of
+ the C compiler, or are trying to build another Harbour project.</div></div>
+
+      <table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td><span>File: </span><span>BuildEXE.bat</span></td></tr></tbody></table>
+
+      <pre class="ELS1"><span class="ELS2">@echo off</span><span class="ELS2">if %1. == . goto MissingParameter</span><span class="ELS2">if %1. == debug.   goto GoodParameter</span><span class="ELS2">if %1. == release. goto GoodParameter</span><span class="ELS2"></span><span class="ELS2">echo You must send "debug" or "release" as parameter</span><span class="ELS2">goto End</span><span class="ELS2"></span><span class="ELS2">:GoodParameter</span><span class="ELS2"></span><span class="ELS2">set PATH=C:\Program Files (x86)\mingw-w64\i686-8.1.0-win32-dwarf-rt_v6-rev0\mingw32\bin;C:\Harbour\bin\win\mingw;C:\HarbourTools;%PATH%</span><span class="ELS2">set HB_COMPILER=mingw</span><span class="ELS2">set HB_PATH=C:\Harbour</span><span class="ELS2"></span><span class="ELS2">C:</span><span class="ELS2">md "C:\HarbourTestCode-32\VSCODE\HelloHarbour\%1\"   <span aria-label="Will create a 'debug' or 'release' sub-folder" class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Will create a 'debug' or 'release' sub-folder"></span><nobr></nobr></span><span class="ELS2">cd "C:\HarbourTestCode-32\VSCODE\HelloHarbour\%1\"   <span aria-label="Sets the current folder on 'debug' or 'release' to ensure generated file are created in that sub-folder" class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Sets the current folder on 'debug' or 'release' to ensure generated file are created in that sub-folder"></span><nobr></nobr></span><span class="ELS2"></span><span class="ELS2">if %1 == debug (</span><span class="ELS2">    hbmk2 ..\HelloHarbour.hbp -b   <span aria-label="Will build in debug mode. Since currently on sub-folder, have to use ..\ to find the source files" class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Will build in debug mode. Since currently on sub-folder, have to use ..\ to find the source files"></span><nobr></nobr></span><span class="ELS2">) else (</span><span class="ELS2">    hbmk2 ..\HelloHarbour.hbp</span><span class="ELS2">)</span><span class="ELS2"></span><span class="ELS2">goto End</span><span class="ELS2">:MissingParameter</span><span class="ELS2">echo Missing Parameter</span><span class="ELS2">:End</span><span class="ELS2"></span></pre>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>To debug our HelloHarbour program, we need to set up a Task and the Launch Settings first.</div><div><br/></div><div>In actuality, we are going to set up 2 tasks, to purposely create the concept of debug and release builds.</div><div><br/></div><div>Press
+ Ctrl+Shift+P and enter "configure Task", and select "Create tasks.json 
+file from template" then select "Others". Otherwise, you could create 
+new a file "tasks.json" in the".vscode" sub-folder, using the "File" / 
+"New File" menu option, while being focused in the ".vscode".</div></div>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>The <em>tasks.json</em>
+ file will define three tasks: CompileDebug, CompileRelease and 
+RunRelease. The first two tasks will instruct VSCODE to call the 
+BuildEXE.bat batch file with the parameter "debug" or "release". 
+RunRelease will first call the CompileRelease, then execute the newly 
+compiled program.</div><div><br/></div><div>For more information about tasks, visit the following: <a href="https://code.visualstudio.com/docs/editor/tasks" rel="noopener noreferrer" target="_blank">https://code.visualstudio.com/docs/editor/tasks</a></div><div><br/></div><div>The
+ first two tasks will call the BuildEXE.bat batch file we create before.
+ The only real differences between the two tasks are their name and the 
+argument passed to the batch file.</div><div><br/></div><div>The "presentation" section of the configuration will instruct VSCODE how to integrate the output of the batch file.</div></div>
+
+      <table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td><span>File: </span><span>tasks.json</span></td></tr></tbody></table>
+
+      <pre class="ELS1"><span class="ELS2">{</span><span class="ELS2">    <span>// See https://go.microsoft.com/fwlink/?LinkId=733558</span><span class="ELS2">    <span>// for the documentation about the tasks.json format</span><span class="ELS2">    "version": "2.0.0",</span><span class="ELS2">    "tasks": [</span><span class="ELS2">        {</span><span class="ELS2">            "label": "CompileDebug",</span><span class="ELS2">            "type": "shell",</span><span class="ELS2">            "command": "${workspaceFolder}\\BuildEXE.bat",</span><span class="ELS2">            "args": [</span><span class="ELS2">                "debug"   <span aria-label="debug build" class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="debug build"></span><nobr></nobr></span><span class="ELS2">            ],</span><span class="ELS2">            "presentation": {</span><span class="ELS2">                "echo": true,</span><span class="ELS2">                "reveal": "always",</span><span class="ELS2">                "focus": true,</span><span class="ELS2">                "panel": "shared",</span><span class="ELS2">                "showReuseMessage": false,</span><span class="ELS2">                "clear": true</span><span class="ELS2">            }</span><span class="ELS2">        },</span><span class="ELS2">        {</span><span class="ELS2">            "label": "CompileRelease",</span><span class="ELS2">            "type": "shell",</span><span class="ELS2">            "command": "${workspaceFolder}\\BuildEXE.bat",</span><span class="ELS2">            "args": [</span><span class="ELS2">                "release"   <span aria-label="release build" class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="release build"></span><nobr></nobr></span><span class="ELS2">            ],</span><span class="ELS2">            "presentation": {</span><span class="ELS2">                "echo": true,</span><span class="ELS2">                "reveal": "always",</span><span class="ELS2">                "focus": true,</span><span class="ELS2">                "panel": "shared",</span><span class="ELS2">                "showReuseMessage": false,</span><span class="ELS2">                "clear": true</span><span class="ELS2">            }</span><span class="ELS2">        },</span><span class="ELS2">        {</span><span class="ELS2">            "label": "RunRelease",</span><span class="ELS2">            "dependsOn": [</span><span class="ELS2">                "CompileRelease"   <span aria-label="To ensure a complete release build occurs first." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="To ensure a complete release build occurs first."></span><nobr></nobr></span><span class="ELS2">            ],</span><span class="ELS2">            "type": "shell",</span><span class="ELS2">            "command": "${workspaceFolder}\\release\\HelloHarbour.exe",</span><span class="ELS2">            "presentation": {</span><span class="ELS2">                "echo": true,</span><span class="ELS2">                "reveal": "always",</span><span class="ELS2">                "focus": true,</span><span class="ELS2">                "panel": "shared",</span><span class="ELS2">                "showReuseMessage": false,</span><span class="ELS2">                "clear": true</span><span class="ELS2">            },</span><span class="ELS2">            "problemMatcher": []</span><span class="ELS2">        }</span><span class="ELS2">    ]</span><span class="ELS2">}</span><span class="ELS2"></span></span></span></pre>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>To compile and run the release version of HelloHarbour, press Ctrl+Shift+P, enter "Run Task", and select "RunRelease".</div><div><br/></div><div>The
+ next step is to let VSCODE know how to run the debugger. This is done 
+by creating a launch configuration, stored in the "launch.json" file, 
+and also located in the <em>.vscode </em>sub-folder.</div><div><br/></div><div>Press
+ Ctrl+Shift+P and enter "launch". Then select "debug: Open launch.json",
+ followed by "Harbour". Afterwards, replace the default content of the 
+new <em>launch.json</em> file with the file described below. </div><div><br/></div><div>The reference "${workspaceFolder}" is a VSCODE variable, that will refer to the starting workspace folder.</div><div><br/></div><div>The option "terminalType" can be used to specify where the output will be sent to:</div><ul><li>"none" = "DEBUG CONSOLE" panel in VSCODE</li><li>"integrated" = "TERMINAL" panel in VSCODE</li><li>"external" = A new external console window</li></ul></div>
+
+      <table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td><span>File: </span><span>launch.json</span></td></tr></tbody></table>
+
+      <pre class="ELS1"><span class="ELS2">{</span><span class="ELS2">    <span>// Use IntelliSense to learn about possible attributes.</span><span class="ELS2">    <span>// Hover to view descriptions of existing attributes.</span><span class="ELS2">    <span>// For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387</span><span class="ELS2">    "version": "0.2.0",</span><span class="ELS2">    "configurations": [</span><span class="ELS2">        {</span><span class="ELS2">            "type": "harbour-dbg",</span><span class="ELS2">            "request": "launch",</span><span class="ELS2">            "name": "Launch Program Harbour Hello Harbour",</span><span class="ELS2">            "program": "${workspaceFolder}\\debug\\HelloHarbour",</span><span class="ELS2">            "stopOnEntry": false,</span><span class="ELS2">            "terminalType": "none",   <span aria-label="This will instruct the debugger where to send output. Values can be: 'none','integrated','external'" class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="This will instruct the debugger where to send output. Values can be: 'none','integrated','external'"></span><nobr></nobr></span><span class="ELS2">            "preLaunchTask": "CompileDebug",   <span aria-label="This will instruct the debugger to first call the CompileDebug task, before any actual program execution" class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="This will instruct the debugger to first call the CompileDebug task, before any actual program execution"></span><nobr></nobr></span><span class="ELS2">            "postDebugTask": "",</span><span class="ELS2">            "workingDir": "${workspaceFolder}\\",</span><span class="ELS2">            "sourcePaths": [</span><span class="ELS2">                "${workspaceFolder}\\debug\\"</span><span class="ELS2">            ]</span><span class="ELS2">        }</span><span class="ELS2">    ]</span><span class="ELS2">}</span></span></span></span></pre>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>As the last configuration step, let's create a key binding to start the "compile for release" task.</div><div><br/></div><div>If, for example, you wanted to set the Ctrl+1 key combination to build your release exe, simply edit your <em>keybindings.json</em> file (see instruction in preview section) and add the following entry:</div></div>
+
+      <pre class="ELS1"><span class="ELS2">{"key": "ctrl+1",</span><span class="ELS2">"command": "workbench.action.tasks.runTask",   <span aria-label="Instructs to use the Run Task command" class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Instructs to use the Run Task command"></span><nobr></nobr></span><span class="ELS2">"args":"CompileRelease"}   <span aria-label="Refers to the previously created CompileRelease task." class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Refers to the previously created CompileRelease task."></span><nobr></nobr></span></pre>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>The following is a list of files you should have from following all the instructions above:</div><div><br/></div><div>C:\HarbourTestCode-32\VSCODE\HelloHarbour\HelloHarbour.code-workspace<br/>C:\HarbourTestCode-32\VSCODE\HelloHarbour\HelloHarbour.hbp<br/>C:\HarbourTestCode-32\VSCODE\HelloHarbour\HelloHarbour.prg<br/>C:\HarbourTestCode-32\VSCODE\HelloHarbour\Debugger.prg<br/>C:\HarbourTestCode-32\VSCODE\HelloHarbour\BuildEXE.bat<br/><br/>C:\HarbourTestCode-32\VSCODE\HelloHarbour\.vscode\launch.json<br/>C:\HarbourTestCode-32\VSCODE\HelloHarbour\.vscode\settings.json<br/>C:\HarbourTestCode-32\VSCODE\HelloHarbour\.vscode\tasks.json</div></div>
+
+      <h2 id="debugging-helloharbour">Debugging HelloHarbour</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>And now, let's do the most important part of our job: debug HelloHarbour.</div><div><br/></div><div>Ensure you have the HelloHarbour workspace open, then do the following:</div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_035.png" style="width: 458px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 334px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_041.png" style="width: 537px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 351px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_022.png" style="width: 1195px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 590px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_047.png" style="width: 1195px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 590px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div><strong>List of files created during debug build:</strong><br/>C:\HarbourTestCode-32\VSCODE\HelloHarbour\debug\HelloHarbour.exe<br/><br/>C:\HarbourTestCode-32\VSCODE\HelloHarbour\debug\.hbmk\win\mingw\Debugger.c<br/>C:\HarbourTestCode-32\VSCODE\HelloHarbour\debug\.hbmk\win\mingw\Debugger.o<br/>C:\HarbourTestCode-32\VSCODE\HelloHarbour\debug\.hbmk\win\mingw\HelloHarbour.c<br/>C:\HarbourTestCode-32\VSCODE\HelloHarbour\debug\.hbmk\win\mingw\HelloHarbour.o<br/>C:\HarbourTestCode-32\VSCODE\HelloHarbour\debug\.hbmk\win\mingw\_hbmkaut_HelloHarbour.c<br/>C:\HarbourTestCode-32\VSCODE\HelloHarbour\debug\.hbmk\win\mingw\_hbmkaut_HelloHarbour.o<br/><br/><strong>List of files created during release build:</strong><br/>C:\HarbourTestCode-32\VSCODE\HelloHarbour\release\HelloHarbour.exe<br/><br/>C:\HarbourTestCode-32\VSCODE\HelloHarbour\release\.hbmk\win\mingw\Debugger.c<br/>C:\HarbourTestCode-32\VSCODE\HelloHarbour\release\.hbmk\win\mingw\Debugger.o<br/>C:\HarbourTestCode-32\VSCODE\HelloHarbour\release\.hbmk\win\mingw\HelloHarbour.c<br/>C:\HarbourTestCode-32\VSCODE\HelloHarbour\release\.hbmk\win\mingw\HelloHarbour.o<br/>C:\HarbourTestCode-32\VSCODE\HelloHarbour\release\.hbmk\win\mingw\_hbmkaut_HelloHarbour.c<br/>C:\HarbourTestCode-32\VSCODE\HelloHarbour\release\.hbmk\win\mingw\_hbmkaut_HelloHarbour.o</div><div><br/></div><div>Remember
+ that the file 
+C:\HarbourTestCode-32\VSCODE\HelloHarbour\debug\HelloHarbour.exe should 
+not be called directly. The program would stall, waiting for a debugger 
+to monitor its execution.</div></div>
+
+      <h2 id="snippets">Snippets</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Code
+ Snippets: a feature you can ignore when you first start using Visual 
+Studio Code, but something you will later want to use all the time!</div><div><br/></div><div>From
+ the official documentation, "Code snippets are templates that make it 
+easier to enter repeating code patterns, such as loops or 
+conditional-statements."</div><div><br/></div><div>Basically, snippets 
+are some piece of source code (or other type of text) you can insert 
+into your own code, with the added following features:</div><ul><li>Specify how your cursor can move around that newly inserted code, making it easier to customize to your needs. </li><li>Have the same text you type appear in multiple places of the newly added code at once.</li><li>Merge some text from a list of built-in variables, like time stamps.</li><li>Specify where your cursor should end up after any snippets editing is done.</li></ul><div>Snippets can be defined as global, specific to a (computer) language or specific to a workspace.</div><div>If snippets are defined for a workstation, they can also be "scoped" for specific (computer) languages.</div><div><br/></div><div>Snippets
+ are called via the IntelliSense engine of VSCODE (meaning as you type 
+in the editor), or can also be inserted via keybindings (keyboard 
+shortcuts).</div><div><br/></div><div>There are two methods to add 
+snippets: via extensions, or by creating your own. I am more of the 
+opinion that you should control the snippets definitions yourself, and I
+ will explain later how to integrate extensions snippets as your own 
+ones.</div><div><br/></div><div>The official documentation for snippets is at the following location: <a href="https://code.visualstudio.com/docs/editor/userdefinedsnippets" rel="noopener noreferrer" target="_blank">https://code.visualstudio.com/docs/editor/userdefinedsnippets</a></div><div><br/></div><div>Another good way to get familiar with snippets is to watch some videos on YouTube. For example:</div><div><a href="https://www.youtube.com/watch?v=JIqk9UxgKEc" rel="noopener noreferrer" target="_blank">https://www.youtube.com/watch?v=JIqk9UxgKEc</a></div><div><a href="https://www.youtube.com/watch?v=N_QshKsUXO8" rel="noopener noreferrer" target="_blank">https://www.youtube.com/watch?v=N_QshKsUXO8</a></div><div><br/></div><div>One of those videos also recommend using a tool to make it easier to create your snippet configs: <a href="https://snippet-generator.app/" rel="noopener noreferrer" target="_blank">https://snippet-generator.app</a></div><div><br/></div><div>Here are some examples of snippet definitions:</div></div>
+
+      <table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td><span>File: </span><span>harbour.json</span></td></tr></tbody></table>
+
+      <pre class="ELS1"><span class="ELS2">{</span><span class="ELS2">    <span>// Place your snippets for harbour here. Each snippet is defined under a snippet name and has a prefix, body and</span><span class="ELS2">    <span>// description. The prefix is what is used to trigger the snippet and the body will be expanded and inserted. Possible variables are:</span><span class="ELS2">    <span>// $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. Placeholders with the</span><span class="ELS2">    <span>// same ids are connected.</span><span class="ELS2">    <span>// Example:</span><span class="ELS2">    <span>// "Print to console": {</span><span class="ELS2">    <span>//     "prefix": "log",</span><span class="ELS2">    <span>//     "body": [</span><span class="ELS2">    <span>//         "console.log('$1');",</span><span class="ELS2">    <span>//         "$2"</span><span class="ELS2">    <span>//     ],</span><span class="ELS2">    <span>//     "description": "Log output to console"</span><span class="ELS2">    <span>// }</span><span class="ELS2">    "Function Header": {</span><span class="ELS2">        "prefix": "FuncHead",</span><span class="ELS2">        "body":[</span><span class="ELS2">            "$LINE_COMMENT ========================================================================",</span><span class="ELS2">            "$LINE_COMMENT Name: ${1}",</span><span class="ELS2">            "$LINE_COMMENT Created By: Eric Lendvai",</span><span class="ELS2">            "$LINE_COMMENT Created On: $CURRENT_MONTH/$CURRENT_DATE/$CURRENT_YEAR $CURRENT_HOUR:$CURRENT_MINUTE",</span><span class="ELS2">            "$LINE_COMMENT ========================================================================",</span><span class="ELS2">            "function ${1}()",</span><span class="ELS2">            "${0}",</span><span class="ELS2">            "return (${2})"</span><span class="ELS2">        ],</span><span class="ELS2">        "description": "Basic Function with Header Documentation"</span><span class="ELS2">    },</span><span class="ELS2">    "Code Change Stamp":{</span><span class="ELS2">        "prefix": "ccstamp",</span><span class="ELS2">        "body": "  $LINE_COMMENT Changed by Eric Lendvai on $CURRENT_MONTH/$CURRENT_DATE/$CURRENT_YEAR $CURRENT_HOUR:$CURRENT_MINUTE Jira: ${1}",</span><span class="ELS2">        "description": "Used to Add some end of line source code change stamp"</span><span class="ELS2">    },</span><span class="ELS2">    "Do Case Statement": {</span><span class="ELS2">        "prefix": "docase",</span><span class="ELS2">        "body": [</span><span class="ELS2">            "do case",</span><span class="ELS2">            "case ${1:condition}",</span><span class="ELS2">            "\t",</span><span class="ELS2">            "case ${2:condition}",</span><span class="ELS2">            "\t",</span><span class="ELS2">            "otherwise",</span><span class="ELS2">            "\t",</span><span class="ELS2">            "endcase",</span><span class="ELS2">            "${0}"</span><span class="ELS2">        ],</span><span class="ELS2">        "description": "basic Do/Case structure"</span><span class="ELS2">    },</span><span class="ELS2">    "If Else Statement": {</span><span class="ELS2">        "prefix": "ifelse",</span><span class="ELS2">        "body": [</span><span class="ELS2">            "if ${1:condition}",</span><span class="ELS2">            "\t${2}",</span><span class="ELS2">            "else",</span><span class="ELS2">            "\t${3}",</span><span class="ELS2">            "endif",</span><span class="ELS2">            "${0}"</span><span class="ELS2">        ],</span><span class="ELS2">        "description": "basic if/else structure"</span><span class="ELS2">    },</span><span class="ELS2">}</span><span class="ELS2"></span></span></span></span></span></span></span></span></span></span></span></span></span></span></pre>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>In
+ the above example configurations, once you type "FuncHead" in your 
+harbour source code file, a drop-down will appear for you to 
+select/confirm that snippet.</div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_043.png" style="width: 590px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 376px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div>Once you select with your mouse the Enter or Tab key, this is how the snippet code will appear:</div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_044.png" style="width: 664px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 259px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div>Snippet
+ entries (tab stops) can also have default text values, be a list of 
+possible text, or be evaluated from a combination of built-in variables.
+ Please refer to the documentation for all the details.</div><div><br/></div><div>One
+ of the easiest ways to add and manage snippets is to press Ctrl+Shift+P
+ and search for "snipp" and select "Configure User Snippets."</div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_009.png" style="width: 571px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 82px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div>As you can see below, there are 3 types of snippets definition files. They all contains json code that defines snippets.</div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_013.png" style="width: 695px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 276px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div>Please add the following line in your main settings.json:</div><div>"window.title": "${dirty}${activeEditorLong}${separator}${rootName}${separator}${appName}",</div><div><br/></div><div>This will help locate the physical location of any files you open, include the above snippets definition files.</div><div><br/></div><div>Another method to get some snippet definition is to look into some extensions that also provide support for snippets.</div><div>For example, there is Foxpro VSCODE extension available in the market place.</div><div>Download the .vsix file from the market place. Rename the file by replacing ".vsix" with ".zip", and unpack the file.</div><div>Go to <a href="https://marketplace.visualstudio.com/items?itemName=NewDataSystems.foxpro" rel="noopener noreferrer" target="_blank">https://marketplace.visualstudio.com/items?itemName=NewDataSystems.foxpro</a> and download the extension: NewDataSystems.foxpro-1.4.8.vsix.</div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_030.png" style="width: 448px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 161px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div>Once you open the foxpro_snippets.json, you will access practical definitions that can also work for harbour.</div><div><br/></div><div>If
+ you also work on VFP / FoxPro files, meaning not only harbour files, 
+you may have conflicts between the harbour and FoxPro extension when 
+editing PRG files.</div><div>To work around this problem, ensure you use
+ workspace files and by adding the "files.associations" setting you can 
+instruct VSCODE to use the correct language.</div><div><br/></div><div>Here is a sample of a harbour-specific workspace file:</div></div>
+
+      <table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td><span>File: </span><span>HelloHarbour.code-workspace</span></td></tr></tbody></table>
+
+      <pre class="ELS1"><span class="ELS2">{</span><span class="ELS2">    "folders": [</span><span class="ELS2">        {</span><span class="ELS2">            "path": "."</span><span class="ELS2">        }</span><span class="ELS2">    ],</span><span class="ELS2">    "settings": {</span><span class="ELS2">        "editor.fontSize": 13,</span><span class="ELS2">        "files.autoSave": "onFocusChange",</span><span class="ELS2">        "files.associations": {</span><span class="ELS2">            "*.prg":"harbour",</span><span class="ELS2">            "*.c":"c"</span><span class="ELS2">        }</span><span class="ELS2">    }</span><span class="ELS2">}</span><span class="ELS2"></span></pre>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>The next trick is to associate a keybinding with a snippet. This would make it even faster to merge code in your files.</div><div>You
+ can either place the single line snippet definition in the keybinding 
+definition file, or refer a keybinding to a snippet definition (via 
+language id and snippet name).</div><div><br/></div><div>The following is an example of my user keybindings definitions:</div></div>
+
+      <table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td><span>File: </span><span>keybindings.json</span></td></tr></tbody></table>
+
+      <pre class="ELS1"><span class="ELS2"><span>// Place your key bindings in this file to override the defaults</span><span class="ELS2">[</span><span class="ELS2">    {   <span aria-label="Will call a task named 'CompileRelease'" class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Will call a task named 'CompileRelease'"></span><nobr></nobr></span><span class="ELS2">        "key": "ctrl+1",</span><span class="ELS2">        "command": "workbench.action.tasks.runTask",</span><span class="ELS2">        "args":"CompileRelease"</span><span class="ELS2">    },</span><span class="ELS2">    {   <span aria-label="Single line snippet definition" class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Single line snippet definition"></span><nobr></nobr></span><span class="ELS2">        "key": "ctrl+2",</span><span class="ELS2">        "command": "editor.action.insertSnippet",</span><span class="ELS2">        "when": "editorTextFocus",</span><span class="ELS2">        "args": {</span><span class="ELS2">          "snippet": "  $LINE_COMMENT Changed by Eric Lendvai on $CURRENT_MONTH/$CURRENT_DATE/$CURRENT_YEAR $CURRENT_HOUR:$CURRENT_MINUTE"</span><span class="ELS2">        }</span><span class="ELS2">    },</span><span class="ELS2">    {   <span aria-label="Will use the harbour language specific snipped named 'Function Header'" class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Will use the harbour language specific snipped named 'Function Header'"></span><nobr></nobr></span><span class="ELS2">        "key": "ctrl+3",</span><span class="ELS2">        "command": "editor.action.insertSnippet",</span><span class="ELS2">        "when": "editorTextFocus",</span><span class="ELS2">        "args": {</span><span class="ELS2">          "langId": "harbour",</span><span class="ELS2">          "name": "Function Header"</span><span class="ELS2">        }</span><span class="ELS2">    }</span><span class="ELS2">]</span></span></pre>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>If
+ your keybinding refers to a workspace-specific snippet, you will also 
+need that workspace to be opened. Therefore, the same same keybinding 
+will insert workspace-specific source code.</div></div>
+
+      <h2 id="vscode-documentation-and-learning-material">VSCode Documentation and Learning Material</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>The core documentation can be found at: <a href="https://code.visualstudio.com/docs/" rel="noopener noreferrer" target="_blank">https://code.visualstudio.com/docs/</a></div><div><br/></div><div>You can also search for YouTube videos. I would recommend the following: "VS Code Can Do That?! VS Code Tips and Tricks," <a href="https://www.youtube.com/watch?v=x5GzCohd4eo" rel="noopener noreferrer" target="_blank">https://www.youtube.com/watch?v=x5GzCohd4eo</a></div><div><br/></div><div>And check out the marketplace for extension: <a href="https://marketplace.visualstudio.com/vscode" rel="noopener noreferrer" target="_blank">https://marketplace.visualstudio.com/vscode</a></div></div>
+
+      <h2 id="conclusion">Conclusion</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>For
+ us developers, there is almost nothing more important than to choose an
+ editor and debugger that will make us as productive as possible, and 
+will also make coding an enjoyable and rewarding experience.</div><div><br/></div><div>Please give Visual Studio Code a chance;. take the time to extend it and customize it to your needs.</div><div><br/></div><div>We
+ appreciate your interest in the subject matter. Please share your 
+feedback, tips and tricks, and favorite extensions, so I can continually
+ update this article and the harbour.wiki website in general, as VSCODE 
+is still evolving. It's your comments about previous articles that made 
+this one come to fruition.</div><div><br/></div><div>And many thanks to <strong>Antonino Perricone</strong> for such a fantastic Harbour extension, and for providing the technical support necessary to write this article.</div></div>
+
+      <div class="hw-close-fallback" data-close-fallback hidden>
+        The browser did not close this tab. It may have been opened directly instead of from the Articles list. Use <a href="/articles/">Back to Articles</a>.
+      </div>
+    </article>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/assets/js/article-page.js"></script>
+  <script src="/assets/js/article-copy-code.js"></script>
+  <script src="/assets/js/article-tooltips.js"></script>
+</body>
+</html>

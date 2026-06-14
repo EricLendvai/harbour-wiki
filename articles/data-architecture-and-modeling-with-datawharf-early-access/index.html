@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Data Architecture and Modeling with DataWharf - Early Access | Harbour Wiki</title>
+  <meta name="description" content="Data Architecture and Modeling with DataWharf - Early Access. Original Harbour.wiki article converted to a static article page.">
+  <link rel="icon" type="image/svg+xml" href="/images/harbour.svg">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="/scripts/FontAwesome_5_3_1/css/all.min.css" rel="stylesheet">
+  <link href="/assets/css/site.css" rel="stylesheet">
+  <link href="/assets/css/articles.css" rel="stylesheet">
+  <link href="/assets/css/article-migration.css" rel="stylesheet">
+</head>
+<body class="hw-article-page">
+  <header class="hw-article-tab-header">
+    <a class="hw-article-tab-brand" href="/" aria-label="Harbour Wiki home">
+      <img class="hw-article-tab-logo" src="/images/harbour.svg" alt="" aria-hidden="true">
+      <span class="hw-article-tab-title">
+        <span class="hw-article-tab-site">Harbour Wiki</span>
+        <span class="hw-article-tab-subtitle">Static article</span>
+      </span>
+    </a>
+    <div class="hw-article-tab-actions">
+      <a class="btn btn-light" href="/articles/"><i class="bi bi-arrow-left" aria-hidden="true"></i> Back to Articles</a>
+      <button class="btn btn-outline-light" type="button" data-close-article><i class="bi bi-x-lg" aria-hidden="true"></i> Close</button>
+    </div>
+  </header>
+
+  <main class="hw-article-main">
+    <article class="hw-article-content">
+      <!-- Source: uploaded saved article HTML: 006 Data Architecture and Modeling with DataWharf - Early Access.htm -->
+      <!-- Conversion: visible article content converted from original article HTML; saved-page navigation/scripts excluded. -->
+      <h1>Data Architecture and Modeling with DataWharf - Early Access</h1>
+
+      
+      <div class="hw-article-author">
+        <img src="images/author-eric-lendvai.png" alt="Eric Lendvai" class="hw-article-author-photo">
+        <span><strong>Author:</strong> Eric Lendvai</span>
+      </div>
+
+      <h2>Table of Contents</h2>
+      <ul class="hw-article-toc">
+        <li><a href="#early-access">Early Access</a></li>
+        <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#introduction">Introduction</a></li>
+        <li><a href="#what-makes-datawharf-different-from-other-modeling-tools">What makes DataWharf different from other modeling tools?</a></li>
+        <li><a href="#technical-notes">Technical Notes</a></li>
+        <li><a href="#installing-datawharf-with-docker">Installing DataWharf with Docker</a></li>
+        <li><a href="#initial-settings">Initial Settings</a></li>
+        <li><a href="#customizing-datawharf">Customizing DataWharf</a></li>
+        <li><a href="#setting-up-applications-and-projects-planned">Setting up Applications and Projects - Planned</a></li>
+        <li><a href="#column-field-types-composing">Column/Field Types - Composing</a></li>
+        <li><a href="#custom-fields-planned">Custom Fields - Planned</a></li>
+        <li><a href="#setting-up-and-testing-single-sign-on-planned">Setting up and Testing Single Sign On - Planned</a></li>
+        <li><a href="#datawharf-repo-and-dependency-planned">DataWharf Repo and dependency - Planned</a></li>
+        <li><a href="#extending-datawharf-with-apis-planned">Extending DataWharf with APIs - Planned</a></li>
+        <li><a href="#user-access-rights-planned">User Access Rights - Planned</a></li>
+        <li><a href="#exporting-and-importing-data-dictionaries-and-models-planned">Exporting and Importing Data Dictionaries and Models - Planned</a></li>
+        <li><a href="#monitoring-datawharf">Monitoring DataWharf</a></li>
+        <li><a href="#installing-datawharf-for-development-planned">Installing DataWharf For Development - Planned</a></li>
+      </ul>
+
+      <h2 id="early-access">Early Access</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Since
+ this article is the primary documentation for the DataWharf 
+application, it is released before it is complete, and will be updated 
+as DataWharf evolves as well.</div><div>Articles are structured as a 
+collection of sections. Several incomplete, or not even in progress, 
+sections will be listed to help you see what are the upcoming topics to 
+be covered.</div><div><br/></div><div>DataWharf is available at <a href="http://datawharf.org/" rel="noopener noreferrer" target="_blank">http://datawharf.org</a> ( which will redirect to <a href="https://github.com/EricLendvai/DataWharf" rel="noopener noreferrer" target="_blank">https://github.com/EricLendvai/DataWharf</a> ).</div><div>Please also review the README.md file displayed  as you first visit the repo.</div></div>
+
+      <h2 id="prerequisites">Prerequisites</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><ul><li>Understanding how to setup a FastCGI Harbour web application or use Docker to build and run a container.</li><li>Setup
+ a PostgreSQL database version 14 or above. Even though DataWharf can 
+manage multiple type of SQL backends, it use PostgreSQL itself to store 
+all of its data.</li></ul></div>
+
+      <h2 id="introduction">Introduction</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>There
+ are many definitions for Data Architecture and Data Modeling. Major 
+evolution occurred in the domain of data management these last few 
+decades, and so did the definition of those terms. </div><div>Some 
+of us started our journey in data management using COBOL, which was 
+created in 1959, and was one of the first computer languages that 
+introduced the concept or rows and columns. </div><div>Starting in 1970 the new concept of data normalization was introduced and refined in the following years.</div><div>There
+ are many articles and books about data normalization, and as an 
+architect it should be second nature to follow at least the 3rd Normal 
+Form.</div><div><br/></div><div>Currently the most common definition for Normalization,  Data Architecture and Data Modeling are (Using ChatGPT):</div><div><br/></div><div>"<strong>Normalization</strong>
+ is a technique used to reduce data redundancy and improve data 
+integrity by organizing data into tables and establishing relationships 
+between them."</div><div><br/></div><div>"<strong>Data architecture</strong>
+ is a high-level approach that deals with the overall design of data 
+structures, systems, and processes. It defines the standards, policies, 
+and practices that govern the collection, storage, retrieval, and use of
+ data in an organization. Data architecture aims to ensure that data is 
+managed in a consistent and coherent manner across the organization."<br/><br/>"<strong>Data modeling</strong>,
+ on the other hand, is a more detailed approach that focuses on creating
+ specific representations of data structures and relationships. It 
+involves the creation of data models, which are diagrams or visual 
+representations of the data elements, their attributes, and the 
+relationships between them. Data modeling helps to clarify the meaning 
+and relationships of data elements, and enables the creation of more 
+accurate and efficient databases".</div><div><br/></div><div>Another set 
+of definitions exists for Conceptual, Logical and Physical data models. 
+And again we can not find a single precise definitions of those terms. 
+So here is what I would consider the most up to date definition (Using 
+ChatGPT):</div><div><br/></div><div>Conceptual, logical, and physical 
+data models are different levels of abstraction used to represent data 
+and information in a structured way.</div><ol><li><div><strong>Conceptual Data Model</strong>:
+ A conceptual data model represents high-level business concepts and 
+their relationships, without getting into the technical details of 
+implementation. It is a conceptualization of the real-world entities and
+ relationships between them. It describes the overall structure of the 
+data, including entities, attributes, and relationships between them, 
+without going into too much detail about the database structure.</div></li><li><div><strong>Logical Data Model</strong>:
+ A logical data model is a detailed representation of the data and how 
+it is organized in a particular database system. It defines the 
+structure of data elements and their relationships, such as entities, 
+attributes, and relationships between them, and also includes data 
+constraints and business rules. It is a representation of data that is 
+independent of any particular database management system or hardware 
+implementation.</div></li><li><div><strong>Physical Data Model</strong>:
+ A physical data model specifies the physical implementation of a 
+database on a particular hardware platform, including storage 
+structures, access methods, and security constraints. It represents the 
+actual data structure and how it is stored in the database management 
+system. It includes details such as table structures, indexes, keys, and
+ data types. The physical data model is optimized for performance and 
+storage efficiency, and is specific to a particular database management 
+system and hardware platform.</div></li></ol><div>Up to this point, it 
+is all theories and definitions. As a long time architects I used to use
+ Microsoft Visio and some desktop database documentation tool to create 
+the Conceptual and Logical/Physical models.It was always very difficult 
+to share diagrams and documentation and to not be concerned about which 
+version of the models are out there. This became even harder in the 
+enterprise worlds, when several hundred architects, engineers and 
+product managers had to cooperate together on multiple projects and 
+applications.</div><div><br/></div><div>Starting first as an example of a FastCGI web app, than moved out to its own github repo, I created <a href="http://datawharf.org/" rel="noopener noreferrer" target="_blank">DataWharf</a>, an enterprise grade web application, that can be used to created Conceptual, Logical and Physical models. </div><div>Initially
+ it was a simple data dictionary tool with some visualization, but then 
+with help from Thomas Goldschmidt, it became a full modeling tool with 
+even more advanced visualization and Single Sign On support.</div><div><br/></div><div>DataWharf has <strong>two major sections</strong>: Projects and Applications.</div><div><br/></div><div><strong>A Project in DataWharf</strong>,
+ is collection of Models, conceptual and/or logical. Projects could be 
+used before applications even exists. Usually a team of architects would
+ be creating one or more models to design an entire project. </div><div>The
+ Models are made of Entities, Associations, Attributes, Packages, 
+Datatypes, ... and many of those concepts can be renamed at the level of
+ a project. </div><div><strong>Custom access rights</strong> can be managed at the level of projects, and most components of a model can have an unlimited number of <strong>custom fields</strong> as well.</div><div><br/></div><div>When using DataWharf to document itself; the following is a physical model of the core tables used to support projects:</div><div><img alt="" class="img-fluid" src="images/index_005.png" style="width: 851px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 467px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div>And the following is a conceptual model of projects:</div><div><img alt="" class="img-fluid" src="images/index.png" style="width: 852px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 656px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div>The grey zone of conceptual and logical modeling; where one ends and the other begins?</div><div><br/></div><div>Some people state that a conceptual model should not have defined attributes.</div><div>Others that logical models should already represent many to many relationships with actual entities.</div><div><br/></div><div>DataWharf
+ will not force the level of details or lack of in your models. 
+Basically models are to be used to express your intent of your data 
+structure.</div><div><br/></div><div>For seasoned architects, models are 
+used to simplify a physical model, to help during training and to 
+explain an application, and therefore are sometimes created after the 
+physical tables already exists.</div><div><br/></div><div>Sometimes 
+models are used during the exploration of what an applications should 
+do, but is that case maintaining the model as the application grows is 
+recommended.</div><div><br/></div><div><strong>An Application in DataWharf</strong>, is in between a logical and physical model for a single database, represented as an actual <strong>Data Dictionary</strong>. </div><div>But
+ unlike most data dictionaries, the ones defined in DataWharf are 
+backend independent, hence the "logical model like" behavior.</div><div><br/></div><div>The
+ data dictionary is defined with its own column types, that can be 
+converted for PostgreSQL, MySQL, MariaDB and MS SQL (currently).</div><div>Most
+ data types will work for any backends. Some data types will be 
+converted to strings if not supported natively, and to not restrict an 
+application's implementation, some field types can be PostgreSQL 
+specific, like arrays.</div><div>By the way, using array column types violates the 1st Normal Form (Normalization).</div><div>An entire section of this article will describe the mapping for DataWharf column types to all supported backends.</div><div><br/></div><div>Another concept DataWharf supports are <strong>Namespaces</strong>,
+ equivalent to "Schema" in PostgreSQL and MS SQL. MariaDB and MySQL do 
+not include such concept and therefore if multiple Namespaces exists, 
+their names will be prepended to the table names.</div><div><br/></div><div>When using DataWharf to document itself; the following is a physical model of the core tables used to support data dictionaries:</div><div><img alt="" class="img-fluid" src="images/index_003.png" style="width: 803px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 643px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div>Custom
+ access rights can be managed at the level of applications, and most 
+components of a data dictionary can have an unlimited number of custom 
+fields as well.</div><div><br/></div><div><strong>Deployments </strong>can
+ also be recorded for each Data Dictionary (Application), making it 
+easier to compare the specification of a data dictionary with the actual
+ implementation of them. </div><div>For example, an Application could have a Develop, Beta, QA and Production installation.</div></div>
+
+      <h2 id="what-makes-datawharf-different-from-other-modeling-tools">What makes DataWharf different from other modeling tools?</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Most data modeling tools are proprietary desktop applications with potentially expensive monthly and per user licensing fees.</div><div><br/></div><div><strong>DataWharf is 100% open-source, free</strong>, and is a <strong>web application</strong>
+ that can be accessed using any modern web browser like Firefox, Chrome,
+ Safari and any other browser supported by Bootstrap 5+ and jQuery 3+.</div><ul><li>DataWharf
+ can be configured for an unlimited number of users. Project and 
+Application level access rights can be configure for each users.</li><li>DataWharf can also be configured to register new users via Single Sign On. </li><li>Most entities can have an unlimited number of custom fields.</li><li>Multiple tags can be used to flag Tables and Columns, making it even easier to filter down lists.</li><li>Multi text searches can be done on description fields.</li><li>The concept of life cycle and documentation completion exists on most entities.</li><li>Users with the proper access rights, can export and import any Models and Data Dictionary.</li><li>An
+ unlimited number of Diagrams/Visualization can be done for Models and 
+Data Dictionaries. Those diagrams directly related to elements entered 
+in the Models and Data Dictionaries.</li><li>Diagrams are living 
+documents with color coding, tooltips and a detail panel that reflects 
+additional information about any highlighted elements.</li><li>All information in DataWharf has a unique URL, allowing user to include those in any external documentation.</li><li>DataWharf has an API engine that can be enhanced to support any external application.</li><li>Except
+ for passwords, all information stored by DataWharf could be used by 
+accessing its own PostgreSQL database (access rights restrictions to be 
+set by your own DBA).</li><li>DataWharf is also compatible with AWS RDS services.</li><li>Support for CyanAudit can be enabled to track any changes made by any users.</li><li>Easily compare your physical model to actual deployments, or sync/load already existing databases.</li><li>For Harbour developers, an export to a Hash Array ready for use by the Harbour_ORM is available.</li></ul><div><br/></div></div>
+
+      <h2 id="technical-notes">Technical Notes</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>The following is a list of notes specific to DataWharf.</div><div><br/></div><ul><li>Names
+ of Namespaces, Tables, Columns, Enumerations, Enumeration Values, 
+Indexes, Tags, Diagrams and all Modeling elements, can be be created by 
+combining lower and upper case letters, but the ordering and uniqueness 
+is case insensitive. Meaning for example, you can not create two Columns
+ in the  same Table where they would have the same name regardless 
+of their casing.</li><li>Dots (periods) are not allowed, and will be automatically removed, in Namespaces, Tables, Columns, Enumerations, and Indexes.</li></ul><div><br/></div><div><br/></div></div>
+
+      <h2 id="installing-datawharf-with-docker">Installing DataWharf with Docker</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>If you plan do develop / enhance or simply run DataWharf locally, install Docker Desktop.</div><div>If you are on MS Windows you can use the following article to install Docker Desktop: <a href="https://harbour.wiki/index.asp?page=PublicArticles&amp;mode=show&amp;id=221022022831&amp;sig=9123873596" rel="noopener noreferrer" target="_blank">https://harbour.wiki/index.asp?page=PublicArticles&amp;mode=show&amp;id=221022022831&amp;sig=9123873596</a></div><div><br/></div><div>Using GIT to clone the DataWharf repo available at <a href="http://datawharf.org/" rel="noopener noreferrer" target="_blank">http://datawharf.org</a> (which will redirect you to <a href="https://github.com/EricLendvai/DataWharf" rel="noopener noreferrer" target="_blank">https://github.com/EricLendvai/DataWharf</a>)</div><div><br/></div><div>If you don't already have access to a PostgreSQL server, install version 14 or above on your local machine.<br/>Create an empty database "DataWharfDemo" for example.</div><div><br/></div><div>There are two methods to run DataWharf with Docker:</div><ol><li>Run as pre-built / pre-compiled web application </li><li>Run by compiling locally and for the purpose of enhancing/extending DataWharf</li></ol><div><strong>The first method (pre-built)</strong> will use a base image of DataWharf always up to date from DockerHub.</div><div>Update
+ the file "config_demo.txt" with PostgreSQL connection and login 
+information to the "DataWharfDemo" database created earlier.</div><div><br/></div><div>Run the following Docker commands from the root folder of your local repo:</div></div>
+
+      <pre class="ELS1"><span class="ELS2">docker build . -f Dockerfile_Demo_Using_DockerHub_Ubuntu_22_04 -t datawharf_demo_using_dockerhub_baseimage:latest</span><span class="ELS2">docker run -d -p 8080:80 datawharf_demo_using_dockerhub_baseimage:latest</span><span class="ELS2"></span></pre>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div><span>Open a browser to "http://localhost:8080"<br/>The initial login ID is "main" and the password is "password".<br/>Once you logged in, to see DataWharf's own data dictionary use the following steps:<br/><br/>1. Go to "Settings" and add an "Application", "DataWharf".<br/>2.
+ Go to "Data Dictionary", select "DataWharf", use the "Import" option, 
+and from the repo use the latest ExportDataDictionary_DataWharf_*.zip.<br/>   You can do the same for "Projects" and "Models" by using ExportModel_DataWharf_Design-Projects_*.zip</span><br/><br/><span>Expended instructions are also available at <a href="https://github.com/EricLendvai/DataWharf/blob/main/README.md" rel="noopener noreferrer" target="_blank">https://github.com/EricLendvai/DataWharf/blob/main/README.md</a></span><br/><br/><span><strong>The second method (local compilation)</strong> will allow you to compile directly in Windows or Docker, via Dev Containers.<br/>If you are using Mac OS, currently, you will need to use Dev Containers.</span><br/><br/><span>Some features, like SSO (Single Sign On) will only function while running in Linux, meaning Docker.</span><br/><br/><span>If you intend to develop on Windows natively, use the following article to setup your local environment: </span><a href="https://harbour.wiki/index.asp?page=PublicArticles&amp;mode=show&amp;id=190401174818&amp;sig=6893630672" rel="noopener noreferrer" target="_blank"><span>https://harbour.wiki/index.asp?page=PublicArticles&amp;mode=show&amp;id=190401174818&amp;sig=6893630672</span></a><br/><span>All the instructions for developing DataWharf are requiring the use if VSCode.</span><br/><br/><span>Regardless if you develop in Windows or Docker (Ubuntu), please install the following two VSCODE extensions:</span><br/><span>1. aperricone.harbour</span><br/><span>2. actboy168.tasks</span><br/><br/><span>Developing DataWharf will also required to clone the following repos locally:<br/>1. </span><a href="https://github.com/EricLendvai/Harbour_FastCGI" rel="noopener noreferrer" target="_blank"><span>Harbour_FastCGI</span></a><span><br/>2. </span><a href="https://github.com/EricLendvai/Harbour_VFP" rel="noopener noreferrer" target="_blank"><span>Harbour_VFP</span></a><span><br/>3. </span><a href="https://github.com/EricLendvai/Harbour_ORM" rel="noopener noreferrer" target="_blank"><span>Harbour_ORM</span></a><br/><br/><span>Please update your <a href="https://github.com/EricLendvai/DataWharf/blob/main/.devcontainer/devcontainer.json" rel="noopener noreferrer" target="_blank">local .devcontainer/devcontainer.json</a> file to mount those repos inside your dev container.</span><br/><span><br/><br/></span></div></div>
+
+      <h2 id="initial-settings">Initial Settings</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>DataWharf
+ use a PostgreSQL database to store all of its own information. 
+Currently around 50 tables are maintained by DataWharf. You only need to
+ create an empty database, point to it, and the DataWharf web app will 
+create and maintain all of its own tables, including dealing with its 
+own schema migrations. </div><div><br/></div><div>DataWharf is a 
+self contained FastCGI executable. Wherever it is installed, you need to
+ create or simply update a config.txt file.</div><div><br/></div><div>The config.txt file is simply a list of name/value entries, one per line.</div><div>The
+ names are defined by DataWharf, and the values can be entered directly 
+or as a reference to environment variables, see example at line 8</div><div><br/></div><div>Here is an example of a config.txt with the description of each possible settings.</div></div>
+
+      <pre class="ELS1"><span class="ELS2">ReloadConfigAtEveryRequest=true                   <span>//"true" or "false". If false the web server or at least the FastCGI executable needs to be restarted for settings changes to be detected.</span><span class="ELS2">MaxRequestPerFCGIProcess=0                        <span>//0 for Unlimited.</span><span class="ELS2"></span><span class="ELS2">POSTGRESPORT=5432                                 <span>//Useful if installing multiple versions of PostgreSQL.</span><span class="ELS2">POSTGRESHOST=localhost                            <span>//Could also refer to an AWS RDS, host.docker.internal (if using docker and accessing PostgreSQL server of host OS.</span><span class="ELS2"></span><span class="ELS2">POSTGRESID=datawharf                              <span>//PostgreSQL User id.</span><span class="ELS2">POSTGRESPASSWORD=${DataWharf_Database_Password}   <nobr><span>//Password for POSTGRESID. Instead of entering the password as plain text, you can specify the name of an environment variable</span></nobr></span><span class="ELS2">POSTGRESDATABASE=DataWharf                        <span>//Database Name</span><span class="ELS2">POSTGRESDRIVER=PostgreSQL ODBC Driver(UNICODE)    <span>//ODBC Drive name might be different depending of ODBC client version or OS used.</span><span class="ELS2"></span><span class="ELS2">ShowDevelopmentInfo=No                            <span aria-label="Only useful for contributors to DataWharf" class="fas fa-comment-alt-dots" data-bs-placement="top" data-bs-toggle="tooltip" role="button" style="color: blue;font-size: 120%;" tabindex="0" title="Only useful for contributors to DataWharf"></span><nobr></nobr></span><span class="ELS2">APPLICATION_TITLE=DataWharf Development           <span>//Main menu branding. Optional.</span><span class="ELS2">COLOR_HEADER_BACKGROUND=E3F2FD                    <span>//Optional.</span><span class="ELS2">COLOR_HEADER_TEXT_WHITE=No                        <span>//Yes or No.</span><span class="ELS2">LOGO_THEME_NAME=Blocks_003                        <span>//Images available from Repo: Earth_001, Blocks_001, Blocks_002, Blocks_003, RainierKayak, RainierSailBoat. You may also add your own image files in the images folder and specify the name.</span><span class="ELS2"></span><span class="ELS2">SECURITY_DEFAULT_PASSWORD=password                <span>//Used when creating the initial user in DataWharf "main"</span><span class="ELS2">SECURITY_SALT=0123456789ABCDEFG                   <span>//To encrypt DataWharf user's passwords. Not used if use Single Sign-on</span><span class="ELS2"></span><span class="ELS2">DEPLOYMENT_CRYPT_KEY=1234                         <span>//Used to encrypt password entered when defining application deployments.</span><span class="ELS2"></span><span class="ELS2">CYANAUDIT_TRAC_USER=No                            <span>//Yes or No. If Cyanaudit is used, the pk field value from the User table will be used, enabling full audit of what any DataWharf user is doing.</span><span class="ELS2"></span><span class="ELS2">ODBC_DRIVER_POSTGRESQL=PostgreSQL ODBC Driver(UNICODE)   <span>//Most likely same as POSTGRESDRIVER. Used during Load/Delta of data dictionaries.</span><span class="ELS2"></span><span class="ELS2"><span>// The following would be setting Under Ubuntu 22:04. The list of driver can be viewed using:  cat /etc/odbcinst.ini</span><span class="ELS2"><span>//ODBC_DRIVER_POSTGRESQL=PostgreSQL Unicode</span><span class="ELS2"><span>//ODBC_DRIVER_MARIADB=MariaDB Unicode</span><span class="ELS2"><span>//ODBC_DRIVER_MYSQL=MySQL ODBC 8.0 Unicode Driver</span><span class="ELS2"><span>//ODBC_DRIVER_MSSQL=ODBC Driver 18 for SQL Server</span><span class="ELS2"></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></pre>
+
+      <h2 id="customizing-datawharf">Customizing DataWharf</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>There
+ are multiple customization that can be done to DataWharf. Since 
+DataWharf is an open-source project, you are free to modify as you 
+desire.</div><div>But most users/companies will only need to make minor 
+changes to rebrand / customize DataWharf, and all of this can be done by
+ editing a config.txt file, or possibly datawharf.ch</div><div><br/></div><div>Please refer to the previous section to see an example of a config.txt file.</div><div><br/></div><div>To
+ rebrand DataWharf, meaning renaming it something your company would 
+identify with, or if you have multiple instance of DataWharf and want to
+ make it obvious which one you are accessing, update the 
+"APPLICATION_TITLE" setting.</div><div><br/></div><div>If you want to 
+change the background color of the top navigation bar, or change the 
+text from black to white, set the following two settings:</div><ul><li>"COLOR_HEADER_BACKGROUND"
+                  A RGB 
+color as set via hex values (standard html color setting).</li><li>"COLOR_HEADER_TEXT_WHITE"                     Yes or No.</li></ul><div><br/></div><div>To change the logo image and picture used on the home page, set the follow setting:</div><ul><li>"LOGO_THEME_NAME"
+                     
+                A name of a pair
+ of image files in the "images" folder under the "website" folder.</li></ul><div>The
+ web sites favicon  (also known as a shortcut icon) is the file 
+named as "favicon_&lt;LOGO_THEME_NAME&gt;.ico"    (64x64 
+pixels)</div><div>The logo in the navigation bar, and the image on the 
+home page is the file named as"Logo_&lt;LOGO_THEME_NAME&gt;.png"   
+ (1024x1024 pixels)</div><div><br/></div><div>A few sets of images files are provided in the repo. Add your own images with the same file name structure if needed.</div><div>The
+ following is a view of what is available by default. These were 
+generated using "midjourney", an AI service that generates images based 
+on some text prompts. These were generate using the paid service, and I 
+(Eric Lendvai) grant use of them to the public when used for any 
+deployment of DataWharf.</div><div><br/></div><div><img alt="" class="img-fluid" src="images/index_002.png" style="width: 1181px; display: block; vertical-align: top; margin: 5px auto 5px 0px; text-align: left; height: 504px; box-sizing: content-box; position: relative; max-width: 100%; cursor: pointer; border: 5px solid rgb(204, 204, 204);"/></div><div><br/></div><div>The
+ "datawharf.ch" file, located in the "src" folder will have some default
+ settings and settings used to set colors of elements used in diagrams.</div><div>Editing that file will require a recompilation, since it behaves as an .h file for programs written in C.</div><div><br/></div><div>DataWharf
+ is written using the Harbour computer language, which in turn is 
+converted to pure C code. For more information about Harbour, go to the 
+web site <a href="https://harbour.wiki/" rel="noopener noreferrer" target="_blank">https://harbour.wiki</a></div></div>
+
+      <h2 id="setting-up-applications-and-projects-planned">Setting up Applications and Projects - Planned</h2>
+
+      <h2 id="column-field-types-composing">Column/Field Types - Composing</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>As mentioned in the introductions, DataWharf has its own datatypes (actually from the Harbour_ORM repo)</div><div><br/></div><div><br/></div><table class="hw-article-data-table"><tbody><tr><td><strong>Type Code</strong></td><td><strong>Type Name<br/></strong></td><td><strong>Length</strong></td><td><strong>Decimals</strong></td><td><strong>PostgreSQL<br/>Field Type</strong></td><td><strong>MariaDB and MySQL<br/>Field Type</strong></td><td><span><strong>Warnings/Notes</strong></span></td></tr><tr><td><span>I</span></td><td>Integer</td><td><br/></td><td><br/></td><td>integer</td><td>INT</td><td><br/></td></tr><tr><td><span>IB</span></td><td>Big Integer</td><td><br/></td><td><br/></td><td>bigint</td><td>BIGINT</td><td><br/></td></tr><tr><td>Y</td><td>Money (4 decimal)</td><td><br/></td><td><br/></td><td>money</td><td>DECIMAL(13,4)<br/>Comment field: 'Type=Y'<br/></td><td><br/></td></tr><tr><td>N</td><td>Numeric</td><td>X</td><td>X</td><td>numeric(&lt;len&gt;,&lt;dev&gt;)</td><td>DECIMAL(&lt;len&gt;,&lt;dev&gt;)</td><td><br/></td></tr><tr><td>C</td><td>Char</td><td>X</td><td><br/></td><td>character(&lt;len&gt;)</td><td>CHAR(&lt;len&gt;)</td><td>Uses UTF8 encoding</td></tr><tr><td>CV</td><td>Variable length char (with max length value)</td><td>X</td><td><br/></td><td>character varying(&lt;len&gt;)</td><td>VARCHAR(&lt;len&gt;)</td><td>Uses UTF8 encoding</td></tr><tr><td>B</td><td>Binary (Same as "R")</td><td>X</td><td><br/></td><td>bytea<br/>Comment field: 'Type=B|Length=&lt;len&gt;'</td><td>BINARY(&lt;len&gt;)</td><td>No code page/encoding.</td></tr><tr><td>BV</td><td>Variable length Binary (Sace as "R" with max length value)</td><td>X</td><td><br/></td><td>bytea<br/>Comment field: 'Type=BV|Length=&lt;len&gt;'<br/></td><td>VARBINARY(&lt;len&gt;)</td><td>No code page/encoding.</td></tr><tr><td>M</td><td>Longtext (memo)</td><td><br/></td><td><br/></td><td>text</td><td>LONGTEXT</td><td>Uses UTF8 encoding</td></tr><tr><td>R</td><td>Long blob (binary) (Same as "B")</td><td><br/></td><td><br/></td><td>bytea</td><td>LONGBLOB</td><td><br/></td></tr><tr><td>L</td><td>Logical</td><td><br/></td><td><br/></td><td>boolean</td><td>TINYINT(1)</td><td><br/></td></tr><tr><td>D</td><td>Date</td><td><br/></td><td><br/></td><td>date</td><td>DATE</td><td><br/></td></tr><tr><td>TOZ</td><td>Time with time zone</td><td><br/></td><td><br/></td><td>time with time zone<br/>or<br/>time(&lt;dec&gt;) with time zone</td><td>TIME<br/>or<br/>TIME(&lt;dec&gt;)<br/>Comment field: 'Type=TOZ'<br/></td><td><br/></td></tr><tr><td>TO</td><td>Time without time zone</td><td><br/></td><td><br/></td><td>time without time zone<br/>or<br/>time(&lt;dec&gt;) without time zone</td><td>TIME<br/>or<br/>TIME(&lt;dec&gt;)</td><td><br/></td></tr><tr><td>DTZ</td><td>Date Time with time zone</td><td><br/></td><td><br/></td><td>timestamp with time zone<br/>or<br/>timestamp(&lt;dec&gt;) with time zone<br/></td><td>TIMESTAMP<br/>or<br/>TIMESTAMP(&lt;dec&gt;)</td><td><br/></td></tr><tr><td>DT<br/>or<br/>T</td><td>Date Time without time zone</td><td><br/></td><td><br/></td><td>timestamp without time zone<br/>or<br/>timestamp(&lt;dec&gt;) without time zone<br/></td><td>DATETIME<br/>or<br/>DATETIME(&lt;dec&gt;)</td><td><br/></td></tr><tr><td>UUI</td><td>UUID (Universally Unique Identifier)</td><td><br/></td><td><br/></td><td>uuid</td><td>VARCHAR(36)<br/>Comment field: 'Type=UI'</td><td>MySQL/MariaDB36 Character Length (32 digits and 4 dashes).<br/>PostgreSQL requires pgcrypto extension to be installed.<br/></td></tr><tr><td><div>JS</div></td><td>JSON</td><td><br/></td><td><br/></td><td>json</td><td>LONGTEXT<br/>Comment field: 'Type=JS'</td><td><br/></td></tr><tr><td>OID<br/></td><td>Object Identifier<br/></td><td><br/></td><td><br/></td><td>oid<br/></td><td>BIGINT COMMENT 'Type=OID'<br/></td><td><br/></td></tr></tbody></table><div><br/></div><div><br/></div><div><span>Notes:</span></div><ul><li>In
+ PostgreSQL a "bit" type also exists, which is a string series for "0" 
+and "1", not the Binary type. For now we do not support the field type.</li><li>On PostgreSQL to allow the generation of UUID values, install the extension "pgcrypto".</li></ul></div>
+
+      <h2 id="custom-fields-planned">Custom Fields - Planned</h2>
+
+      <h2 id="setting-up-and-testing-single-sign-on-planned">Setting up and Testing Single Sign On - Planned</h2>
+
+      <h2 id="datawharf-repo-and-dependency-planned">DataWharf Repo and dependency - Planned</h2>
+
+      <h2 id="extending-datawharf-with-apis-planned">Extending DataWharf with APIs - Planned</h2>
+
+      <h2 id="user-access-rights-planned">User Access Rights - Planned</h2>
+
+      <h2 id="exporting-and-importing-data-dictionaries-and-models-planned">Exporting and Importing Data Dictionaries and Models - Planned</h2>
+
+      <h2 id="monitoring-datawharf">Monitoring DataWharf</h2>
+
+      <div class="fr-view" style="padding: 0px;border-width:0px;"><div>Simply
+ access the /heath web page to see if your instance of DataWharf is 
+running and to review the versions of several of its components.</div><div><br/></div><div>Additionally, check the table ORM.SchemaAndDataErrorLog to see review any errors created by the application itself.</div><div><br/></div><div>The following is an example of the information provided by the /health page.</div></div>
+
+      <pre class="ELS1"><span class="ELS2">{</span><span class="ELS2">    "message": "OK",</span><span class="ELS2">    "zulu_time": "2023-04-19T09:03:14.501Z",</span><span class="ELS2">    "application_version": "2.53",</span><span class="ELS2">    "data_schema_version": "20",</span><span class="ELS2">    "build Info":</span><span class="ELS2">    {</span><span class="ELS2">    "datawharf": "mingw64 release 04/19/2023  2:02:45.90",</span><span class="ELS2">    "harbour_orm": "mingw64 release 02/17/2023  2:09:56.08",</span><span class="ELS2">    "harbour_vfp": "mingw64 release 02/17/2023  2:09:50.19"</span><span class="ELS2">    },</span><span class="ELS2">    "data_server": "PostgreSQL 14.5, compiled by Visual C++ build 1914, 64-bit"</span><span class="ELS2">}</span><span class="ELS2"></span></pre>
+
+      <h2 id="installing-datawharf-for-development-planned">Installing DataWharf For Development - Planned</h2>
+
+      <div class="hw-close-fallback" data-close-fallback hidden>
+        The browser did not close this tab. It may have been opened directly instead of from the Articles list. Use <a href="/articles/">Back to Articles</a>.
+      </div>
+    </article>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/assets/js/article-page.js"></script>
+  <script src="/assets/js/article-copy-code.js"></script>
+  <script src="/assets/js/article-tooltips.js"></script>
+</body>
+</html>

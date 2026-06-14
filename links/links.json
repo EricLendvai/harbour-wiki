@@ -1,0 +1,157 @@
+{
+  "schema_version": 1,
+  "title": "Harbour Wiki Links",
+  "description": "Editable static link list for the Harbour Wiki Links page.",
+  "updated": "2026-06-13",
+  "categories": [
+    {
+      "id": "harbour-compiler",
+      "title": "Harbour Compiler",
+      "links": [
+        {
+          "title": "1. Main Harbour Core Compiler Repo",
+          "url": "https://github.com/harbour/core",
+          "description": "This is the current official GitHub repo to download the Harbour compiler from."
+        },
+        {
+          "title": "2. Harbour Compiler Fork by Viktor Szakats",
+          "url": "https://github.com/vszakats/harbour-core",
+          "description": "Viktor Szakats used to be one of the most active core developers of Harbour. This is a read-only repo. It is strongly encouraged that you use the main repo, since this one is no longer maintained."
+        }
+      ]
+    },
+    {
+      "id": "harbour-info",
+      "title": "Harbour Info",
+      "links": [
+        {
+          "title": "Harbour Generic Info",
+          "url": "https://harbour.github.io/",
+          "description": "The official site that explains what Harbour is and who the main contributors are. This site was not maintained for a while."
+        }
+      ]
+    },
+    {
+      "id": "learning-harbour",
+      "title": "Learning Harbour",
+      "links": [
+        {
+          "title": "Harbour Functions Dictionary by Petewg",
+          "url": "https://github.com/Petewg/harbour-core/wiki",
+          "description": "Original Harbour function reference material."
+        },
+        {
+          "title": "Harbour Functions Documentation",
+          "url": "/api/",
+          "description": "Categorized list of Harbour functions."
+        },
+        {
+          "title": "Harbour Language Rules",
+          "url": "https://github.com/EricLendvai/harbour-language-for-ai-training/blob/main/harbour_language_rules.md",
+          "description": "Markdown file that renders on GitHub and is suitable for both human readers and AI systems."
+        },
+        {
+          "title": "Harbour Reference Guide 1",
+          "url": "https://harbour.github.io/doc/",
+          "description": "Harbour reference guide."
+        },
+        {
+          "title": "Harbour Reference Guide 2",
+          "url": "/articles/harbour-developers-guide-early-access/",
+          "description": "Static target for the Harbour Developer's Guide article once migrated."
+        },
+        {
+          "title": "Local Web Based Sandbox",
+          "url": "https://github.com/EricLendvai/Harbour_LocalSandbox",
+          "description": "Web application to practice and learn Harbour code."
+        },
+        {
+          "title": "Small Harbour Samples",
+          "url": "https://github.com/EricLendvai/Harbour_Samples",
+          "description": "A collection of small console and web apps to help you start developing with Harbour on Windows and Linux. Also review the VSCode and WSL/Docker article targets after migration."
+        }
+      ]
+    },
+    {
+      "id": "harbour-core-development",
+      "title": "Harbour Core Development",
+      "links": [
+        {
+          "title": "Harbour Reference Guide - C level API",
+          "url": "http://www.fivetechsoft.com/harbour-docs/clevelapi.html",
+          "description": "Useful information if you want to create C-level contribs or add to the Harbour compiler."
+        }
+      ]
+    },
+    {
+      "id": "c-language",
+      "title": "C (The Language)",
+      "links": [
+        {
+          "title": "Wikibooks C Programming",
+          "url": "https://en.wikibooks.org/wiki/C_Programming",
+          "description": "Since Harbour generates native C code, and since you can embed C code directly in PRG files using #pragma, this is a useful C language resource."
+        }
+      ]
+    },
+    {
+      "id": "forums",
+      "title": "Forums",
+      "links": [
+        {
+          "title": "Google Harbour Forum for Core Language Developers",
+          "url": "https://groups.google.com/forum/#!forum/harbour-devel",
+          "description": "Currently the most active site to communicate with Harbour core contributors."
+        },
+        {
+          "title": "Google Harbour Forum for Users",
+          "url": "https://groups.google.com/forum/#!forum/harbour-users",
+          "description": "Currently the most active site to ask questions about Harbour."
+        }
+      ]
+    },
+    {
+      "id": "older-reference-material",
+      "title": "Older Reference Material",
+      "links": [
+        {
+          "title": "Harbour Blog",
+          "url": "http://harbourlanguage.blogspot.com/",
+          "description": "Older Harbour blog reference material."
+        },
+        {
+          "title": "Marinas Harbour and QT",
+          "url": "http://www.marinas-gui.org/projects/marinas-gui/mg_harbour_reference.htm",
+          "description": "Older Harbour and Qt reference material."
+        }
+      ]
+    },
+    {
+      "id": "third-party-tools",
+      "title": "3rd Party Tools",
+      "links": [
+        {
+          "title": "Data Modeling Web App",
+          "url": "https://github.com/EricLendvai/DataWharf",
+          "description": "Data modeling web application."
+        },
+        {
+          "title": "Visual Studio Code Harbour Extension With Debugger",
+          "url": "https://marketplace.visualstudio.com/items?itemName=aperricone.harbour",
+          "description": "VSCode Harbour extension with debugger. Also see the static VSCode article after it is migrated."
+        }
+      ]
+    },
+    {
+      "id": "third-party-vendors",
+      "title": "3rd Party Vendors",
+      "links": [
+        {
+          "title": "Harbour Magazine",
+          "url": "https://medium.com/harbour-magazine",
+          "description": "Harbour Magazine on Medium."
+        }
+      ]
+    }
+  ]
+}
